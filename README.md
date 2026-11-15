@@ -1,11 +1,11 @@
 # kotlin-security-scanner
 
-[![CI](https://github.com/JasminGuberinic/kotlin-security-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/JasminGuberinic/kotlin-security-scanner/actions/workflows/ci.yml)
+[![CI](https://github.com/makan1869/kotlin-security-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/makan1869/kotlin-security-scanner/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/kotlin-2.4.10-purple.svg)](https://kotlinlang.org)
 [![Detekt](https://img.shields.io/badge/detekt-2.0.0--alpha.6-blue.svg)](https://detekt.dev)
 [![Rules](https://img.shields.io/badge/rules-216-brightgreen.svg)](#owasp-top-10-coverage)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.jasminguberinic/scanner-core.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.jasminguberinic/scanner-core)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.makan1869/scanner-core.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.makan1869/scanner-core)
 
 **Kotlin SAST — Detekt plugin with 216 rules that detects OWASP Top 10 security vulnerabilities in Spring Boot, Quarkus, Dropwizard, Ktor, Micronaut, and Vert.x applications at compile time, in your IDE, with zero infrastructure.**
 

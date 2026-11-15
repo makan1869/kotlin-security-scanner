@@ -5,5 +5,5 @@ version 2.1.
 
 In short: be respectful and constructive. Harassment, personal attacks, and
 discrimination are not tolerated. Report unacceptable behavior to the maintainer via the
-contact on the [GitHub profile](https://github.com/JasminGuberinic); reports are handled
+contact on the [GitHub profile](https://github.com/makan1869); reports are handled
 confidentially.

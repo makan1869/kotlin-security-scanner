@@ -3,7 +3,7 @@
 Add this entry to `website/src/data/marketplace.js` in the `detekt/detekt` repo,
 in alphabetical order by title (between "K" entries).
 
-Current release: **v0.2.0 — 201 rules across 6 rulesets, on Maven Central.**
+Current release: **v0.4.0 — 216 rules across 7 rulesets, for detekt 2, on Maven Central.**
 
 ## Entry to add
 
@@ -12,7 +12,7 @@ Current release: **v0.2.0 — 201 rules across 6 rulesets, on Maven Central.**
     title: "Kotlin Security Scanner",
     description:
       "201 OWASP Top 10 rules for Kotlin Spring Boot, Quarkus, Dropwizard, Ktor & Micronaut. Active by default. Catches what FindSecBugs misses.",
-    repo: "https://github.com/JasminGuberinic/kotlin-security-scanner",
+    repo: "https://github.com/makan1869/kotlin-security-scanner",
     ruleset: "security-core",
     rules: [
       "JaxrsOpenRedirect",
@@ -79,11 +79,11 @@ Current release: **v0.2.0 — 201 rules across 6 rulesets, on Maven Central.**
 ```
 ## What this adds
 
-[kotlin-security-scanner](https://github.com/JasminGuberinic/kotlin-security-scanner)
+[kotlin-security-scanner](https://github.com/makan1869/kotlin-security-scanner)
 is a Detekt plugin with 201 OWASP Top 10 rules for Kotlin Spring Boot, Quarkus,
 Dropwizard, Ktor, and Micronaut applications. It's on Maven Central:
 
-    detektPlugins("io.github.jasminguberinic:scanner-all:0.2.0")
+    detektPlugins("io.github.makan1869:scanner-all:0.4.0")
 
 Rules are active by default and CWE-tagged; findings appear on the first run with no
 per-rule config.

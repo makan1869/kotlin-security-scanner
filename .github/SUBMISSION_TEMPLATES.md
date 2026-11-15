@@ -1,7 +1,7 @@
 # Submission Templates for Discoverability
 
-Current release: **v0.2.0 — 201 rules, 6 modules, on Maven Central.**
-Install: `detektPlugins("io.github.jasminguberinic:scanner-all:0.2.0")` (or pick per-framework modules).
+Current release: **v0.4.0 — 216 rules, 7 modules, for detekt 2, on Maven Central.**
+Install: `detektPlugins("io.github.makan1869:scanner-all:0.4.0")` (or pick per-framework modules).
 
 ## 1. analysis-tools.dev
 
@@ -11,7 +11,7 @@ Fill in the form with:
 - **Name:** kotlin-security-scanner
 - **Categories:** Security, Static Analysis
 - **Languages:** Kotlin
-- **Homepage:** https://github.com/JasminGuberinic/kotlin-security-scanner
+- **Homepage:** https://github.com/makan1869/kotlin-security-scanner
 - **Description:**
   > Detekt plugin with 201 OWASP Top 10 security rules for Kotlin — Spring Boot, Quarkus,
   > Dropwizard, Ktor, and Micronaut. Catches coroutine security-context loss, JWT attacks,
@@ -30,7 +30,7 @@ Repo: https://github.com/KotlinBy/awesome-kotlin
 Add to section **Libraries/Frameworks > Security**:
 
 ```markdown
-* [kotlin-security-scanner](https://github.com/JasminGuberinic/kotlin-security-scanner) -
+* [kotlin-security-scanner](https://github.com/makan1869/kotlin-security-scanner) -
   Detekt plugin with 201 OWASP Top 10 security rules for Spring Boot, Quarkus, Dropwizard,
   Ktor, and Micronaut. Active by default, CWE-tagged, on Maven Central.
 ```
@@ -55,12 +55,12 @@ Hi,
 
 I'd like to submit kotlin-security-scanner for consideration in Kotlin Weekly.
 
-https://github.com/JasminGuberinic/kotlin-security-scanner
+https://github.com/makan1869/kotlin-security-scanner
 
 It's a Detekt plugin with 201 OWASP Top 10 security rules for Kotlin backends —
 Spring Boot, Quarkus, Dropwizard, Ktor, and Micronaut. It's on Maven Central:
 
-    detektPlugins("io.github.jasminguberinic:scanner-all:0.2.0")
+    detektPlugins("io.github.makan1869:scanner-all:0.4.0")
 
 Rules are active by default, so findings appear on the first `./gradlew detekt` with no
 per-rule config. Every rule is CWE-tagged and verified end-to-end (1262 tests, plus a
@@ -96,7 +96,7 @@ File: `pages/Source_Code_Analysis_Tools.md`
 Add under "Free/Open Source Tools" table, Kotlin section:
 
 ```markdown
-| [kotlin-security-scanner](https://github.com/JasminGuberinic/kotlin-security-scanner) | Kotlin |
+| [kotlin-security-scanner](https://github.com/makan1869/kotlin-security-scanner) | Kotlin |
 Detekt plugin, 201 OWASP Top 10 rules, Spring Boot/Quarkus/Dropwizard/Ktor/Micronaut,
 catches Kotlin-specific patterns bytecode tools miss | Apache 2.0 |
 ```

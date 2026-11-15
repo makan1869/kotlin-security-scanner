@@ -6,8 +6,8 @@ If you find a security issue **in this tool itself** (for example, a way to make
 analyzer crash, hang, or execute code while scanning a project), please report it
 privately — do not open a public issue.
 
-- Use GitHub's [private vulnerability reporting](https://github.com/JasminGuberinic/kotlin-security-scanner/security/advisories/new), or
-- email the maintainer at the address listed on the [GitHub profile](https://github.com/JasminGuberinic).
+- Use GitHub's [private vulnerability reporting](https://github.com/makan1869/kotlin-security-scanner/security/advisories/new), or
+- email the maintainer at the address listed on the [GitHub profile](https://github.com/makan1869).
 
 Please include the affected version, a minimal Kotlin snippet that triggers the issue,
 and what you expected to happen. We aim to acknowledge reports within a few days.

@@ -313,7 +313,7 @@ ssh-keygen -t ed25519 -C "jasmin.guberinic@gmail.com" \
 
 # Add public key to: github.com/settings/ssh/new
 
-git clone git@github.com-personal:JasminGuberinic/kotlin-security-scanner.git
+git clone git@github.com:makan1869/kotlin-security-scanner.git
 ```
 
 ## Stack

@@ -86,4 +86,5 @@ First public release on Maven Central:
   and dead-detection defects (fully-qualified-name receivers, substring over-matching, wrong
   argument indices, Spring `${prop:default}` vs bash `:-` syntax). No crash bugs found.
 
+[0.4.0]: https://github.com/makan1869/kotlin-security-scanner/releases/tag/v0.4.0
 [0.2.0]: https://github.com/JasminGuberinic/kotlin-security-scanner/releases/tag/v0.2.0

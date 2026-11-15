@@ -22,7 +22,7 @@ labels: [false-positive-or-negative]
 <!-- e.g. "should not flag — input is validated" / "should flag — user input reaches the query" -->
 
 **Environment**
-- scanner version: <!-- e.g. 0.2.0 -->
+- scanner version: <!-- e.g. 0.4.0 -->
 - module(s): <!-- scanner-core / scanner-spring-boot / ... -->
 - Detekt version:
 - JDK:
