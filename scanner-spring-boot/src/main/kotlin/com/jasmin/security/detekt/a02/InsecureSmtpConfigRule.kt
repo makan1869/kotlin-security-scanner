@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -20,15 +17,11 @@ import java.util.Properties
  *   spring.mail.properties.mail.smtp.starttls.enable=false
  *   spring.mail.properties.mail.smtp.ssl.enable=false
  */
-class InsecureSmtpConfigRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecureSmtpConfig",
-        severity = Severity.Security,
-        description = "SMTP configured without TLS — credentials and content sent in cleartext",
-        debt = Debt.TEN_MINS,
-    )
-
+class InsecureSmtpConfigRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "InsecureSmtpConfig",
+    description = "SMTP configured without TLS — credentials and content sent in cleartext",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         val starttlsKey = "spring.mail.properties.mail.smtp.starttls.enable"

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class MicronautInsecureCookieRuleTest {
             import io.micronaut.http.cookie.Cookie
             fun build(id: String) = Cookie.of("SESSION", id).secure(false)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class MicronautInsecureCookieRuleTest {
             import io.micronaut.http.cookie.Cookie
             fun build(id: String) = Cookie.of("SESSION", id).secure(true)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -36,7 +36,7 @@ class MicronautInsecureCookieRuleTest {
                 c.secure(false)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -45,7 +45,7 @@ class MicronautInsecureCookieRuleTest {
             class ConnectionBuilder { fun secure(flag: Boolean) = this }
             fun build() = ConnectionBuilder().secure(false)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,6 +56,6 @@ class MicronautInsecureCookieRuleTest {
                 conn.secure(false)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

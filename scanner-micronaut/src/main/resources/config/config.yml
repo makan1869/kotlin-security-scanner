@@ -1,0 +1,28 @@
+security-micronaut:
+  active: true
+  MicronautMissingSecured:
+    active: true
+  MicronautWebSocketNoAuth:
+    active: true
+  MicronautCacheableSensitive:
+    active: true
+  MicronautRetryOnAuth:
+    active: true
+  MicronautAnonymousAccess:
+    active: true
+  MicronautInsecureHttpClient:
+    active: true
+  MicronautGrpcInsecure:
+    active: true
+  MicronautSensitiveQueryParam:
+    active: true
+  MicronautBodyAnyType:
+    active: true
+  MicronautManagementEndpointInsecure:
+    active: true
+  MicronautInsecureCookie:
+    active: true
+  MicronautHardcodedSecret:
+    active: true
+  MicronautExceptionMessageLeak:
+    active: true

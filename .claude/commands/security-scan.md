@@ -18,7 +18,6 @@ Default scans `src/main/kotlin`.
 **1. Run the scan:**
 
 ```bash
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
 ./gradlew detekt
 ```
 

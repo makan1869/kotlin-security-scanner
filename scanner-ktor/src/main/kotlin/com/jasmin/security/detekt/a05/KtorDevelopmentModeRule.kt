@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 
 /**
@@ -17,15 +14,11 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  * Non-compliant:
  *   environment { developmentMode = true }
  */
-class KtorDevelopmentModeRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorDevelopmentMode",
-        severity = Severity.Security,
-        description = "developmentMode = true leaks stack traces to clients — disable it in production",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorDevelopmentModeRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorDevelopmentMode",
+    description = "developmentMode = true leaks stack traces to clients — disable it in production",
+) {
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
         if (expression.operationReference.text != "=") return

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a08
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class KtorInsecureContentNegotiationRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class KtorInsecureContentNegotiationRuleTest {
         val code = """
             val javaSerialType = "application/x-java-serialized-object"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class KtorInsecureContentNegotiationRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -46,7 +46,7 @@ class KtorInsecureContentNegotiationRuleTest {
         val code = """
             val jsonType = "application/json"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -57,6 +57,6 @@ class KtorInsecureContentNegotiationRuleTest {
                 mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

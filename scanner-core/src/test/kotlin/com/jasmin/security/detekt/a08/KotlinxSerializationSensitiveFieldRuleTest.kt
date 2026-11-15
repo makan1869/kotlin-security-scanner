@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a08
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
             @Serializable
             data class UserDto(val username: String, val password: String)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
             @Serializable
             data class Config(val endpoint: String, val secret: String)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
                 var private_key: String = ""
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -48,7 +48,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
             @Serializable
             data class UserDto(val username: String, @Transient val password: String = "")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
         val code = """
             data class InternalUser(val username: String, val password: String)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -67,7 +67,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
                 val passwordHint: String get() = "x"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -76,7 +76,7 @@ class KotlinxSerializationSensitiveFieldRuleTest {
             @Serializable
             data class UserDto(val username: String, val email: String)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -88,6 +88,6 @@ class KotlinxSerializationSensitiveFieldRuleTest {
                 mapper.enableDefaultTyping()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

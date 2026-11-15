@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class SpringDataSortInjectionRuleTest {
                 return userRepository.findAll(Sort.by(sortField))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class SpringDataSortInjectionRuleTest {
                 return userRepository.findAll(Sort.by(sort))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class SpringDataSortInjectionRuleTest {
                 return userRepository.findAll(org.springframework.data.domain.Sort.by(sortField))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -47,7 +47,7 @@ class SpringDataSortInjectionRuleTest {
                 return userRepository.findAll(Sort.by(Sort.Direction.ASC, sortField))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -57,7 +57,7 @@ class SpringDataSortInjectionRuleTest {
                 return userRepository.findAll(Sort.by("name"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -67,7 +67,7 @@ class SpringDataSortInjectionRuleTest {
                 return userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -76,6 +76,6 @@ class SpringDataSortInjectionRuleTest {
             val parser = SpelExpressionParser()
             val expr = parser.parseExpression("'hello'")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 // OWASP A05 — Security Misconfiguration
@@ -12,15 +9,11 @@ import java.util.Properties
 // and example payloads — making reconnaissance trivial for attackers.
 // Compliant:   %dev.quarkus.swagger-ui.always-include=true
 // Non-compliant: quarkus.swagger-ui.always-include=true (applies to all profiles)
-class QuarkusSwaggerUiInProdRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusSwaggerUiInProd",
-        severity = Severity.Security,
-        description = "Swagger UI always-include=true — API explorer exposed in production",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusSwaggerUiInProdRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusSwaggerUiInProd",
+    description = "Swagger UI always-include=true — API explorer exposed in production",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         props.forEach { rawKey, rawValue ->

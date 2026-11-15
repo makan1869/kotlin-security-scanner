@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class XxeInjectionRuleTest {
                 dbf.newDocumentBuilder().parse(xml)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class XxeInjectionRuleTest {
                 spf.newSAXParser()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class XxeInjectionRuleTest {
                 xif.createXMLStreamReader(stream)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -55,7 +55,7 @@ class XxeInjectionRuleTest {
                 val tf = TransformerFactory.newInstance()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -66,7 +66,7 @@ class XxeInjectionRuleTest {
                 dbf.newDocumentBuilder().parse(xml)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -78,7 +78,7 @@ class XxeInjectionRuleTest {
                 val cal = Calendar.newInstance()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -88,7 +88,7 @@ class XxeInjectionRuleTest {
                 val format = DateFormat.newInstance()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -101,6 +101,6 @@ class XxeInjectionRuleTest {
                 ois.readObject()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

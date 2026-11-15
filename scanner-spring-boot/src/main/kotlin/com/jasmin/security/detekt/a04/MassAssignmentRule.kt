@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a04
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtParameter
  * Non-compliant:
  *   fun create(@RequestBody user: User): User  // domain entity exposed directly
  */
-class MassAssignmentRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MassAssignment",
-        severity = Severity.Security,
-        description = "@RequestBody bound to a domain entity — use a dedicated DTO to control exposed fields",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MassAssignmentRule(config: Config) : SecurityRule(
+    config,
+    id = "MassAssignment",
+    description = "@RequestBody bound to a domain entity — use a dedicated DTO to control exposed fields",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         function.valueParameters.forEach { param ->

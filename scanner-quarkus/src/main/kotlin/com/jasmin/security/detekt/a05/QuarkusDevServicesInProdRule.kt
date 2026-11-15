@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -12,15 +9,11 @@ import java.util.Properties
  * Quarkus Dev Services spins up in-process databases and brokers automatically.
  * Leaving them enabled in production exposes internal infrastructure to attackers.
  */
-class QuarkusDevServicesInProdRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusDevServicesInProd",
-        severity = Severity.Security,
-        description = "Quarkus Dev Services enabled — exposes internal infrastructure in production",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusDevServicesInProdRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusDevServicesInProd",
+    description = "Quarkus Dev Services enabled — exposes internal infrastructure in production",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         val prodKey = "%prod.quarkus.devservices.enabled"

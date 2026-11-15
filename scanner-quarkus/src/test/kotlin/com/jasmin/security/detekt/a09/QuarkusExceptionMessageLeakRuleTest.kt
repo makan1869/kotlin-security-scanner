@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a09
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 return Response.serverError().entity(e.message).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 return Response.status(500).entity(exception.stackTraceToString()).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 return Response.serverError().entity(e.message).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -50,7 +50,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 return Response.ok(service.message).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -61,7 +61,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 return Response.ok(cache.toString()).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -72,7 +72,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 return Response.serverError().entity("Internal server error").build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class QuarkusExceptionMessageLeakRuleTest {
                 logger.error("Error: ${'$'}{e.message}")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -90,6 +90,6 @@ class QuarkusExceptionMessageLeakRuleTest {
         val code = """
             quarkus.smallrye-health.ui.enable=false
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

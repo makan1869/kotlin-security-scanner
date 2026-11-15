@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   install(Sessions) { cookie<UserSession>("SESSION") }
  */
-class KtorInsecureCookieSessionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorInsecureCookieSession",
-        severity = Severity.Security,
-        description = "Ktor Sessions cookie without encryption — session data can be read and forged",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorInsecureCookieSessionRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorInsecureCookieSession",
+    description = "Ktor Sessions cookie without encryption — session data can be read and forged",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

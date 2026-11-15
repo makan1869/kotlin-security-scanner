@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -16,15 +13,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // This rule catches classic concatenation: "SELECT ... WHERE id = " + id
 // Compliant:   Users.select { Users.id eq id }
 // Non-compliant: exec("SELECT * FROM users WHERE id = " + id)
-class KtorExposedRawSqlConcatRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorExposedRawSqlConcat",
-        severity = Severity.Security,
-        description = "exec() with string concatenation — SQL injection risk; use Exposed DSL or prepared statements",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorExposedRawSqlConcatRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorExposedRawSqlConcat",
+    description = "exec() with string concatenation — SQL injection risk; use Exposed DSL or prepared statements",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

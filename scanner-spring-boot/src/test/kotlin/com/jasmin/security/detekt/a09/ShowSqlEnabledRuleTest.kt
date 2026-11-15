@@ -1,6 +1,6 @@
 package com.jasmin.security.detekt.a09
 
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.Properties

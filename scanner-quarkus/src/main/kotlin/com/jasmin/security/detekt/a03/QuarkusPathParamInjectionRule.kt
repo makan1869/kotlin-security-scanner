@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 // OWASP A03 — Injection
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // Non-compliant: Entity.find("name = '$name'")     // string-template injection
 //               Entity.find("name = '" + name)   // string-concatenation injection
 @Suppress("ReturnCount")
-class QuarkusPathParamInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusPathParamInjection",
-        severity = Severity.Security,
-        description = "@PathParam value interpolated into Panache query — use positional parameters",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusPathParamInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusPathParamInjection",
+    description = "@PathParam value interpolated into Panache query — use positional parameters",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val hasPathParam = function.valueParameters.any { param ->

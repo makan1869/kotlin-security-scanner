@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -33,15 +30,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   MACSigner("hardcoded-secret")
  *   Keys.hmacShaKeyFor("hardcoded".toByteArray())
  */
-class JwtWeakSecretRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JwtWeakSecret",
-        severity = Severity.Security,
-        description = "JWT signed with a hardcoded secret — use an environment variable or key store",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JwtWeakSecretRule(config: Config) : SecurityRule(
+    config,
+    id = "JwtWeakSecret",
+    description = "JWT signed with a hardcoded secret — use an environment variable or key store",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

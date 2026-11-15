@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -21,7 +21,7 @@ class QuarkusJsonBeforeAuthRuleTest {
                 fun listUsers(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class QuarkusJsonBeforeAuthRuleTest {
                 fun securedPost(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -52,7 +52,7 @@ class QuarkusJsonBeforeAuthRuleTest {
                 fun list(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -64,7 +64,7 @@ class QuarkusJsonBeforeAuthRuleTest {
                 fun health(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -76,7 +76,7 @@ class QuarkusJsonBeforeAuthRuleTest {
                 fun processUser(): Unit {}
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -92,6 +92,6 @@ class QuarkusJsonBeforeAuthRuleTest {
                 fun deleteItem(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

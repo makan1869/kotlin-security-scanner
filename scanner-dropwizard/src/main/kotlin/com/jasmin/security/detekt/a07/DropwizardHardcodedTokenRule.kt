@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // in source code and build artifacts, trivially extractable via strings or decompilers.
 // Compliant:   private val apiKey: String = System.getenv("API_KEY") ?: error("not set")
 // Non-compliant: private val apiKey = "sk-prod-abc123"
-class DropwizardHardcodedTokenRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DropwizardHardcodedToken",
-        severity = Severity.Security,
-        description = "Hardcoded credential assigned to sensitive field — use environment variable or Vault",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class DropwizardHardcodedTokenRule(config: Config) : SecurityRule(
+    config,
+    id = "DropwizardHardcodedToken",
+    description = "Hardcoded credential assigned to sensitive field — use environment variable or Vault",
+) {
     private val sensitiveNames = setOf(
         "token", "apikey", "api_key", "apitoken", "secret", "password", "passwd",
         "credential", "bearertoken", "accesstoken", "refreshtoken",

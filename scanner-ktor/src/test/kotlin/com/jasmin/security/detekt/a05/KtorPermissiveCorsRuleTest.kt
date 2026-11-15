@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class KtorPermissiveCorsRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class KtorPermissiveCorsRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -46,7 +46,7 @@ class KtorPermissiveCorsRuleTest {
                 allowHost("api.example.com", schemes = listOf("https"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class KtorPermissiveCorsRuleTest {
                 cookie<UserSession>("SESSION")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class KtorPermissiveCorsRuleTest {
                 allowMethod(HttpMethod.Get)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -78,6 +78,6 @@ class KtorPermissiveCorsRuleTest {
                 get("/health") { call.respond("UP") }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -16,15 +13,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 // database names, and class names to the client — valuable reconnaissance for attackers.
 // Compliant:   HttpResponse.serverError("Internal error")  (log the real cause server-side)
 // Non-compliant: HttpResponse.serverError(e.message)
-class MicronautExceptionMessageLeakRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautExceptionMessageLeak",
-        severity = Severity.Security,
-        description = "@Error handler exposes exception.message to the client — return a generic error message",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautExceptionMessageLeakRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautExceptionMessageLeak",
+    description = "@Error handler exposes exception.message to the client — return a generic error message",
+) {
     private val messageSelectors = setOf("message", "localizedMessage")
     private val logMethods = setOf("error", "warn", "debug", "info", "trace")
 

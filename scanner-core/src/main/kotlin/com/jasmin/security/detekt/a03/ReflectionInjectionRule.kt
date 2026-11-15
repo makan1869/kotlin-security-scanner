@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   Class.forName(className)                      // variable — attacker-chosen class
  *   Class.forName("com.${'$'}userInput")          // interpolated — partial control
  */
-class ReflectionInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ReflectionInjection",
-        severity = Severity.Security,
-        description = "Class.forName() with non-literal class name — attacker-controlled class loading",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class ReflectionInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "ReflectionInjection",
+    description = "Class.forName() with non-literal class name — attacker-controlled class loading",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

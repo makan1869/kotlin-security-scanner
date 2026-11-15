@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a09
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class SpringBootExceptionBodyLeakRuleTest {
                 return ResponseEntity.status(500).body(ex.message)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class SpringBootExceptionBodyLeakRuleTest {
                 return ResponseEntity.badRequest().body(e.stackTraceToString())
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class SpringBootExceptionBodyLeakRuleTest {
                 return ResponseEntity.status(500).body(mapOf("error" to "Internal server error"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -49,7 +49,7 @@ class SpringBootExceptionBodyLeakRuleTest {
                 logger.error("Error: ${'$'}{ex.message}")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -57,6 +57,6 @@ class SpringBootExceptionBodyLeakRuleTest {
         val code = """
             spring.jpa.show-sql=true
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -21,15 +18,11 @@ import java.util.Properties
  * Non-compliant:
  *   logging.level.org.springframework.security=DEBUG
  */
-class SecurityLoggingVerboseRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SecurityLoggingVerbose",
-        severity = Severity.Security,
-        description = "Spring Security DEBUG logging in production leaks auth decisions and token details",
-        debt = Debt.FIVE_MINS,
-    )
-
+class SecurityLoggingVerboseRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "SecurityLoggingVerbose",
+    description = "Spring Security DEBUG logging in production leaks auth decisions and token details",
+) {
     private val sensitiveLoggers = listOf(
         "logging.level.org.springframework.security",
         "logging.level.org.springframework.security.web",

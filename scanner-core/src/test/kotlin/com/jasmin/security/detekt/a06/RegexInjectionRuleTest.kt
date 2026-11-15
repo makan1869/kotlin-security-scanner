@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a06
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class RegexInjectionRuleTest {
             import java.util.regex.Pattern
             fun match(userPattern: String) = Pattern.compile(userPattern)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -23,7 +23,7 @@ class RegexInjectionRuleTest {
         val code = """
             fun match(userPattern: String) = Regex(userPattern)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -31,7 +31,7 @@ class RegexInjectionRuleTest {
         val code = """
             fun match(userPattern: String) = userPattern.toRegex()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -40,7 +40,7 @@ class RegexInjectionRuleTest {
             import java.util.regex.Pattern
             fun match() = Pattern.compile("^[a-z0-9]+$")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -48,6 +48,6 @@ class RegexInjectionRuleTest {
         val code = """
             fun match() = "[a-z]+".toRegex()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

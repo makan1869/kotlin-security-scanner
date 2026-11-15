@@ -3,23 +3,16 @@ package com.jasmin.security.detekt.a07
 import com.jasmin.security.detekt.core.DetectionPatterns.CREDENTIAL_VARIABLE_KEYWORDS
 import com.jasmin.security.detekt.core.DetectionPatterns.SAFE_CREDENTIAL_PLACEHOLDERS
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 // FindSecBugs: HARD_CODE_PASSWORD — OWASP A07
-class HardcodedCredentialsRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedCredentials",
-        severity = Severity.Security,
-        description = "Hardcoded credential detected — move secrets to environment variables or a vault",
-        debt = Debt.TWENTY_MINS
-    )
-
+class HardcodedCredentialsRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "HardcodedCredentials",
+    description = "Hardcoded credential detected — move secrets to environment variables or a vault",
+) {
     companion object {
         private const val MIN_CREDENTIAL_LENGTH = 3
     }

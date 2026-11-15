@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtParameter
 // at runtime, enabling deserialization gadget attacks (similar to CVE-2017-7525).
 // Compliant:   fun update(@RequestBody dto: UpdateRequest)
 // Non-compliant: fun update(@RequestBody body: Any)
-class SpringBootRequestBodyAnyTypeRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringBootRequestBodyAnyType",
-        severity = Severity.Security,
-        description = "@RequestBody typed as Any/Object — enables polymorphic deserialization attacks",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringBootRequestBodyAnyTypeRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringBootRequestBodyAnyType",
+    description = "@RequestBody typed as Any/Object — enables polymorphic deserialization attacks",
+) {
     private val unsafeTypes = setOf("Any", "Object", "Serializable", "Comparable<*>")
 
     @Suppress("ReturnCount")

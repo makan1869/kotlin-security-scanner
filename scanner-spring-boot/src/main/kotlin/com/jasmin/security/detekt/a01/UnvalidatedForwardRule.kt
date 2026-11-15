@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   request.getRequestDispatcher(request.getParameter("page")).forward(req, res)
  */
-class UnvalidatedForwardRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "UnvalidatedForward",
-        severity = Severity.Security,
-        description = "getRequestDispatcher() called with non-literal path — enables unvalidated internal forward",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class UnvalidatedForwardRule(config: Config) : SecurityRule(
+    config,
+    id = "UnvalidatedForward",
+    description = "getRequestDispatcher() called with non-literal path — enables unvalidated internal forward",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

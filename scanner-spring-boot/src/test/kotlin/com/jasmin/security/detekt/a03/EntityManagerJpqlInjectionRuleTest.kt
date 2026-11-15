@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class EntityManagerJpqlInjectionRuleTest {
                         .resultList
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -31,7 +31,7 @@ class EntityManagerJpqlInjectionRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class EntityManagerJpqlInjectionRuleTest {
                     em.createQuery("SELECT u FROM User u").resultList
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -55,7 +55,7 @@ class EntityManagerJpqlInjectionRuleTest {
                         .resultList
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class EntityManagerJpqlInjectionRuleTest {
                     em.createQuery("SELECT u " + "FROM User u").resultList
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -76,6 +76,6 @@ class EntityManagerJpqlInjectionRuleTest {
                 fun evaluate(expr: String) = parser.parseExpression("user.name")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

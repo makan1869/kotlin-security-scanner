@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -21,15 +18,11 @@ import java.util.Properties
  * Non-compliant:
  *   spring.kafka.security.protocol=PLAINTEXT
  */
-class KafkaInsecureProtocolRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KafkaInsecureProtocol",
-        severity = Severity.Security,
-        description = "Kafka security protocol set to PLAINTEXT — all broker traffic is unencrypted",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KafkaInsecureProtocolRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "KafkaInsecureProtocol",
+    description = "Kafka security protocol set to PLAINTEXT — all broker traffic is unencrypted",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         props.forEach { rawKey, rawValue ->

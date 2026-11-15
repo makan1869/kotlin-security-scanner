@@ -2,23 +2,16 @@ package com.jasmin.security.detekt.a10
 
 import com.jasmin.security.detekt.core.DetectionPatterns.SSRF_CONSTRUCTORS
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 // FindSecBugs: URLCONNECTION_SSRF_FD — OWASP A10
-class SsrfRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "Ssrf",
-        severity = Severity.Security,
-        description = "URL/URI built with a non-literal — validate and allowlist user-supplied URLs (OWASP A10)",
-        debt = Debt.TWENTY_MINS
-    )
-
+class SsrfRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "Ssrf",
+    description = "URL/URI built with a non-literal — validate and allowlist user-supplied URLs (OWASP A10)",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class CommandInjectionRuleTest {
                 Runtime.getRuntime().exec("ls ${'$'}cmd")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class CommandInjectionRuleTest {
                 ProcessBuilder(userInput)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class CommandInjectionRuleTest {
                 ProcessBuilder(listOf("sh", "-c", arg))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class CommandInjectionRuleTest {
                 Runtime.getRuntime().exec(userInput)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -60,7 +60,7 @@ class CommandInjectionRuleTest {
                 ProcessBuilder(listOf("git", "status"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -70,7 +70,7 @@ class CommandInjectionRuleTest {
                 Runtime.getRuntime().exec("whoami")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
 
@@ -81,7 +81,7 @@ class CommandInjectionRuleTest {
                 Runtime.getRuntime().exec("ls -l /tmp")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -91,7 +91,7 @@ class CommandInjectionRuleTest {
                 ProcessBuilder("ls", "-la")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -104,6 +104,6 @@ class CommandInjectionRuleTest {
                 return db.query(q)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

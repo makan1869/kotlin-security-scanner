@@ -2,22 +2,15 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns.WEAK_CIPHER_ALGORITHMS
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 // FindSecBugs: ECB_MODE, DES_USAGE, TDES_USAGE, NULL_CIPHER — OWASP A02
-class WeakCipherModeRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "WeakCipherMode",
-        severity = Severity.Security,
-        description = "Insecure cipher algorithm or mode — use AES/GCM/NoPadding with a random IV (OWASP A02)",
-        debt = Debt.TWENTY_MINS
-    )
-
+class WeakCipherModeRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "WeakCipherMode",
+    description = "Insecure cipher algorithm or mode — use AES/GCM/NoPadding with a random IV (OWASP A02)",
+) {
     @Suppress("ReturnCount")
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)

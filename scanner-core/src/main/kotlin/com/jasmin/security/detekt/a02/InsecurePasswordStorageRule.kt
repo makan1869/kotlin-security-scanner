@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -29,15 +26,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *   MessageDigest.getInstance("SHA-256").digest(password.toByteArray())
  *   DigestUtils.sha256Hex(password)
  */
-class InsecurePasswordStorageRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecurePasswordStorage",
-        severity = Severity.Security,
-        description = "Weak hash algorithm for password storage — use BCrypt, Argon2, or PBKDF2",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class InsecurePasswordStorageRule(config: Config) : SecurityRule(
+    config,
+    id = "InsecurePasswordStorage",
+    description = "Weak hash algorithm for password storage — use BCrypt, Argon2, or PBKDF2",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 // OWASP A05 — Security Misconfiguration
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // a filename of "../../etc/cron.d/evil" overwrites arbitrary server files.
 // Compliant:   val safe = UUID.randomUUID().toString() + extension
 // Non-compliant: File(uploadDir, fileItem.fileName())
-class QuarkusInsecureFileUploadRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusInsecureFileUpload",
-        severity = Severity.Security,
-        description = "FileUpload.fileName() used as file path — path traversal risk",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusInsecureFileUploadRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusInsecureFileUpload",
+    description = "FileUpload.fileName() used as file path — path traversal risk",
+) {
     private val pathContextKeywords = setOf("File(", "Paths.get", "resolve", "transferTo", "copyTo")
 
     @Suppress("ReturnCount")

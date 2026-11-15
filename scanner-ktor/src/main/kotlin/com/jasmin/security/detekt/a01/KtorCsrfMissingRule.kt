@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // header or Origin is vulnerable to cross-site request forgery.
 // Compliant:   post("/transfer") { val csrf = call.request.header("X-CSRF-Token"); require(csrf != null) }
 // Non-compliant: post("/transfer") { val body = call.receive<TransferRequest>(); process(body) }
-class KtorCsrfMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorCsrfMissing",
-        severity = Severity.Security,
-        description = "Ktor state-changing route without CSRF token check — validate X-CSRF-Token header",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorCsrfMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorCsrfMissing",
+    description = "Ktor state-changing route without CSRF token check — validate X-CSRF-Token header",
+) {
     private val mutatingMethods = setOf("post", "put", "delete", "patch")
     private val csrfIndicators = setOf("X-CSRF-Token", "csrfToken", "csrf", "Origin", "Referer")
 

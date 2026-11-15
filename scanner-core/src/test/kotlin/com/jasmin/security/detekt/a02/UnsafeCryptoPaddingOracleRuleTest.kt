@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
         val code = """
             fun cipher(): Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
                 return cipher.doFinal(data)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
             val cipherMode = "AES/CBC/PKCS5Padding"
             val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -47,7 +47,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
         val code = """
             fun cipher(): Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -55,7 +55,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
         val code = """
             fun cipher(): Cipher = Cipher.getInstance("AES/CBC/NoPadding")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
         val code = """
             fun hasher() = MessageDigest.getInstance("SHA-256")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -71,7 +71,7 @@ class UnsafeCryptoPaddingOracleRuleTest {
         val code = """
             fun cipher(mode: String): Cipher = Cipher.getInstance(mode)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -81,6 +81,6 @@ class UnsafeCryptoPaddingOracleRuleTest {
         val code = """
             fun cipher(): Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

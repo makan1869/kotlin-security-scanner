@@ -1,0 +1,81 @@
+security-quarkus:
+  active: true
+  QuarkusMissingAuth:
+    active: true
+  QuarkusSystemExit:
+    active: true
+  QuarkusPermitAllSensitive:
+    active: true
+  QuarkusJsonBeforeAuth:
+    active: true
+  QuarkusRestClientInsecureUrl:
+    active: true
+  QuarkusGraphQLNoAuth:
+    active: true
+  QuarkusReactiveRouteNoAuth:
+    active: true
+  QuarkusFormCsrfMissing:
+    active: true
+  QuarkusUnsafeSecurityContext:
+    active: true
+  QuarkusCacheResultSensitive:
+    active: true
+  QuarkusSmallryeJwtInsecure:
+    active: true
+  QuarkusRedisInsecure:
+    active: true
+  QuarkusMongoInsecure:
+    active: true
+  QuarkusOidcAudienceMissing:
+    active: true
+  QuarkusGrpcInsecure:
+    active: true
+  PanacheRawQuery:
+    active: true
+  QuarkusMissingBeanValidation:
+    active: true
+  QuarkusNativeQueryInjection:
+    active: true
+  QuarkusPathParamInjection:
+    active: true
+  QuarkusSensitiveQueryParam:
+    active: true
+  QuarkusMassAssignment:
+    active: true
+  QuarkusUnsafeHeader:
+    active: true
+  QuarkusBuildTimeSecretLeak:
+    active: true
+  QuarkusCorsPermissiveConfig:
+    active: true
+  QuarkusDevServicesInProd:
+    active: true
+  QuarkusMultipartInsecure:
+    active: true
+    maxBodySizeMb: 50
+  QuarkusSmallRyeHealthInsecure:
+    active: true
+  QuarkusSwaggerUiInProd:
+    active: true
+  QuarkusInsecureCookie:
+    active: true
+  QuarkusInsecureFileUpload:
+    active: true
+  QuarkusHardcodedConfigSecret:
+    active: true
+  QuarkusOidcInsecureConfig:
+    active: true
+  QuarkusHardcodedDatasourcePassword:
+    active: true
+  QuarkusConfigPasswordLeak:
+    active: true
+  QuarkusHardcodedConfigPropertyDefault:
+    active: true
+  QuarkusReflectionUnsafe:
+    active: true
+  QuarkusJsonbUnsafeDeserialization:
+    active: true
+  QuarkusExceptionMessageLeak:
+    active: true
+  QuarkusPasswordInLog:
+    active: true

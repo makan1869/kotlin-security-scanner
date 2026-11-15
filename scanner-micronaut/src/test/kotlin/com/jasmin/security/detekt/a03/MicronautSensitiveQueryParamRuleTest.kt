@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class MicronautSensitiveQueryParamRuleTest {
                 fun login(@QueryValue password: String): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class MicronautSensitiveQueryParamRuleTest {
                 fun callApi(@QueryValue("api_key") key: String): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -45,7 +45,7 @@ class MicronautSensitiveQueryParamRuleTest {
                 fun webhook(@QueryValue secret: String): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -58,7 +58,7 @@ class MicronautSensitiveQueryParamRuleTest {
                 fun list(@QueryValue page: Int): List<String> = emptyList()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -72,7 +72,7 @@ class MicronautSensitiveQueryParamRuleTest {
                 fun login(@Body request: LoginRequest): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,6 +82,6 @@ class MicronautSensitiveQueryParamRuleTest {
                 val key = "literal"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

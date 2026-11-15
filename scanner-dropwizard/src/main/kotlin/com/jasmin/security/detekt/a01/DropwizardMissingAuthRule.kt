@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Non-compliant:
  *   @GET fun list(): Response   // unprotected endpoint
  */
-class DropwizardMissingAuthRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DropwizardMissingAuth",
-        severity = Severity.Security,
-        description = "JAX-RS endpoint lacks access-control annotation",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class DropwizardMissingAuthRule(config: Config) : SecurityRule(
+    config,
+    id = "DropwizardMissingAuth",
+    description = "JAX-RS endpoint lacks access-control annotation",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 

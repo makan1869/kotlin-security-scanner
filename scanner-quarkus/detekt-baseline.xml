@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:QuarkusSystemExitRule.kt:QuarkusSystemExitRule$(expression, "Dangerous application shutdown call (exit) detected. An attacker could cause a Denial of Service (DoS)!")</ID>
+    <ID>FinalNewline:QuarkusSystemExitRule.kt:com.jasmin.security.detekt.a01.QuarkusSystemExitRule.kt</ID>
+    <ID>FinalNewline:QuarkusSystemExitRuleTest.kt:com.jasmin.security.detekt.a01.QuarkusSystemExitRuleTest.kt</ID>
+    <ID>FunctionSignature:QuarkusHardcodedConfigSecretRule.kt:QuarkusHardcodedConfigSecretRule$private fun buildMessage</ID>
+    <ID>FunctionSignature:QuarkusMissingAuthRule.kt:QuarkusMissingAuthRule$private fun hasHttpMethod</ID>
+    <ID>Indentation:QuarkusSystemExitRule.kt:QuarkusSystemExitRule$ </ID>
+    <ID>MaxLineLength:QuarkusSystemExitRule.kt:QuarkusSystemExitRule$reportAt(expression, "Dangerous application shutdown call (exit) detected. An attacker could cause a Denial of Service (DoS)!")</ID>
+    <ID>MaximumLineLength:QuarkusSystemExitRule.kt:QuarkusSystemExitRule$)</ID>
+    <ID>NewLineAtEndOfFile:QuarkusSystemExitRule.kt:com.jasmin.security.detekt.a01.QuarkusSystemExitRule.kt</ID>
+    <ID>NewLineAtEndOfFile:QuarkusSystemExitRuleTest.kt:com.jasmin.security.detekt.a01.QuarkusSystemExitRuleTest.kt</ID>
+    <ID>ReturnCount:QuarkusBuildTimeSecretLeakRule.kt:QuarkusBuildTimeSecretLeakRule$private fun isSecretKey: Boolean</ID>
+    <ID>TrailingCommaOnCallSite:QuarkusRuleSetProvider.kt:QuarkusRuleSetProvider$( ruleSetId, listOf( // A01 Broken Access Control ::QuarkusMissingAuthRule, ::QuarkusSystemExitRule, ::QuarkusPermitAllSensitiveRule, ::QuarkusJsonBeforeAuthRule, ::QuarkusRestClientInsecureUrlRule, ::QuarkusGraphQLNoAuthRule, ::QuarkusReactiveRouteNoAuthRule, ::QuarkusFormCsrfMissingRule, ::QuarkusUnsafeSecurityContextRule, ::QuarkusCacheResultSensitiveRule, // A02 Cryptographic Failures ::QuarkusSmallryeJwtInsecureRule, ::QuarkusRedisInsecureRule, ::QuarkusMongoInsecureRule, ::QuarkusOidcAudienceMissingRule, ::QuarkusGrpcInsecureRule, // A03 Injection ::PanacheRawQueryRule, ::QuarkusMissingBeanValidationRule, ::QuarkusNativeQueryInjectionRule, ::QuarkusPathParamInjectionRule, ::QuarkusSensitiveQueryParamRule, // A04 Insecure Design ::QuarkusMassAssignmentRule, // A05 Security Misconfiguration ::QuarkusUnsafeHeaderRule, ::QuarkusBuildTimeSecretLeakRule, ::QuarkusCorsPermissiveConfigRule, ::QuarkusDevServicesInProdRule, ::QuarkusMultipartInsecureRule, ::QuarkusSmallRyeHealthInsecureRule, ::QuarkusSwaggerUiInProdRule, ::QuarkusInsecureCookieRule, ::QuarkusInsecureFileUploadRule, // A07 Identification and Authentication Failures ::QuarkusHardcodedConfigSecretRule, ::QuarkusOidcInsecureConfigRule, ::QuarkusHardcodedDatasourcePasswordRule, ::QuarkusConfigPasswordLeakRule, ::QuarkusHardcodedConfigPropertyDefaultRule, // A08 Software and Data Integrity ::QuarkusReflectionUnsafeRule, ::QuarkusJsonbUnsafeDeserializationRule, // A09 Security Logging and Monitoring Failures ::QuarkusExceptionMessageLeakRule, ::QuarkusPasswordInLogRule, ) )</ID>
+  </CurrentIssues>
+</SmellBaseline>

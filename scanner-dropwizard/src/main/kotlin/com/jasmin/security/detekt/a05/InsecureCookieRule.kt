@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -30,15 +27,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  *   NewCookie("s", v, "/", null, "", 3600, false, true)  // 8-arg: secure=false
  *   NewCookie("s", v, "/", "example.com", "", 3600)      // 6-arg: secure defaults to false
  */
-class InsecureCookieRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecureCookie",
-        severity = Severity.Security,
-        description = "NewCookie without Secure flag — session cookies must be set Secure and HttpOnly",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class InsecureCookieRule(config: Config) : SecurityRule(
+    config,
+    id = "InsecureCookie",
+    description = "NewCookie without Secure flag — session cookies must be set Secure and HttpOnly",
+) {
     @Suppress("ReturnCount", "MagicNumber")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

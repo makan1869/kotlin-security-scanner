@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class SpelInjectionRuleTest {
                 return parser.parseExpression(userInput).getValue()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class SpelInjectionRuleTest {
                 return parser.parseExpression("user.${'$'}field").getValue()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -43,7 +43,7 @@ class SpelInjectionRuleTest {
                 return SpelExpressionParser().parseRaw(expr).getValue()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -57,7 +57,7 @@ class SpelInjectionRuleTest {
                 return parser.parseExpression("user.age").getValue()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class SpelInjectionRuleTest {
             import org.springframework.expression.spel.standard.SpelExpressionParser
             fun getAge(): Any? = SpelExpressionParser().parseExpression("user." + "age").getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class SpelInjectionRuleTest {
         val code = """
             fun parse(pattern: String) = Regex(pattern)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -87,6 +87,6 @@ class SpelInjectionRuleTest {
                 http.csrf { it.disable() }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

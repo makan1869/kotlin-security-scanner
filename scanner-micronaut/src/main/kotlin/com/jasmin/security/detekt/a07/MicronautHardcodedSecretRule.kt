@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // If the env var is unset, the hardcoded default silently takes effect in production.
 // Compliant:   @Value("\${jwt.secret}") — no default forces the app to fail fast
 // Non-compliant: @Value("\${jwt.secret:hardcoded-secret}")
-class MicronautHardcodedSecretRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautHardcodedSecret",
-        severity = Severity.Security,
-        description = "@Value property with hardcoded default for a secret — remove the default so the app fails fast",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautHardcodedSecretRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautHardcodedSecret",
+    description = "@Value property with hardcoded default for a secret — remove the default so the app fails fast",
+) {
     private val sensitiveNames = setOf(
         "secret", "password", "passwd", "pwd", "token", "apikey", "api-key",
         "api_key", "credential", "key", "jwt", "auth",

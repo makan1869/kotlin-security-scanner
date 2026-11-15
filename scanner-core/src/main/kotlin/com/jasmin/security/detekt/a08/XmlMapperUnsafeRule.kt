@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   val mapper = XmlMapper()
  */
-class XmlMapperUnsafeRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "XmlMapperUnsafe",
-        severity = Severity.Security,
-        description = "XmlMapper() has unsafe defaults — disable DTD and set FAIL_ON_UNKNOWN_PROPERTIES",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class XmlMapperUnsafeRule(config: Config) : SecurityRule(
+    config,
+    id = "XmlMapperUnsafe",
+    description = "XmlMapper() has unsafe defaults — disable DTD and set FAIL_ON_UNKNOWN_PROPERTIES",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (expression.calleeExpression?.text != DetectionPatterns.XML_MAPPER_CLASS) return

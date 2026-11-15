@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 // Exposes the schema structure via error messages and risks data loss on drop.
 // Compliant:   use database migrations (Flyway/Liquibase) in a dedicated migration step
 // Non-compliant: SchemaUtils.create(Users, Orders) in Application.module()
-class KtorExposedSchemaAutoCreateRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorExposedSchemaAutoCreate",
-        severity = Severity.Security,
-        description = "SchemaUtils.create/drop in application code — use Flyway or Liquibase migrations instead",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorExposedSchemaAutoCreateRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorExposedSchemaAutoCreate",
+    description = "SchemaUtils.create/drop in application code — use Flyway or Liquibase migrations instead",
+) {
     private val dangerousMethods = setOf("create", "drop", "createMissingTablesAndColumns", "dropDatabase")
 
     @Suppress("ReturnCount")

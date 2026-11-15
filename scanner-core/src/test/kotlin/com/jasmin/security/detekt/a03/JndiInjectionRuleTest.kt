@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class JndiInjectionRuleTest {
         val code = """
             fun resolve(name: String): Any = ctx.lookup(name)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class JndiInjectionRuleTest {
         val code = """
             fun resolve(host: String): Any = ctx.lookup("ldap://${'$'}host/exploit")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class JndiInjectionRuleTest {
                 ctx.rebind(name, obj)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -43,7 +43,7 @@ class JndiInjectionRuleTest {
             fun resolve(req: HttpServletRequest): Any =
                 ctx.lookup(req.getParameter("resource"))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -53,7 +53,7 @@ class JndiInjectionRuleTest {
         val code = """
             fun getDataSource(): Any = ctx.lookup("java:comp/env/jdbc/MyDs")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -61,7 +61,7 @@ class JndiInjectionRuleTest {
         val code = """
             fun getBean(): Any = ctx.lookup("java:module/MyBean")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -72,6 +72,6 @@ class JndiInjectionRuleTest {
             fun findUser(name: String): Any? =
                 xpath.evaluate("//user[@name='${'$'}name']", doc, XPathConstants.NODE)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

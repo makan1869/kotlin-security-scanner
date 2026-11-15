@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtProperty
 // (e.g. "../../etc/cron.d/evil") and may overwrite arbitrary server files.
 // Compliant:   val safe = UUID.randomUUID().toString() + ext
 // Non-compliant: file.transferTo(File(upload.originalFilename!!))
-class SpringBootInsecureFileUploadRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringBootInsecureFileUpload",
-        severity = Severity.Security,
-        description = "MultipartFile.originalFilename used as file path — path traversal risk",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringBootInsecureFileUploadRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringBootInsecureFileUpload",
+    description = "MultipartFile.originalFilename used as file path — path traversal risk",
+) {
     private val pathContextKeywords = setOf("transferTo", "File(", "Paths.get", "resolve")
 
     @Suppress("ReturnCount")

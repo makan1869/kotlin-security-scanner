@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class WeakRsaKeyRuleTest {
                 kpg.initialize(512)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class WeakRsaKeyRuleTest {
                 kpg.initialize(1024)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class WeakRsaKeyRuleTest {
         val code = """
             fun makeKey() = KeyPairGenerator.getInstance("RSA").also { it.initialize(768) }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -51,7 +51,7 @@ class WeakRsaKeyRuleTest {
                 kpg.initialize(2048)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -62,7 +62,7 @@ class WeakRsaKeyRuleTest {
                 kpg.initialize(4096)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -70,7 +70,7 @@ class WeakRsaKeyRuleTest {
         val code = """
             fun makeKey() = KeyPairGenerator.getInstance("EC").initialize(256)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -78,7 +78,7 @@ class WeakRsaKeyRuleTest {
         val code = """
             fun makeKey() = KeyPairGenerator.getInstance("Ed25519").initialize(255)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -89,7 +89,7 @@ class WeakRsaKeyRuleTest {
                 kpg.initialize(size)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -101,6 +101,6 @@ class WeakRsaKeyRuleTest {
                 val iv = IvParameterSpec(byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

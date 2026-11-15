@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A01 — Broken Access Control
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // the protocol level before the WebSocket upgrade is accepted.
 // Compliant:   routing { authenticate("jwt") { webSocket("/chat") { ... } } }
 // Non-compliant: routing { webSocket("/chat") { ... } }
-class KtorWebSocketNoAuthRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorWebSocketNoAuth",
-        severity = Severity.Security,
-        description = "webSocket() handler without authenticate{} — wrap with authenticate(\"provider\") to require credentials",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorWebSocketNoAuthRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorWebSocketNoAuth",
+    description = "webSocket() handler without authenticate{} — wrap with authenticate(\"provider\") to require credentials",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

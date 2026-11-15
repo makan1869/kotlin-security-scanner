@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class DropwizardHardcodedTokenRuleTest {
                 val apiKey = "sk-prod-abc123def456"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class DropwizardHardcodedTokenRuleTest {
                 val accessToken = "Bearer eyJhbGciOiJIUzI1NiJ9"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class DropwizardHardcodedTokenRuleTest {
                 val clientSecret = "super-secret-value"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -46,7 +46,7 @@ class DropwizardHardcodedTokenRuleTest {
                 val baseUrl = "https://api.example.com"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,6 +56,6 @@ class DropwizardHardcodedTokenRuleTest {
                 val apiKey: String = System.getenv("API_KEY") ?: error("API_KEY not set")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

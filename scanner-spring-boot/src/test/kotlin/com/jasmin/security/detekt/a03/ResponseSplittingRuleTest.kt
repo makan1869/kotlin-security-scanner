@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class ResponseSplittingRuleTest {
                 response.addHeader("X-Custom", value)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class ResponseSplittingRuleTest {
                 response.setHeader("Location", "https://${'$'}host/callback")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class ResponseSplittingRuleTest {
                 response.addHeader("X-Forwarded-For", req.getHeader("X-Forwarded-For"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -50,7 +50,7 @@ class ResponseSplittingRuleTest {
                 response.setHeader("Cache-Control", "no-store, no-cache")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -60,7 +60,7 @@ class ResponseSplittingRuleTest {
                 response.addHeader("X-Frame-Options", "DENY")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -70,7 +70,7 @@ class ResponseSplittingRuleTest {
                 response.setHeader("Cache-Control", "no-store, " + "no-cache")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -80,7 +80,7 @@ class ResponseSplittingRuleTest {
                 response.setHeader("Cache-Control")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -91,6 +91,6 @@ class ResponseSplittingRuleTest {
             import org.springframework.expression.spel.standard.SpelExpressionParser
             fun eval(expr: String): Any? = SpelExpressionParser().parseExpression(expr).getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

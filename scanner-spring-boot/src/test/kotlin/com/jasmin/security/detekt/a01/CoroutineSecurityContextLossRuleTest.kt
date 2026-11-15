@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class CoroutineSecurityContextLossRuleTest {
             @PreAuthorize("hasRole('ADMIN')")
             suspend fun deleteUser(id: Long) { userService.delete(id) }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class CoroutineSecurityContextLossRuleTest {
             @PostAuthorize("returnObject.owner == authentication.name")
             suspend fun getDocument(id: Long): Document = repo.findById(id)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class CoroutineSecurityContextLossRuleTest {
             @Secured("ROLE_ADMIN")
             suspend fun adminAction(): String = "done"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -46,7 +46,7 @@ class CoroutineSecurityContextLossRuleTest {
             @PreAuthorize("hasRole('ADMIN')")
             fun deleteUser(id: Long) { userService.delete(id) }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -54,7 +54,7 @@ class CoroutineSecurityContextLossRuleTest {
         val code = """
             suspend fun fetchData(id: Long): Data = repository.findById(id)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class CoroutineSecurityContextLossRuleTest {
             @RolesAllowed("ADMIN")
             suspend fun action(): String = "ok"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -74,6 +74,6 @@ class CoroutineSecurityContextLossRuleTest {
             @GetMapping("/users")
             fun getUsers(): List<User> = userService.findAll()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

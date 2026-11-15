@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a09
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SensitiveDataLoggingRuleTest {
@@ -16,7 +16,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.info("User login with password: ${'$'}password")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.debug("Received token: ${'$'}token")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.warn("Config secret=${'$'}clientSecret")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -49,7 +49,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.error("Failed with apiKey=${'$'}apiKey")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -60,7 +60,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.info("password={}", userPwd)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -71,7 +71,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.warn("Reset of the password page for ${'$'}{user.id}")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.info("user logged in")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -93,7 +93,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.info("Processing request for userId=${'$'}userId")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -104,7 +104,7 @@ class SensitiveDataLoggingRuleTest {
                 logger.info("Application started")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -112,7 +112,7 @@ class SensitiveDataLoggingRuleTest {
         val code = """
             fun process(password: String) = println("password: ${'$'}password")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag path traversal patterns
@@ -121,13 +121,13 @@ class SensitiveDataLoggingRuleTest {
         val code = """
             fun readFile(userPath: String) = java.io.File(userPath)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag hardcoded credential patterns
     @Test
     fun `does not interfere with hardcoded credential code`() {
         val code = """val dbPassword = "hardcoded-secret""""
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,25 +1,18 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 // OWASP A02 — Cryptographic Failures
 // gRPC clients connecting over plaintext expose RPC calls and credentials.
 // Compliant:   quarkus.grpc.clients.my-service.ssl.trust-certificate=ca.pem
 // Non-compliant: quarkus.grpc.clients.my-service.plain-text=true
-class QuarkusGrpcInsecureRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusGrpcInsecure",
-        severity = Severity.Security,
-        description = "Quarkus gRPC client configured with plain-text=true — RPC traffic is unencrypted",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusGrpcInsecureRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusGrpcInsecure",
+    description = "Quarkus gRPC client configured with plain-text=true — RPC traffic is unencrypted",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         props.forEach { rawKey, rawValue ->

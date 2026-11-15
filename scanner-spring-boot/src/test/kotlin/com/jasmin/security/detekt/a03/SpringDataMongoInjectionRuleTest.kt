@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class SpringDataMongoInjectionRuleTest {
             fun findBy(field: String, value: String) =
                 mongoTemplate.find(Query(Criteria.where(field).is(value)), User::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class SpringDataMongoInjectionRuleTest {
             fun findBy(prefix: String) =
                 mongoTemplate.find(Query(Criteria.where("${'$'}prefix.name").is("test")), Doc::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class SpringDataMongoInjectionRuleTest {
                     Document::class.java,
                 )
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -49,7 +49,7 @@ class SpringDataMongoInjectionRuleTest {
             fun findByUsername(username: String) =
                 mongoTemplate.find(Query(Criteria.where("username").is(username)), User::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -58,7 +58,7 @@ class SpringDataMongoInjectionRuleTest {
             fun findByUsername(value: String) =
                 mongoTemplate.find(Query(Criteria.where("user" + "name").is(value)), User::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -67,7 +67,7 @@ class SpringDataMongoInjectionRuleTest {
         val code = """
             fun build(field: String) = criteriaBuilder.where(field)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -75,7 +75,7 @@ class SpringDataMongoInjectionRuleTest {
         val code = """
             fun filter(items: List<String>, pred: (String) -> Boolean) = items.filter { pred(it) }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -85,6 +85,6 @@ class SpringDataMongoInjectionRuleTest {
         val code = """
             fun evaluate(expr: String) = SpelExpressionParser().parseExpression(expr).getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

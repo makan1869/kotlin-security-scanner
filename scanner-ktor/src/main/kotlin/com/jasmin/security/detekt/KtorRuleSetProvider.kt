@@ -34,58 +34,58 @@ import com.jasmin.security.detekt.a07.KtorHardcodedSecretKeyRule
 import com.jasmin.security.detekt.a08.KtorInsecureContentNegotiationRule
 import com.jasmin.security.detekt.a09.KtorLoggingCredentialsRule
 import com.jasmin.security.detekt.a09.KtorStatusPageLeakDetailsRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 class KtorRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-ktor"
+    override val ruleSetId = RuleSetId("security-ktor")
 
-    override fun instance(config: Config): RuleSet {
+    override fun instance(): RuleSet {
         val rules = listOf(
             // A01 Broken Access Control
-            KtorMissingAuthRule(config),
-            KtorInsecureRedirectRule(config),
-            KtorCsrfMissingRule(config),
-            KtorExposedDeleteAllRule(config),
-            KtorWebSocketNoAuthRule(config),
+            ::KtorMissingAuthRule,
+            ::KtorInsecureRedirectRule,
+            ::KtorCsrfMissingRule,
+            ::KtorExposedDeleteAllRule,
+            ::KtorWebSocketNoAuthRule,
             // A02 Cryptographic Failures
-            KtorBasicAuthInsecureRule(config),
-            KtorWeakJwtSecretRule(config),
-            KtorExposedConnectionNotSecureRule(config),
+            ::KtorBasicAuthInsecureRule,
+            ::KtorWeakJwtSecretRule,
+            ::KtorExposedConnectionNotSecureRule,
             // A03 Injection
-            KtorXssResponseRule(config),
-            KtorExposedOrmInjectionRule(config),
-            KtorExposedRawSqlConcatRule(config),
-            KtorSensitiveRouteParamRule(config),
-            KtorFileUploadTraversalRule(config),
-            KtorUnvalidatedQueryParamRule(config),
-            KtorRespondFileTraversalRule(config),
+            ::KtorXssResponseRule,
+            ::KtorExposedOrmInjectionRule,
+            ::KtorExposedRawSqlConcatRule,
+            ::KtorSensitiveRouteParamRule,
+            ::KtorFileUploadTraversalRule,
+            ::KtorUnvalidatedQueryParamRule,
+            ::KtorRespondFileTraversalRule,
             // A04 Insecure Design
-            KtorRawCallReceiveRule(config),
+            ::KtorRawCallReceiveRule,
             // A05 Security Misconfiguration
-            KtorExposedSchemaAutoCreateRule(config),
-            KtorDevelopmentModeRule(config),
-            KtorCorsAnyHeaderRule(config),
-            KtorInsecureCookieSessionRule(config),
-            KtorPermissiveCorsRule(config),
-            KtorClearTextCookieRule(config),
-            KtorSecurityHeadersMissingRule(config),
-            KtorSslRedirectMissingRule(config),
-            KtorRateLimitingMissingRule(config),
-            KtorSessionCookieDomainMissingRule(config),
-            KtorForwardedHeaderTrustRule(config),
-            KtorMultipartInsecureUploadRule(config),
+            ::KtorExposedSchemaAutoCreateRule,
+            ::KtorDevelopmentModeRule,
+            ::KtorCorsAnyHeaderRule,
+            ::KtorInsecureCookieSessionRule,
+            ::KtorPermissiveCorsRule,
+            ::KtorClearTextCookieRule,
+            ::KtorSecurityHeadersMissingRule,
+            ::KtorSslRedirectMissingRule,
+            ::KtorRateLimitingMissingRule,
+            ::KtorSessionCookieDomainMissingRule,
+            ::KtorForwardedHeaderTrustRule,
+            ::KtorMultipartInsecureUploadRule,
             // A07 Identification and Authentication Failures
-            KtorHardcodedSecretKeyRule(config),
-            KtorHardcodedPasswordComparisonRule(config),
-            KtorHardcodedDatabasePasswordRule(config),
+            ::KtorHardcodedSecretKeyRule,
+            ::KtorHardcodedPasswordComparisonRule,
+            ::KtorHardcodedDatabasePasswordRule,
             // A08 Software and Data Integrity Failures
-            KtorInsecureContentNegotiationRule(config),
+            ::KtorInsecureContentNegotiationRule,
             // A09 Security Logging and Monitoring Failures
-            KtorLoggingCredentialsRule(config),
-            KtorStatusPageLeakDetailsRule(config),
+            ::KtorLoggingCredentialsRule,
+            ::KtorStatusPageLeakDetailsRule,
         )
         return RuleSet(ruleSetId, rules)
     }

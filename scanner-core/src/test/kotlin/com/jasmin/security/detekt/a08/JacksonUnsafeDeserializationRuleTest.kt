@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a08
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class JacksonUnsafeDeserializationRuleTest {
         val code = """
             fun mapper(): ObjectMapper = ObjectMapper().apply { enableDefaultTyping() }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class JacksonUnsafeDeserializationRuleTest {
                 it.activateDefaultTyping(LaissezFaireSubTypeValidator.instance)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class JacksonUnsafeDeserializationRuleTest {
             @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
             open class Animal(val name: String)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class JacksonUnsafeDeserializationRuleTest {
             @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = As.PROPERTY, property = "@c")
             abstract class Vehicle
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -53,7 +53,7 @@ class JacksonUnsafeDeserializationRuleTest {
             @JsonTypeInfo(JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "@c")
             open class Animal(val name: String)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -64,7 +64,7 @@ class JacksonUnsafeDeserializationRuleTest {
             @JsonTypeInfo(JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
             open class Shape
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
 
@@ -73,7 +73,7 @@ class JacksonUnsafeDeserializationRuleTest {
         val code = """
             fun mapper(): ObjectMapper = ObjectMapper()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class JacksonUnsafeDeserializationRuleTest {
             @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
             open class Shape
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -93,6 +93,6 @@ class JacksonUnsafeDeserializationRuleTest {
             fun deserialize(input: InputStream): Any =
                 ObjectInputStream(input).readObject()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

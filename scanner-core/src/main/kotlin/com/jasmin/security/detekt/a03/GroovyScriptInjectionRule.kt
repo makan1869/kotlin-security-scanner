@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   shell.evaluate(userScript)                 // variable — RCE risk
  *   engine.eval("println '${'$'}userInput'")   // interpolated — RCE risk
  */
-class GroovyScriptInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "GroovyScriptInjection",
-        severity = Severity.Security,
-        description = "Script execution with non-literal source — user-controlled scripts enable RCE",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class GroovyScriptInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "GroovyScriptInjection",
+    description = "Script execution with non-literal source — user-controlled scripts enable RCE",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

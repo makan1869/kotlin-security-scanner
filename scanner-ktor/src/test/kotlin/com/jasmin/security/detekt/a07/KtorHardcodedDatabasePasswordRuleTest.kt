@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class KtorHardcodedDatabasePasswordRuleTest {
                 Database.connect("jdbc:postgresql://localhost/mydb", "org.postgresql.Driver", "dbuser", "hardcoded-pass")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class KtorHardcodedDatabasePasswordRuleTest {
                 Database.connect(url = "jdbc:h2:mem:test", password = "literal-password")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class KtorHardcodedDatabasePasswordRuleTest {
             val pass = System.getenv("DB_PASS") ?: error("DB_PASS not set")
             Database.connect("jdbc:postgresql://localhost/mydb", "org.postgresql.Driver", "user", pass)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -45,6 +45,6 @@ class KtorHardcodedDatabasePasswordRuleTest {
                 Users.selectAll().toList()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

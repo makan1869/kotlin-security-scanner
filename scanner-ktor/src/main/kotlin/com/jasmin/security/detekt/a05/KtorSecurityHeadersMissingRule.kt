@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A05 — Security Misconfiguration
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // leaves the app exposed to clickjacking and MIME sniffing attacks.
 // Compliant:   install(DefaultHeaders) { header("X-Frame-Options", "DENY") }
 // Non-compliant: install(DefaultHeaders)  // no security headers configured
-class KtorSecurityHeadersMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorSecurityHeadersMissing",
-        severity = Severity.Security,
-        description = "Ktor DefaultHeaders without X-Frame-Options — app is vulnerable to clickjacking",
-        debt = Debt.TEN_MINS,
-    )
-
+class KtorSecurityHeadersMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorSecurityHeadersMissing",
+    description = "Ktor DefaultHeaders without X-Frame-Options — app is vulnerable to clickjacking",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

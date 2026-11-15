@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 
 // OWASP A02 — Cryptographic Failures
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtClass
 // over plaintext. Switch to https:// or configure the URI via properties.
 // Compliant:   @RegisterRestClient(configKey="my-svc")  // URI in application.properties
 // Non-compliant: @RegisterRestClient(baseUri="http://payment-service:8080")
-class QuarkusRestClientInsecureUrlRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusRestClientInsecureUrl",
-        severity = Severity.Security,
-        description = "@RegisterRestClient baseUri uses HTTP — request bodies transmitted in cleartext",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusRestClientInsecureUrlRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusRestClientInsecureUrl",
+    description = "@RegisterRestClient baseUri uses HTTP — request bodies transmitted in cleartext",
+) {
     @Suppress("ReturnCount")
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)

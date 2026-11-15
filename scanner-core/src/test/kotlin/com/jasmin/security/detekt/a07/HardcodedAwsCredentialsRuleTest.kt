@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val awsKey = "AKIAIOSFODNN7EXAMPLE"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val tempKey = "ASIAIOSFODNN7EXAMPLE"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val roleKey = "AROAIOSFODNN7EXAMPLE"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────="────────────────
@@ -42,7 +42,7 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val awsKey = System.getenv("AWS_ACCESS_KEY_ID")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val name = "AKIA"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -58,7 +58,7 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val name = "akiaiosfodnn7example"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -68,6 +68,6 @@ class HardcodedAwsCredentialsRuleTest {
         val code = """
             val password = "hunter2"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

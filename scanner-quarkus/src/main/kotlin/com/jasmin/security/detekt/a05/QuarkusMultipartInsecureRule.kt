@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 // OWASP A05 — Security Misconfiguration
@@ -12,15 +9,11 @@ import java.util.Properties
 // resource exhaustion and malicious file upload attacks via multipart.
 // Compliant:   quarkus.http.limits.max-body-size=10M
 // Non-compliant: quarkus.http.limits.max-body-size=500M (or very large value)
-class QuarkusMultipartInsecureRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusMultipartInsecure",
-        severity = Severity.Security,
-        description = "Quarkus multipart upload limit is very large or unset — enforce a reasonable max-body-size",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusMultipartInsecureRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusMultipartInsecure",
+    description = "Quarkus multipart upload limit is very large or unset — enforce a reasonable max-body-size",
+) {
     // Accepts an optional K/M/G binary-multiple suffix or a bare byte count.
     private val sizePattern = Regex("""^(\d+)\s*([KMG]?)$""", RegexOption.IGNORE_CASE)
 

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A05 — Security Misconfiguration
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // will accept plain HTTP requests and silently serve content over cleartext.
 // Compliant:   install(HttpsRedirect) { sslPort = 443; permanentRedirect = true }
 // Non-compliant: routing { get("/") { ... } } without install(HttpsRedirect)
-class KtorSslRedirectMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorSslRedirectMissing",
-        severity = Severity.Security,
-        description = "Ktor app has routing without HttpsRedirect — HTTP requests served in cleartext",
-        debt = Debt.TEN_MINS,
-    )
-
+class KtorSslRedirectMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorSslRedirectMissing",
+    description = "Ktor app has routing without HttpsRedirect — HTTP requests served in cleartext",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -28,15 +25,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *       private fun readObject(stream: ObjectInputStream) { ... }
  *   }
  */
-class QuarkusReflectionUnsafeRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusReflectionUnsafe",
-        severity = Severity.Security,
-        description = "@RegisterForReflection on Serializable with readObject — deserialization gadget risk",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusReflectionUnsafeRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusReflectionUnsafe",
+    description = "@RegisterForReflection on Serializable with readObject — deserialization gadget risk",
+) {
     @Suppress("ReturnCount")
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)

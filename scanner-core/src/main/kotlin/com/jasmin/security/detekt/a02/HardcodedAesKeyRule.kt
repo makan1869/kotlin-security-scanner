@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   SecretKeySpec(byteArrayOf(0x01, 0x02, ...), "AES")
  *   SecretKeySpec("my-secret-key!!".toByteArray(), "AES")
  */
-class HardcodedAesKeyRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedAesKey",
-        severity = Severity.Security,
-        description = "Symmetric encryption key is a hardcoded literal — load from a KeyStore or environment variable",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HardcodedAesKeyRule(config: Config) : SecurityRule(
+    config,
+    id = "HardcodedAesKey",
+    description = "Symmetric encryption key is a hardcoded literal — load from a KeyStore or environment variable",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

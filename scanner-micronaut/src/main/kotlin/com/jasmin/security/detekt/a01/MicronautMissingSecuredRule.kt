@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -15,15 +12,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // Compliant:   @Get @Secured(SecurityRule.IS_AUTHENTICATED) fun list(): List<User>
 //              OR @Secured(...) at class level protects all methods
 // Non-compliant: @Get fun list(): List<User>   // unannotated = world-readable
-class MicronautMissingSecuredRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautMissingSecured",
-        severity = Severity.Security,
-        description = "Micronaut controller endpoint lacks @Secured — all callers can access it",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautMissingSecuredRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautMissingSecured",
+    description = "Micronaut controller endpoint lacks @Secured — all callers can access it",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val funcAnnotations = function.annotationNames()

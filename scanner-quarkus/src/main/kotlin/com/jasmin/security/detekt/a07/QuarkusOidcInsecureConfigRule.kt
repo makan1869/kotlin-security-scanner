@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -23,15 +20,11 @@ import java.util.Properties
  *   quarkus.oidc.tls.verification=none
  *   quarkus.oidc.credentials.secret=my-hardcoded-secret
  */
-class QuarkusOidcInsecureConfigRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusOidcInsecureConfig",
-        severity = Severity.Security,
-        description = "Quarkus OIDC misconfigured — TLS disabled or secret hardcoded",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusOidcInsecureConfigRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusOidcInsecureConfig",
+    description = "Quarkus OIDC misconfigured — TLS disabled or secret hardcoded",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         val tlsKey = "quarkus.oidc.tls.verification"

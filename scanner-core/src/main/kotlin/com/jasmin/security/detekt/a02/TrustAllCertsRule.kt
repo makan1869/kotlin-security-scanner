@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Non-compliant:
  *   override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) { }
  */
-class TrustAllCertsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "TrustAllCerts",
-        severity = Severity.Security,
-        description = "Empty X509TrustManager check method accepts all certificates including invalid ones",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class TrustAllCertsRule(config: Config) : SecurityRule(
+    config,
+    id = "TrustAllCerts",
+    description = "Empty X509TrustManager check method accepts all certificates including invalid ones",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (function.name !in DetectionPatterns.TRUST_CHECK_METHODS) return

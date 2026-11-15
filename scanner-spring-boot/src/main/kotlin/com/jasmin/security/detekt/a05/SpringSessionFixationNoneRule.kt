@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * Non-compliant:
  *   http.sessionManagement { sessionFixation { none() } }
  */
-class SpringSessionFixationNoneRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringSessionFixationNone",
-        severity = Severity.Security,
-        description = "Session fixation protection set to none() — the session ID survives login",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringSessionFixationNoneRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "SpringSessionFixationNone",
+    description = "Session fixation protection set to none() — the session ID survives login",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

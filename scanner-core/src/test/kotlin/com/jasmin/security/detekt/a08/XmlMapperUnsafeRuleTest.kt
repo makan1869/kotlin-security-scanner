@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a08
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class XmlMapperUnsafeRuleTest {
         val code = """
             fun mapper(): XmlMapper = XmlMapper()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class XmlMapperUnsafeRuleTest {
                 registerModule(KotlinModule.Builder().build())
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class XmlMapperUnsafeRuleTest {
         val code = """
             val xmlMapper = XmlMapper()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -44,7 +44,7 @@ class XmlMapperUnsafeRuleTest {
         val code = """
             val mapper = ObjectMapper()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -53,7 +53,7 @@ class XmlMapperUnsafeRuleTest {
             val sb = StringBuilder()
             val list = ArrayList<String>()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -63,6 +63,6 @@ class XmlMapperUnsafeRuleTest {
         val code = """
             fun mapper() = ObjectMapper().apply { enableDefaultTyping() }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

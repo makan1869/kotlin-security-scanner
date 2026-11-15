@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -20,15 +17,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   val pem = "-----BEGIN RSA PRIVATE KEY-----\nMIIEo..."
  */
-class HardcodedPrivateKeyRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedPrivateKey",
-        severity = Severity.Security,
-        description = "Private key PEM material in source code — load from a secure KeyStore",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HardcodedPrivateKeyRule(config: Config) : SecurityRule(
+    config,
+    id = "HardcodedPrivateKey",
+    description = "Private key PEM material in source code — load from a secure KeyStore",
+) {
     private val pemHeaders = listOf(
         "-----BEGIN RSA PRIVATE KEY-----",
         "-----BEGIN PRIVATE KEY-----",

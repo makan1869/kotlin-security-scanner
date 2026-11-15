@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class QuarkusInsecureCookieRuleTest {
                 return Response.ok().cookie(NewCookie("SESSION", token)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class QuarkusInsecureCookieRuleTest {
                 return Response.ok().cookie(cookie).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class QuarkusInsecureCookieRuleTest {
                 return Response.ok().cookie(cookie).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -46,7 +46,7 @@ class QuarkusInsecureCookieRuleTest {
         val code = """
             val cookie = jakarta.ws.rs.core.NewCookie.Builder("SESSION").secure(true).httpOnly(true).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -54,7 +54,7 @@ class QuarkusInsecureCookieRuleTest {
         val code = """
             val cookie = NewCookie.Builder("SESSION").secure(true).httpOnly(true).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -62,6 +62,6 @@ class QuarkusInsecureCookieRuleTest {
         val code = """
             quarkus.http.cors.origins=https://app.example.com
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

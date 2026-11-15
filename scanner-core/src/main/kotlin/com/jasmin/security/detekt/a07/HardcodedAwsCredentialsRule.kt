@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   val key = "AKIAIOSFODNN7EXAMPLE"
  */
-class HardcodedAwsCredentialsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedAwsCredentials",
-        severity = Severity.Security,
-        description = "Hardcoded AWS access key — rotate immediately and use IAM roles or env vars",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HardcodedAwsCredentialsRule(config: Config) : SecurityRule(
+    config,
+    id = "HardcodedAwsCredentials",
+    description = "Hardcoded AWS access key — rotate immediately and use IAM roles or env vars",
+) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
         if (expression.hasInterpolation()) return

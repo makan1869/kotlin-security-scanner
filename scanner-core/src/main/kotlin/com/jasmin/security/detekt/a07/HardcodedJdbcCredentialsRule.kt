@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -20,15 +17,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   "jdbc:postgresql://admin:s3cr3t@db.internal:5432/app"
  *   "jdbc:mysql://db/app?user=root&password=hunter2"
  */
-class HardcodedJdbcCredentialsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedJdbcCredentials",
-        severity = Severity.Security,
-        description = "JDBC URL embeds credentials — inject the password from the environment instead",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HardcodedJdbcCredentialsRule(config: Config) : SecurityRule(
+    config,
+    id = "HardcodedJdbcCredentials",
+    description = "JDBC URL embeds credentials — inject the password from the environment instead",
+) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
         if (expression.hasInterpolation()) return

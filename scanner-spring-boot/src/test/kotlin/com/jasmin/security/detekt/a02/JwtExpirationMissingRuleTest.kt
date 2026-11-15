@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun token() = Jwts.builder().subject("user").compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun token() = Jwts.builder().subject("user").claim("role", "admin").compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun token() = Jwts.builder().subject("user").signWith(key).compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -42,7 +42,7 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun token() = Jwts.builder().subject("user").setExpiration(expDate).compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun token() = Jwts.builder().subject("user").expiration(date).compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -58,7 +58,7 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun compress(data: ByteArray) = zip.compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -68,6 +68,6 @@ class JwtExpirationMissingRuleTest {
         val code = """
             fun redis() = RedisStandaloneConfiguration("localhost", 6379)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

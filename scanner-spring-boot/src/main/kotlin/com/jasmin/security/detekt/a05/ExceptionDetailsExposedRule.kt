@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -24,18 +21,14 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @ExceptionHandler fun handle(e: Exception) =
  *       ResponseEntity.badRequest().body(e.message)
  */
-class ExceptionDetailsExposedRule(config: Config) : SecurityRule(config) {
-
+class ExceptionDetailsExposedRule(config: Config) : SecurityRule(
+    config,
+    id = "ExceptionDetailsExposed",
+    description = "@ExceptionHandler exposes internal exception details to the client",
+) {
     // Matches a logging call and its arguments, e.g. logger.error("..", e.message) or log.warn(e).
     // We strip these out so that an exception detail that is only LOGGED (not returned) is ignored.
     private val LOG_CALL = Regex("""\b(log|logger|LOG|LOGGER)\s*\.\s*\w+\s*\([^)]*\)""")
-
-    override val issue = Issue(
-        id = "ExceptionDetailsExposed",
-        severity = Severity.Security,
-        description = "@ExceptionHandler exposes internal exception details to the client",
-        debt = Debt.TWENTY_MINS,
-    )
 
     @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 
@@ -18,15 +15,11 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
  * Non-compliant:
  *   SessionHandler.create(store).setCookieSecureFlag(false)
  */
-class VertxSessionCookieInsecureRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "VertxSessionCookieInsecure",
-        severity = Severity.Security,
-        description = "SessionHandler.setCookieSecureFlag(false) — session cookie sent over plain HTTP",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class VertxSessionCookieInsecureRule(config: Config) : SecurityRule(
+    config,
+    id = "VertxSessionCookieInsecure",
+    description = "SessionHandler.setCookieSecureFlag(false) — session cookie sent over plain HTTP",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (expression.calleeExpression?.text?.substringAfterLast(".") != "setCookieSecureFlag") return

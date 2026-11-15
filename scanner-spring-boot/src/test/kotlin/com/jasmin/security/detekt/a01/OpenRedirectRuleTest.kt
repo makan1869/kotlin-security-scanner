@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class OpenRedirectRuleTest {
                 fun login(returnUrl: String): String = "redirect:${'$'}returnUrl"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class OpenRedirectRuleTest {
                 fun login(next: String): String = "redirect:" + next
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -45,7 +45,7 @@ class OpenRedirectRuleTest {
                 fun login(next: String): String = "redirect:/" + next
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -60,7 +60,7 @@ class OpenRedirectRuleTest {
                 fun afterCreate(id: Long): String = "redirect:/users/${'$'}id/profile"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -72,7 +72,7 @@ class OpenRedirectRuleTest {
                 fun save(id: Long): String = "redirect:/owners/" + id
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -83,7 +83,7 @@ class OpenRedirectRuleTest {
                 fun home(): String = "redirect:/dashboard"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -94,7 +94,7 @@ class OpenRedirectRuleTest {
                 fun view(id: Long): String = "forward:/templates/user"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -105,7 +105,7 @@ class OpenRedirectRuleTest {
                 fun message(name: String): String = "hello ${'$'}name"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -116,6 +116,6 @@ class OpenRedirectRuleTest {
             import org.springframework.expression.spel.standard.SpelExpressionParser
             fun eval(expr: String): Any? = SpelExpressionParser().parseExpression(expr).getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

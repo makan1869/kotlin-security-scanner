@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a04
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class QuarkusMassAssignmentRuleTest {
                 return Response.ok(userService.create(user)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class QuarkusMassAssignmentRuleTest {
                 return Response.ok(userService.update(id, user)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class QuarkusMassAssignmentRuleTest {
                 return userService.list(filter)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -54,7 +54,7 @@ class QuarkusMassAssignmentRuleTest {
                 return Response.ok(userService.create(dto)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -64,6 +64,6 @@ class QuarkusMassAssignmentRuleTest {
             @Path("/admin")
             fun admin(): Response = Response.ok().build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class ExceptionDetailsExposedRuleTest {
             @ExceptionHandler
             fun handle(e: Exception) = ResponseEntity.badRequest().body(e.message)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class ExceptionDetailsExposedRuleTest {
             @ExceptionHandler
             fun handle(e: Exception): String = e.localizedMessage
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class ExceptionDetailsExposedRuleTest {
                 return "error"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -49,7 +49,7 @@ class ExceptionDetailsExposedRuleTest {
             @ExceptionHandler
             fun handle(e: Exception) = ResponseEntity.internalServerError().body("An error occurred")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -61,7 +61,7 @@ class ExceptionDetailsExposedRuleTest {
                 return ResponseEntity.internalServerError().body("An error occurred")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -69,7 +69,7 @@ class ExceptionDetailsExposedRuleTest {
         val code = """
             fun logError(e: Exception) = logger.error(e.message)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -80,6 +80,6 @@ class ExceptionDetailsExposedRuleTest {
             @Bean
             fun hiddenHttpMethodFilter() = HiddenHttpMethodFilter()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

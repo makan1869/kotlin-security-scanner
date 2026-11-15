@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class GroovyScriptInjectionRuleTest {
         val code = """
             fun run(userScript: String) = GroovyShell().evaluate(userScript)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class GroovyScriptInjectionRuleTest {
         val code = """
             fun run(expr: String) = GroovyShell().evaluate("println '${'$'}expr'")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class GroovyScriptInjectionRuleTest {
                 engine.eval(code)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class GroovyScriptInjectionRuleTest {
             fun run(req: HttpServletRequest) =
                 GroovyShell().evaluate(req.getParameter("script"))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -54,7 +54,7 @@ class GroovyScriptInjectionRuleTest {
         val code = """
             fun greet() = GroovyShell().evaluate("println 'hello world'")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -65,7 +65,7 @@ class GroovyScriptInjectionRuleTest {
                 engine.eval("1 + 1")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -75,6 +75,6 @@ class GroovyScriptInjectionRuleTest {
         val code = """
             fun load(className: String): Class<*> = Class.forName(className)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

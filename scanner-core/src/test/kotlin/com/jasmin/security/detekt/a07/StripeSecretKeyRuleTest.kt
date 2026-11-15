@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class StripeSecretKeyRuleTest {
         val code = """
             val key = "$token"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class StripeSecretKeyRuleTest {
         val code = """
             val key = "$token"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class StripeSecretKeyRuleTest {
         val code = """
             val key = "sk_test_0123456789abcdefghijklmno"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -43,6 +43,6 @@ class StripeSecretKeyRuleTest {
         val code = """
             val key = System.getenv("STRIPE_SECRET_KEY")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

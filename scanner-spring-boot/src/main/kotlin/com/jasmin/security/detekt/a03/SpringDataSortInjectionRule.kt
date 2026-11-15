@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   Sort.by(request.getParameter("sort"))
  */
-class SpringDataSortInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringDataSortInjection",
-        severity = Severity.Security,
-        description = "Sort.by() with non-literal argument — user-controlled sort field enables JPQL injection",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringDataSortInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringDataSortInjection",
+    description = "Sort.by() with non-literal argument — user-controlled sort field enables JPQL injection",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

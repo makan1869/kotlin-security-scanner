@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -27,16 +24,12 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   BCryptPasswordEncoder(4)
  */
-class WeakBcryptRoundsRule(config: Config) : SecurityRule(config) {
-
+class WeakBcryptRoundsRule(config: Config) : SecurityRule(
+    config,
+    id = "WeakBcryptRounds",
+    description = "BCryptPasswordEncoder strength below minimum — brute-forceable offline",
+) {
     private val minStrength: Int = config.valueOrDefault("minStrength", DetectionPatterns.BCRYPT_MIN_ROUNDS)
-
-    override val issue = Issue(
-        id = "WeakBcryptRounds",
-        severity = Severity.Security,
-        description = "BCryptPasswordEncoder strength below minimum — brute-forceable offline",
-        debt = Debt.TWENTY_MINS,
-    )
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {

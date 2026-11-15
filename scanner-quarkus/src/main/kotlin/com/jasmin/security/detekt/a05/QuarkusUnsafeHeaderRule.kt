@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   Response.ok().header("Content-Type", userInput).build()   // dynamic — unsafe
  */
-class QuarkusUnsafeHeaderRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusUnsafeHeader",
-        severity = Severity.Security,
-        description = "JAX-RS Response.header() with dynamic value — CR/LF enables response splitting",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusUnsafeHeaderRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusUnsafeHeader",
+    description = "JAX-RS Response.header() with dynamic value — CR/LF enables response splitting",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

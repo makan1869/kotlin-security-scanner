@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   StaticHandler.create("/")
  *   StaticHandler.create().setAllowRootFileSystemAccess(true)
  */
-class VertxStaticHandlerRootFsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "VertxStaticHandlerRootFs",
-        severity = Severity.Security,
-        description = "StaticHandler serves the filesystem root — arbitrary file disclosure",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class VertxStaticHandlerRootFsRule(config: Config) : SecurityRule(
+    config,
+    id = "VertxStaticHandlerRootFs",
+    description = "StaticHandler serves the filesystem root — arbitrary file disclosure",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  *   File(outputDir, zipEntry.name)
  *   outputDir.resolve(entry.name)
  */
-class ZipSlipRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ZipSlip",
-        severity = Severity.Security,
-        description = "ZipEntry name resolved into an output path — normalize and verify it stays inside the target dir",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class ZipSlipRule(config: Config) : SecurityRule(
+    config,
+    id = "ZipSlip",
+    description = "ZipEntry name resolved into an output path — normalize and verify it stays inside the target dir",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

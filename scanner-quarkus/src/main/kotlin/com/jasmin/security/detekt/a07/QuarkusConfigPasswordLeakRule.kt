@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClass
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtClass
 // compile-time default. This ends up in class files and container images.
 // Compliant:   @ConfigProperty(name="app.secret") lateinit var secret: String
 // Non-compliant: @ConfigProperty(name="app.secret", defaultValue="hardcoded-val")
-class QuarkusConfigPasswordLeakRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusConfigPasswordLeak",
-        severity = Severity.Security,
-        description = "@ConfigProperty defaultValue contains a potential secret — remove defaultValue for secrets",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusConfigPasswordLeakRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusConfigPasswordLeak",
+    description = "@ConfigProperty defaultValue contains a potential secret — remove defaultValue for secrets",
+) {
     private val sensitiveNames = setOf(
         "password", "passwd", "pwd", "secret", "token", "key", "credential", "apikey", "api-key",
     )

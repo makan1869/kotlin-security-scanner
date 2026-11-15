@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/JasminGuberinic/kotlin-security-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/JasminGuberinic/kotlin-security-scanner/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.0.10-purple.svg)](https://kotlinlang.org)
-[![Detekt](https://img.shields.io/badge/detekt-1.23.7-blue.svg)](https://detekt.dev)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.10-purple.svg)](https://kotlinlang.org)
+[![Detekt](https://img.shields.io/badge/detekt-2.0.0--alpha.6-blue.svg)](https://detekt.dev)
 [![Rules](https://img.shields.io/badge/rules-216-brightgreen.svg)](#owasp-top-10-coverage)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.jasminguberinic/scanner-core.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.jasminguberinic/scanner-core)
 
@@ -18,28 +18,28 @@
 
 ## Quick Start
 
-All modules are published to **Maven Central** under `io.github.jasminguberinic`.
+This fork targets detekt 2. Its modules use the coordinates `io.github.makan1869:scanner-*`.
 
 ```kotlin
 // build.gradle.kts
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.23.7"
+    id("dev.detekt") version "2.0.0-alpha.6"
 }
 
 dependencies {
     // Core rules — works with any Kotlin project
-    detektPlugins("io.github.jasminguberinic:scanner-core:0.3.0")
+    detektPlugins("io.github.makan1869:scanner-core:0.4.0")
 
     // Pick the module(s) for your framework — combine as many as you like
-    detektPlugins("io.github.jasminguberinic:scanner-spring-boot:0.3.0")
-    // detektPlugins("io.github.jasminguberinic:scanner-quarkus:0.3.0")
-    // detektPlugins("io.github.jasminguberinic:scanner-dropwizard:0.3.0")
-    // detektPlugins("io.github.jasminguberinic:scanner-ktor:0.3.0")
-    // detektPlugins("io.github.jasminguberinic:scanner-micronaut:0.3.0")
-    // detektPlugins("io.github.jasminguberinic:scanner-vertx:0.3.0")
+    detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
+    // detektPlugins("io.github.makan1869:scanner-quarkus:0.4.0")
+    // detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.0")
+    // detektPlugins("io.github.makan1869:scanner-ktor:0.4.0")
+    // detektPlugins("io.github.makan1869:scanner-micronaut:0.4.0")
+    // detektPlugins("io.github.makan1869:scanner-vertx:0.4.0")
 
     // ...or pull everything in one go:
-    // detektPlugins("io.github.jasminguberinic:scanner-all:0.3.0")
+    // detektPlugins("io.github.makan1869:scanner-all:0.4.0")
 }
 
 detekt {
@@ -352,9 +352,8 @@ Manual checklist for PRs:
 ## Contributing
 
 ```bash
-git clone https://github.com/JasminGuberinic/kotlin-security-scanner.git
+git clone https://github.com/makan1869/kotlin-security-scanner.git
 cd kotlin-security-scanner
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
 ./gradlew test detekt
 ```
 
@@ -366,10 +365,10 @@ See [`RULES_BACKLOG.md`](RULES_BACKLOG.md) for the pre-researched rule backlog w
 
 | Component | Version |
 |---|---|
-| Kotlin | 2.0.10 |
-| Detekt | 1.23.7 |
-| Java | 21 |
-| Gradle | 8.x |
+| Kotlin | 2.4.10 |
+| Detekt | 2.0.0-alpha.6 |
+| Java | 21+ |
+| Gradle | 9.x |
 | AssertJ | 3.26.3 |
 
 ---

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 
 /**
@@ -22,15 +19,11 @@ import org.jetbrains.kotlin.psi.KtClass
  *   @EnableWebSecurity(debug = true)
  *   class SecurityConfig : WebSecurityConfigurerAdapter()
  */
-class SpringSecurityDebugEnabledRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringSecurityDebugEnabled",
-        severity = Severity.Security,
-        description = "@EnableWebSecurity(debug=true) logs security internals — disable in production",
-        debt = Debt.FIVE_MINS,
-    )
-
+class SpringSecurityDebugEnabledRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringSecurityDebugEnabled",
+    description = "@EnableWebSecurity(debug=true) logs security internals — disable in production",
+) {
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         val annotation = klass.annotationEntries.find {

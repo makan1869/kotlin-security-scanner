@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return authService.authenticate(password)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return tokenService.validate(token)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return service.fetch(apiKey)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -54,7 +54,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return bookService.byAuthor(author)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return service.lookup(authority)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -78,7 +78,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return service.list(sortKey)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -90,7 +90,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return searchService.find(q)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -102,7 +102,7 @@ class QuarkusSensitiveQueryParamRuleTest {
                 return userService.find(id)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -111,6 +111,6 @@ class QuarkusSensitiveQueryParamRuleTest {
             @GET
             fun users(): List<User> = User.list("from User")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

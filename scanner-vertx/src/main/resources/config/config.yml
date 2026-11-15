@@ -1,0 +1,24 @@
+security-vertx:
+  active: true
+  VertxEventBusBridgeOpen:
+    active: true
+  VertxTrustAllCerts:
+    active: true
+  VertxJwtNoneAlgorithm:
+    active: true
+  VertxStaticHandlerRootFs:
+    active: true
+  VertxCorsWildcard:
+    active: true
+  VertxBodyHandlerNoLimit:
+    active: true
+  VertxInsecureCookie:
+    active: true
+  VertxCookieNoHttpOnly:
+    active: true
+  VertxSessionCookieInsecure:
+    active: true
+  VertxStaticHandlerDirectoryListing:
+    active: true
+  VertxHardcodedJwtSecret:
+    active: true

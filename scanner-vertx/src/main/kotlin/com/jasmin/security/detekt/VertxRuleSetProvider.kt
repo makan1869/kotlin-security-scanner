@@ -11,33 +11,33 @@ import com.jasmin.security.detekt.a05.VertxInsecureCookieRule
 import com.jasmin.security.detekt.a05.VertxSessionCookieInsecureRule
 import com.jasmin.security.detekt.a05.VertxStaticHandlerDirectoryListingRule
 import com.jasmin.security.detekt.a07.VertxHardcodedJwtSecretRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 class VertxRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-vertx"
+    override val ruleSetId = RuleSetId("security-vertx")
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
             // A01 Broken Access Control
-            VertxEventBusBridgeOpenRule(config),
+            ::VertxEventBusBridgeOpenRule,
             // A02 Cryptographic Failures
-            VertxTrustAllCertsRule(config),
-            VertxJwtNoneAlgorithmRule(config),
+            ::VertxTrustAllCertsRule,
+            ::VertxJwtNoneAlgorithmRule,
             // A03 Injection
-            VertxStaticHandlerRootFsRule(config),
+            ::VertxStaticHandlerRootFsRule,
             // A05 Security Misconfiguration
-            VertxCorsWildcardRule(config),
-            VertxBodyHandlerNoLimitRule(config),
-            VertxInsecureCookieRule(config),
-            VertxCookieNoHttpOnlyRule(config),
-            VertxSessionCookieInsecureRule(config),
-            VertxStaticHandlerDirectoryListingRule(config),
+            ::VertxCorsWildcardRule,
+            ::VertxBodyHandlerNoLimitRule,
+            ::VertxInsecureCookieRule,
+            ::VertxCookieNoHttpOnlyRule,
+            ::VertxSessionCookieInsecureRule,
+            ::VertxStaticHandlerDirectoryListingRule,
             // A07 Identification and Authentication Failures
-            VertxHardcodedJwtSecretRule(config),
+            ::VertxHardcodedJwtSecretRule,
         )
     )
 }

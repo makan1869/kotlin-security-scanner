@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class KtorWeakJwtSecretRuleTest {
                 JWT.require(Algorithm.HMAC256("my-super-secret-key"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class KtorWeakJwtSecretRuleTest {
                 JWT.require(Algorithm.HMAC512("another-secret"))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class KtorWeakJwtSecretRuleTest {
             val secret = System.getenv("JWT_SECRET") ?: error("JWT_SECRET not set")
             JWT.require(Algorithm.HMAC256(secret))
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -49,6 +49,6 @@ class KtorWeakJwtSecretRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

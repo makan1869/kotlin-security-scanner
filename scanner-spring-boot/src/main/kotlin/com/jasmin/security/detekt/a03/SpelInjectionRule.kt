@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   parser.parseExpression(userInput)           // variable — RCE risk
  *   parser.parseExpression("prefix_$userInput") // interpolated — RCE risk
  */
-class SpelInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpelInjection",
-        severity = Severity.Security,
-        description = "SpEL expression built from non-literal input enables remote code execution",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpelInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "SpelInjection",
+    description = "SpEL expression built from non-literal input enables remote code execution",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (!isSpelParseCall(expression)) return

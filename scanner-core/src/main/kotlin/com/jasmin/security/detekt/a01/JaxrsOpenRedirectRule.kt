@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -29,15 +26,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   Response.seeOther(URI(userInput)).build()           // variable — attacker-controlled
  *   HttpResponse.seeOther(URI(url))                     // Micronaut
  */
-class JaxrsOpenRedirectRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JaxrsOpenRedirect",
-        severity = Severity.Security,
-        description = "JAX-RS/Micronaut redirect target from non-literal input — validate against an allowlist",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JaxrsOpenRedirectRule(config: Config) : SecurityRule(
+    config,
+    id = "JaxrsOpenRedirect",
+    description = "JAX-RS/Micronaut redirect target from non-literal input — validate against an allowlist",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

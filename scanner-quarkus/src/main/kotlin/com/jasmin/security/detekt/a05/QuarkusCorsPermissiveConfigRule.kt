@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -12,15 +9,11 @@ import java.util.Properties
  * quarkus.http.cors.origins=* allows any origin to make cross-origin requests,
  * enabling CSRF and data-exfiltration from authenticated sessions.
  */
-class QuarkusCorsPermissiveConfigRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusCorsPermissiveConfig",
-        severity = Severity.Security,
-        description = "quarkus.http.cors.origins=* allows all origins — restrict to specific domains",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusCorsPermissiveConfigRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusCorsPermissiveConfig",
+    description = "quarkus.http.cors.origins=* allows all origins — restrict to specific domains",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val key = "quarkus.http.cors.origins"
         val value = props.getProperty(key)?.trim() ?: return emptyList()

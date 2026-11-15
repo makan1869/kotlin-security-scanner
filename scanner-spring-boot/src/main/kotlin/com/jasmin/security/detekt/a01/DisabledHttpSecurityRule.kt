@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * Non-compliant:
  *   auth.anyRequest().permitAll()               // ALL requests are unauthenticated
  */
-class DisabledHttpSecurityRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DisabledHttpSecurity",
-        severity = Severity.Security,
-        description = "anyRequest().permitAll() grants unauthenticated access to all endpoints",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class DisabledHttpSecurityRule(config: Config) : SecurityRule(
+    config,
+    id = "DisabledHttpSecurity",
+    description = "anyRequest().permitAll() grants unauthenticated access to all endpoints",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

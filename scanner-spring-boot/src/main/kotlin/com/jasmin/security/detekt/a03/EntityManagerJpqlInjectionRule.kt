@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   em.createQuery("SELECT u FROM User u WHERE u.name = '$name'")
  *   em.createNativeQuery("SELECT * FROM users WHERE id = " + id)
  */
-class EntityManagerJpqlInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "EntityManagerJpqlInjection",
-        severity = Severity.Security,
-        description = "EntityManager query built with dynamic string — use named parameters to prevent injection",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class EntityManagerJpqlInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "EntityManagerJpqlInjection",
+    description = "EntityManager query built with dynamic string — use named parameters to prevent injection",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

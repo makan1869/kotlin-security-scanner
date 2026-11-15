@@ -1,21 +1,14 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
-class CloudConfigInsecureUriRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "CloudConfigInsecureUri",
-        severity = Severity.Security,
-        description = "Spring Cloud Config URI uses HTTP — config secrets transmitted in cleartext",
-        debt = Debt.TEN_MINS,
-    )
-
+class CloudConfigInsecureUriRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "CloudConfigInsecureUri",
+    description = "Spring Cloud Config URI uses HTTP — config secrets transmitted in cleartext",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         props.forEach { rawKey, rawValue ->

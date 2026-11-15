@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * Non-compliant:
  *   http.headers { frameOptions { disable() } }
  */
-class SpringFrameOptionsDisabledRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringFrameOptionsDisabled",
-        severity = Severity.Security,
-        description = "X-Frame-Options disabled — the app can be framed for clickjacking",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringFrameOptionsDisabledRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "SpringFrameOptionsDisabled",
+    description = "X-Frame-Options disabled — the app can be framed for clickjacking",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class CrossOriginCredentialsWildcardRuleTest {
             @RestController
             class UserController
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class CrossOriginCredentialsWildcardRuleTest {
             @GetMapping("/profile")
             fun getProfile(): UserDto = UserDto()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class CrossOriginCredentialsWildcardRuleTest {
                 fun getData() = emptyList<String>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -49,7 +49,7 @@ class CrossOriginCredentialsWildcardRuleTest {
             @RestController
             class UserController
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -60,7 +60,7 @@ class CrossOriginCredentialsWildcardRuleTest {
             @RestController
             class UserController
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -70,7 +70,7 @@ class CrossOriginCredentialsWildcardRuleTest {
             @RestController
             class UserController
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -85,6 +85,6 @@ class CrossOriginCredentialsWildcardRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

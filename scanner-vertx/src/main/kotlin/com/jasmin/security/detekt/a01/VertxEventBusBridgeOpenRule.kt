@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   SockJSBridgeOptions().addInboundPermitted(PermittedOptions().setAddressRegex(".*"))
  */
-class VertxEventBusBridgeOpenRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "VertxEventBusBridgeOpen",
-        severity = Severity.Security,
-        description = "Event-bus bridge permits all addresses (\".*\"/\"*\") — exposes the whole bus to clients",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class VertxEventBusBridgeOpenRule(config: Config) : SecurityRule(
+    config,
+    id = "VertxEventBusBridgeOpen",
+    description = "Event-bus bridge permits all addresses (\".*\"/\"*\") — exposes the whole bus to clients",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

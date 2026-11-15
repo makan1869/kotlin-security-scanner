@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class ELInjectionRuleTest {
         val code = """
             fun evaluate(userExpr: String): Any? = ELProcessor().eval(userExpr)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class ELInjectionRuleTest {
         val code = """
             fun evaluate(prop: String): Any? = ELProcessor().eval("user.${'$'}prop")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class ELInjectionRuleTest {
             fun build(ctx: ELContext, expr: String) =
                 factory.createValueExpression(ctx, expr, String::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -44,7 +44,7 @@ class ELInjectionRuleTest {
         val code = """
             fun getUser(): Any? = ELProcessor().eval("user.name")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -54,7 +54,7 @@ class ELInjectionRuleTest {
             fun build(ctx: ELContext) =
                 factory.createValueExpression(ctx, "#{user.name}", String::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -62,7 +62,7 @@ class ELInjectionRuleTest {
         val code = """
             fun getUser(): Any? = ELProcessor().eval("user." + "name")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -74,6 +74,6 @@ class ELInjectionRuleTest {
                 response.addHeader("X-Custom", value)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

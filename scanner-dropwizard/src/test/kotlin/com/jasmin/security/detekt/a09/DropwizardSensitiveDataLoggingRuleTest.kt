@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a09
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class DropwizardSensitiveDataLoggingRuleTest {
                 logger.info("Authenticating with password: {}", password)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class DropwizardSensitiveDataLoggingRuleTest {
                 logger.debug("Processing token: {}", token)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class DropwizardSensitiveDataLoggingRuleTest {
                 logger.info("Processing user: {}", userId)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -44,6 +44,6 @@ class DropwizardSensitiveDataLoggingRuleTest {
         val code = """
             fun describe(): String = "Enter your password below"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MaxLineLength:MicronautCacheableSensitiveRule.kt:MicronautCacheableSensitiveRule$"@Cacheable + @Secured on '${function.name}' — the cache must include the authenticated principal in its key to avoid cross-user data leakage"</ID>
+    <ID>MaxLineLength:MicronautCacheableSensitiveRule.kt:MicronautCacheableSensitiveRule$"@Cacheable on '${function.name}' inside a @Secured class — the cache must include the authenticated principal in its key"</ID>
+    <ID>MaxLineLength:MicronautCacheableSensitiveRule.kt:MicronautCacheableSensitiveRule$description = "@Cacheable on a secured method may serve cached responses across users — ensure cache key includes the principal"</ID>
+    <ID>MaxLineLength:MicronautHardcodedSecretRule.kt:MicronautHardcodedSecretRule$"@Value(\"\${$propName:***}\") has a hardcoded default — remove it so the app fails fast when the secret is absent"</ID>
+    <ID>MaxLineLength:MicronautManagementEndpointInsecureRule.kt:MicronautManagementEndpointInsecureRule$"@Endpoint operation '${fn.name}' has no @Secured — add @Secured(SecurityRule.IS_AUTHENTICATED) or secure at class level"</ID>
+    <ID>MaxLineLength:MicronautRetryOnAuthRule.kt:MicronautRetryOnAuthRule$"@Retryable on authentication method '${function.name}' — exclude AuthenticationException from retries or remove @Retryable"</ID>
+    <ID>MaxLineLength:MicronautRetryOnAuthRule.kt:MicronautRetryOnAuthRule$description = "@Retryable on an authentication method retries failed login attempts — bypasses brute-force protection"</ID>
+    <ID>MaxLineLength:MicronautSensitiveQueryParamRule.kt:MicronautSensitiveQueryParamRule$"@QueryValue \"$paramName\" — sensitive data in URL is logged by proxies; use @Body or Authorization header"</ID>
+    <ID>MaxLineLength:MicronautWebSocketNoAuthRule.kt:MicronautWebSocketNoAuthRule$"@ServerWebSocket endpoint '${klass.name}' has no @Secured — add @Secured(SecurityRule.IS_AUTHENTICATED) to restrict access"</ID>
+    <ID>MaximumLineLength:MicronautCacheableSensitiveRule.kt:MicronautCacheableSensitiveRule$,</ID>
+    <ID>MaximumLineLength:MicronautRetryOnAuthRule.kt:MicronautRetryOnAuthRule$,</ID>
+    <ID>PropertyName:MicronautHardcodedSecretRuleTest.kt:MicronautHardcodedSecretRuleTest$private val S = "${'$'}"</ID>
+    <ID>ReturnCount:MicronautCacheableSensitiveRule.kt:MicronautCacheableSensitiveRule$override fun visitNamedFunction</ID>
+    <ID>ReturnCount:MicronautExceptionMessageLeakRule.kt:MicronautExceptionMessageLeakRule$private fun KtCallExpression.isLoggingCall: Boolean</ID>
+    <ID>ReturnCount:MicronautMissingSecuredRule.kt:MicronautMissingSecuredRule$override fun visitNamedFunction</ID>
+    <ID>ReturnCount:MicronautRetryOnAuthRule.kt:MicronautRetryOnAuthRule$override fun visitNamedFunction</ID>
+    <ID>StringTemplate:MicronautHardcodedSecretRuleTest.kt:MicronautHardcodedSecretRuleTest$${S}</ID>
+    <ID>TrailingCommaOnCallSite:MicronautRuleSetProvider.kt:MicronautRuleSetProvider$( ruleSetId, listOf( // A01 Broken Access Control ::MicronautMissingSecuredRule, ::MicronautWebSocketNoAuthRule, ::MicronautCacheableSensitiveRule, ::MicronautRetryOnAuthRule, ::MicronautAnonymousAccessRule, // A02 Cryptographic Failures ::MicronautInsecureHttpClientRule, ::MicronautGrpcInsecureRule, // A03 Injection ::MicronautSensitiveQueryParamRule, // A04 Insecure Design ::MicronautBodyAnyTypeRule, // A05 Security Misconfiguration ::MicronautManagementEndpointInsecureRule, ::MicronautInsecureCookieRule, // A07 Identification and Authentication Failures ::MicronautHardcodedSecretRule, // A09 Security Logging and Monitoring Failures ::MicronautExceptionMessageLeakRule, ) )</ID>
+    <ID>VariableNaming:MicronautHardcodedSecretRuleTest.kt:MicronautHardcodedSecretRuleTest$private val S = "${'$'}"</ID>
+  </CurrentIssues>
+</SmellBaseline>

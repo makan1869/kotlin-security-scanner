@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   ctx.search("ou=users", "(uid=${'$'}username)", controls)        // interpolated filter
  *   ctx.search("ou=users", "(uid=" + username + ")", controls)   // concatenated filter
  */
-class LdapInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "LdapInjection",
-        severity = Severity.Security,
-        description = "LDAP operation with interpolated argument — escape input or use parameterised filters",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class LdapInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "LdapInjection",
+    description = "LDAP operation with interpolated argument — escape input or use parameterised filters",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression?.text ?: return

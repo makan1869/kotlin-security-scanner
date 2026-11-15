@@ -1,0 +1,70 @@
+security-ktor:
+  active: true
+  KtorMissingAuth:
+    active: true
+  KtorInsecureRedirect:
+    active: true
+  KtorCsrfMissing:
+    active: true
+  KtorExposedDeleteAll:
+    active: true
+  KtorWebSocketNoAuth:
+    active: true
+  KtorBasicAuthInsecure:
+    active: true
+  KtorWeakJwtSecret:
+    active: true
+  KtorExposedConnectionNotSecure:
+    active: true
+  KtorXssResponse:
+    active: true
+  KtorExposedOrmInjection:
+    active: true
+  KtorExposedRawSqlConcat:
+    active: true
+  KtorSensitiveRouteParam:
+    active: true
+  KtorFileUploadTraversal:
+    active: true
+  KtorUnvalidatedQueryParam:
+    active: true
+  KtorRespondFileTraversal:
+    active: true
+  KtorRawCallReceive:
+    active: true
+  KtorExposedSchemaAutoCreate:
+    active: true
+  KtorDevelopmentMode:
+    active: true
+  KtorCorsAnyHeader:
+    active: true
+  KtorInsecureCookieSession:
+    active: true
+  KtorPermissiveCors:
+    active: true
+  KtorClearTextCookie:
+    active: true
+  KtorSecurityHeadersMissing:
+    active: true
+  KtorSslRedirectMissing:
+    active: true
+  KtorRateLimitingMissing:
+    active: true
+  KtorSessionCookieDomainMissing:
+    active: true
+  KtorForwardedHeaderTrust:
+    active: true
+  KtorMultipartInsecureUpload:
+    active: true
+  KtorHardcodedSecretKey:
+    active: true
+  KtorHardcodedPasswordComparison:
+    active: true
+  KtorHardcodedDatabasePassword:
+    active: true
+  KtorInsecureContentNegotiation:
+    active: true
+  KtorLoggingCredentials:
+    active: true
+  KtorStatusPageLeakDetails:
+    active: true

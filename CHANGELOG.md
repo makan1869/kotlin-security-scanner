@@ -4,6 +4,17 @@ All notable changes to kotlin-security-scanner are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] — detekt 2
+
+Ports every module to the detekt 2 API (`dev.detekt`, 2.0.0-alpha.6). detekt 1.x is no longer
+supported. Published under `io.github.makan1869`.
+
+### Changed
+- Rules extend `dev.detekt.api.Rule` and keep their existing rule ids.
+- Each module ships `config/config.yml`, so its rules stay active by default. detekt 2 only runs
+  rules that appear in config. `MissingAuthorization` stays opt-in.
+- Build: Kotlin 2.4.10, Gradle 9.7.1, per-module detekt baselines.
+
 ## [0.3.0] — Reactive security
 
 Adds a new **`scanner-vertx`** module and **WebFlux (reactive Spring)** rules — 15 new rules,

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtExpression
  *   SecureRandom(byteArrayOf(1, 2, 3, 4))           // hardcoded seed constructor
  *   SecureRandom().also { it.setSeed(12345L) }      // explicit constant seed
  */
-class InsecureRandomSeedRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecureRandomSeed",
-        severity = Severity.Security,
-        description = "SecureRandom seeded with a constant — predictable output defeats the purpose of a secure RNG",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class InsecureRandomSeedRule(config: Config) : SecurityRule(
+    config,
+    id = "InsecureRandomSeed",
+    description = "SecureRandom seeded with a constant — predictable output defeats the purpose of a secure RNG",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   allowedOrigins("*")       // Micronaut CorsOriginConfiguration
  *   addAllowedOrigin("*")     // Spring CorsConfiguration
  */
-class CorsWildcardOriginsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "CorsWildcardOrigins",
-        severity = Severity.Security,
-        description = "CORS configured with wildcard origin '*' — restricts the Same-Origin Policy for all domains",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class CorsWildcardOriginsRule(config: Config) : SecurityRule(
+    config,
+    id = "CorsWildcardOrigins",
+    description = "CORS configured with wildcard origin '*' — restricts the Same-Origin Policy for all domains",
+) {
     private val corsOriginMethods = setOf(
         "allowedOrigins", "addAllowedOrigin", "allowedOriginsRegex",
     )

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class PathTraversalRuleTest {
@@ -13,7 +13,7 @@ class PathTraversalRuleTest {
         val code = """
             fun readFile(userPath: String) = java.io.File(userPath)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class PathTraversalRuleTest {
         val code = """
             fun open(userPath: String) = java.io.FileInputStream(userPath)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -29,7 +29,7 @@ class PathTraversalRuleTest {
         val code = """
             fun read(userPath: String) = java.io.FileReader(userPath)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class PathTraversalRuleTest {
         val code = """
             fun readFile(name: String) = java.io.File("/uploads/${'$'}name")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -45,7 +45,7 @@ class PathTraversalRuleTest {
         val code = """
             val config = java.io.File("/etc/app/config.yml")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -53,7 +53,7 @@ class PathTraversalRuleTest {
         val code = """
             val dir = java.io.File(".")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag cipher patterns
@@ -63,7 +63,7 @@ class PathTraversalRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag sql injection patterns
@@ -72,6 +72,6 @@ class PathTraversalRuleTest {
         val code = """
             fun find(id: String) = "SELECT * FROM files WHERE id = ${'$'}id"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

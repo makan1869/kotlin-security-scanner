@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class InsecureRedisConnectionRuleTest {
                 return LettuceConnectionFactory(config)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(2)
+        assertThat(rule.lint(code, compile = false)).hasSize(2)
     }
 
     @Test
@@ -28,7 +28,7 @@ class InsecureRedisConnectionRuleTest {
         val code = """
             val factory = LettuceConnectionFactory()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class InsecureRedisConnectionRuleTest {
         val code = """
             val factory = JedisConnectionFactory(RedisStandaloneConfiguration("host", 6379))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(2)
+        assertThat(rule.lint(code, compile = false)).hasSize(2)
     }
 
     @Test
@@ -44,7 +44,7 @@ class InsecureRedisConnectionRuleTest {
         val code = """
             val config = RedisStandaloneConfiguration("redis.internal", 6379)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -54,7 +54,7 @@ class InsecureRedisConnectionRuleTest {
         val code = """
             val config = RedisStandaloneConfiguration("redis.internal", 6380).also { it.useSsl() }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class InsecureRedisConnectionRuleTest {
             val client = RestTemplate()
             val props = Properties()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -73,6 +73,6 @@ class InsecureRedisConnectionRuleTest {
         val code = """
             fun encoder(): PasswordEncoder = NoOpPasswordEncoder.getInstance()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

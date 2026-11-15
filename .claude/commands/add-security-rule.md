@@ -47,10 +47,7 @@ package com.jasmin.security.detekt.a0X
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.<KtPsiType>
 
 /**
@@ -65,14 +62,11 @@ import org.jetbrains.kotlin.psi.<KtPsiType>
  * Non-compliant:
  *   <vulnerable example — one line>
  */
-class <RuleName>(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "<RuleId>",
-        severity = Severity.Security,
-        description = "<description — max 120 chars including indentation>",
-        debt = Debt.TWENTY_MINS,
-    )
+class <RuleName>(config: Config) : SecurityRule(
+    config,
+    id = "<RuleId>",
+    description = "<description — max 120 chars including indentation>",
+) {
 
     @Suppress("ReturnCount")   // include if > 2 early returns
     override fun visit<PsiType>(expression: <KtPsiType>) {
@@ -108,8 +102,8 @@ Path: `scanner-<module>/src/test/kotlin/com/jasmin/security/detekt/a0X/<RuleName
 ```kotlin
 package com.jasmin.security.detekt.a0X
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -124,7 +118,7 @@ class <RuleName>Test {
         val code = """
             <minimal Kotlin snippet — imports optional, body only>
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // minimum 3 positive tests
@@ -134,7 +128,7 @@ class <RuleName>Test {
     @Test
     fun `ignores <safe pattern 1>`() {
         val code = """ <safe equivalent> """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // minimum 2 negative tests
@@ -145,7 +139,7 @@ class <RuleName>Test {
     fun `does not trigger on <other rule> fixture`() {
         // Copy a POSITIVE snippet from a DIFFERENT rule in the same module.
         // This test must return isEmpty() to prove rules don't interfere.
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }
 ```
@@ -159,7 +153,14 @@ class <RuleName>Test {
 import com.jasmin.security.detekt.a0X.<RuleName>
 
 // In instance():
-<RuleName>(config.subConfig("<RuleId>")),
+::<RuleName>,
+```
+
+**`scanner-<module>/src/main/resources/config/config.yml`** under `security-<module>:` — detekt 2 only
+runs rules listed in config, and `<Module>RuleSetProviderTest` fails if the rule is missing here:
+```yaml
+  <RuleId>:
+    active: true
 ```
 
 **`config/detekt/detekt.yml`** under `security-<module>:`:
@@ -174,7 +175,6 @@ import com.jasmin.security.detekt.a0X.<RuleName>
 ## Step 5 — Verify + update docs
 
 ```bash
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
 ./gradlew test detekt
 ```
 
@@ -297,13 +297,13 @@ Pick from Priority 1 first — those are unique to this tool. Properties-file ru
 
 ```kotlin
 class InsecureActuatorExposureListener : FileProcessListener {
-    override fun onProcess(file: KtFile, bindingContext: BindingContext) {
+    override fun onProcess(file: KtFile) {
         // Only process .properties / .yml files
         // Check raw file.text for the bad pattern
     }
 }
 ```
-Register in: `META-INF/services/io.gitlab.arturbosch.detekt.api.FileProcessListener`
+Register in: `META-INF/services/dev.detekt.api.FileProcessListener`
 
 | Rule | Module | OWASP | Property key to scan |
 |------|--------|-------|---------------------|

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 
 /**
@@ -22,15 +19,11 @@ import org.jetbrains.kotlin.psi.KtClass
  * Non-compliant:
  *   @Serializable data class User(val username: String, val password: String)
  */
-class KotlinxSerializationSensitiveFieldRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KotlinxSerializationSensitiveField",
-        severity = Severity.Security,
-        description = "@Serializable class has sensitive field without @Transient — will be serialized",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KotlinxSerializationSensitiveFieldRule(config: Config) : SecurityRule(
+    config,
+    id = "KotlinxSerializationSensitiveField",
+    description = "@Serializable class has sensitive field without @Transient — will be serialized",
+) {
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         if (DetectionPatterns.KOTLINX_SERIALIZABLE_ANNOTATION !in klass.annotationNames()) return

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -22,15 +19,11 @@ import java.util.Properties
  * Non-compliant:
  *   quarkus.datasource.password=mysecretpassword
  */
-class QuarkusBuildTimeSecretLeakRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusBuildTimeSecretLeak",
-        severity = Severity.Security,
-        description = "Hardcoded secret in application.properties — use environment variable reference",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusBuildTimeSecretLeakRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusBuildTimeSecretLeak",
+    description = "Hardcoded secret in application.properties — use environment variable reference",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         for ((rawKey, rawValue) in props) {

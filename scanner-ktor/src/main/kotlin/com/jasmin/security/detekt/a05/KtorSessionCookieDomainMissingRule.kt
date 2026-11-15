@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A05 — Security Misconfiguration
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // cookie to all subdomains, including attacker-controlled ones (subdomain takeover).
 // Compliant:   cookie<MySession>("S") { cookie.domain = "app.example.com" }
 // Non-compliant: cookie<MySession>("SESSION") { }  // no domain restriction
-class KtorSessionCookieDomainMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorSessionCookieDomainMissing",
-        severity = Severity.Security,
-        description = "Ktor session cookie without domain restriction — vulnerable to subdomain takeover",
-        debt = Debt.TEN_MINS,
-    )
-
+class KtorSessionCookieDomainMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorSessionCookieDomainMissing",
+    description = "Ktor session cookie without domain restriction — vulnerable to subdomain takeover",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

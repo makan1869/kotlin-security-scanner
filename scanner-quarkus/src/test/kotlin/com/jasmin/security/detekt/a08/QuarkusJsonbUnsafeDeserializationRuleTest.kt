@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a08
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class QuarkusJsonbUnsafeDeserializationRuleTest {
                 val result = jsonb.fromJson(json, Any::class.java)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class QuarkusJsonbUnsafeDeserializationRuleTest {
                 val result = jsonb.fromJson(json, Object::class.java)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class QuarkusJsonbUnsafeDeserializationRuleTest {
                 return jsonb.fromJson(json, UserDto::class.java)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -45,6 +45,6 @@ class QuarkusJsonbUnsafeDeserializationRuleTest {
             @RegisterForReflection
             class MyClass(val data: Any)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class ReflectionInjectionRuleTest {
         val code = """
             fun load(className: String): Class<*> = Class.forName(className)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class ReflectionInjectionRuleTest {
         val code = """
             fun load(pkg: String): Class<*> = Class.forName("com.${'$'}pkg.Handler")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -33,7 +33,7 @@ class ReflectionInjectionRuleTest {
             fun loadFromParam(req: HttpServletRequest): Class<*> =
                 Class.forName(req.getParameter("class"))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -43,7 +43,7 @@ class ReflectionInjectionRuleTest {
         val code = """
             fun loadDriver(): Class<*> = Class.forName("com.mysql.cj.jdbc.Driver")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -51,7 +51,7 @@ class ReflectionInjectionRuleTest {
         val code = """
             fun loadJson(): Class<*> = Class.forName("com.fasterxml.jackson.databind.ObjectMapper")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -61,6 +61,6 @@ class ReflectionInjectionRuleTest {
         val code = """
             fun resolve(name: String): Any = ctx.lookup(name)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

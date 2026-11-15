@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   processor.eval(userInput)                 // variable — EL injection
  *   factory.createValueExpression(ctx, expr, String::class.java)  // dynamic expr
  */
-class ELInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ELInjection",
-        severity = Severity.Security,
-        description = "EL expression from non-literal input — attacker-supplied EL can invoke arbitrary code",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class ELInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "ELInjection",
+    description = "EL expression from non-literal input — attacker-supplied EL can invoke arbitrary code",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

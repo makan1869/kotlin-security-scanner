@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -22,15 +19,11 @@ import java.util.Properties
  * Non-compliant:
  *   spring.kafka.consumer.properties.spring.json.trusted.packages=*
  */
-class KafkaTrustedPackagesWildcardRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KafkaTrustedPackagesWildcard",
-        severity = Severity.Security,
-        description = "Kafka trusted packages '*' enables arbitrary deserialization (CVE-2023-34040)",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KafkaTrustedPackagesWildcardRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "KafkaTrustedPackagesWildcard",
+    description = "Kafka trusted packages '*' enables arbitrary deserialization (CVE-2023-34040)",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         props.forEach { rawKey, rawValue ->

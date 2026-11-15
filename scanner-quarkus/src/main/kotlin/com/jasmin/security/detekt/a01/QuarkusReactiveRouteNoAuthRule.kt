@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 // OWASP A01 — Broken Access Control
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // Compliant:   @Route(path="/profile") @Authenticated fun profile(rc: RoutingContext)
 // Non-compliant: @Route(path="/profile") fun profile(rc: RoutingContext)
 @Suppress("ReturnCount")
-class QuarkusReactiveRouteNoAuthRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusReactiveRouteNoAuth",
-        severity = Severity.Security,
-        description = "@Route method missing access-control annotation — reactive routes bypass JAX-RS filters",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusReactiveRouteNoAuthRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusReactiveRouteNoAuth",
+    description = "@Route method missing access-control annotation — reactive routes bypass JAX-RS filters",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val annotations = function.annotationNames()

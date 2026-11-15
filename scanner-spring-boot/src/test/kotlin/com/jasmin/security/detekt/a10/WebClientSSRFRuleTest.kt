@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a10
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class WebClientSSRFRuleTest {
         val code = """
             fun fetch(url: String) = WebClient.create(url).get().retrieve().bodyToMono(String::class.java)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class WebClientSSRFRuleTest {
         val code = """
             fun proxy(@RequestParam targetUrl: String) = WebClient.create(targetUrl)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class WebClientSSRFRuleTest {
         val code = """
             fun fetch(host: String) = WebClient.create("http://${'$'}host/api")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -42,7 +42,7 @@ class WebClientSSRFRuleTest {
         val code = """
             fun client() = WebClient.create("https://api.internal.example.com")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class WebClientSSRFRuleTest {
         val code = """
             fun builder() = HttpClient.create("https://host.internal")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -60,6 +60,6 @@ class WebClientSSRFRuleTest {
         val code = """
             fun evaluate(expr: String) = SpelExpressionParser().parseExpression(expr).getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

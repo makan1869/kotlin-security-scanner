@@ -13,37 +13,37 @@ import com.jasmin.security.detekt.a05.MicronautInsecureCookieRule
 import com.jasmin.security.detekt.a05.MicronautManagementEndpointInsecureRule
 import com.jasmin.security.detekt.a07.MicronautHardcodedSecretRule
 import com.jasmin.security.detekt.a09.MicronautExceptionMessageLeakRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 class MicronautRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-micronaut"
+    override val ruleSetId = RuleSetId("security-micronaut")
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
             // A01 Broken Access Control
-            MicronautMissingSecuredRule(config),
-            MicronautWebSocketNoAuthRule(config),
-            MicronautCacheableSensitiveRule(config),
-            MicronautRetryOnAuthRule(config),
-            MicronautAnonymousAccessRule(config),
+            ::MicronautMissingSecuredRule,
+            ::MicronautWebSocketNoAuthRule,
+            ::MicronautCacheableSensitiveRule,
+            ::MicronautRetryOnAuthRule,
+            ::MicronautAnonymousAccessRule,
             // A02 Cryptographic Failures
-            MicronautInsecureHttpClientRule(config),
-            MicronautGrpcInsecureRule(config),
+            ::MicronautInsecureHttpClientRule,
+            ::MicronautGrpcInsecureRule,
             // A03 Injection
-            MicronautSensitiveQueryParamRule(config),
+            ::MicronautSensitiveQueryParamRule,
             // A04 Insecure Design
-            MicronautBodyAnyTypeRule(config),
+            ::MicronautBodyAnyTypeRule,
             // A05 Security Misconfiguration
-            MicronautManagementEndpointInsecureRule(config),
-            MicronautInsecureCookieRule(config),
+            ::MicronautManagementEndpointInsecureRule,
+            ::MicronautInsecureCookieRule,
             // A07 Identification and Authentication Failures
-            MicronautHardcodedSecretRule(config),
+            ::MicronautHardcodedSecretRule,
             // A09 Security Logging and Monitoring Failures
-            MicronautExceptionMessageLeakRule(config),
+            ::MicronautExceptionMessageLeakRule,
         )
     )
 }

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class QuarkusMissingAuthRuleTest {
                 fun listUsers(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class QuarkusMissingAuthRuleTest {
                 fun createOrder(dto: OrderDto): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class QuarkusMissingAuthRuleTest {
                 fun deleteUser(): Response = Response.noContent().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative tests — must NOT be flagged ──────────────────────────────────
@@ -60,7 +60,7 @@ class QuarkusMissingAuthRuleTest {
                 fun listUsers(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class QuarkusMissingAuthRuleTest {
                 fun profile(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -88,7 +88,7 @@ class QuarkusMissingAuthRuleTest {
                 fun health(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -102,7 +102,7 @@ class QuarkusMissingAuthRuleTest {
                 fun secret(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -112,7 +112,7 @@ class QuarkusMissingAuthRuleTest {
                 fun findById(id: Long): User = repo.find(id)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation tests — no interference with other rules ────────────────────
@@ -126,7 +126,7 @@ class QuarkusMissingAuthRuleTest {
                 lateinit var apiSecret: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -139,7 +139,7 @@ class QuarkusMissingAuthRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -153,6 +153,6 @@ class QuarkusMissingAuthRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

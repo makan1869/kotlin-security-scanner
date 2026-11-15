@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 // OWASP A05 — Security Misconfiguration
@@ -12,15 +9,11 @@ import java.util.Properties
 // resource-exhaustion attacks by uploading enormous request bodies.
 // Compliant:   server.maxRequestEntitySize=10MiB
 // Non-compliant: server.maxRequestEntitySize=500MiB
-class DropwizardInsecureMultipartRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DropwizardInsecureMultipart",
-        severity = Severity.Security,
-        description = "Dropwizard maxRequestEntitySize is very large — limits resource exhaustion protection",
-        debt = Debt.TEN_MINS,
-    )
-
+class DropwizardInsecureMultipartRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "DropwizardInsecureMultipart",
+    description = "Dropwizard maxRequestEntitySize is very large — limits resource exhaustion protection",
+) {
     private val largePattern = Regex("""^(\d+)\s*(GiB|GiB|GB|MiB|MB)$""", RegexOption.IGNORE_CASE)
 
     private val maxBodySizeMb: Int = config.valueOrDefault("maxBodySizeMb", 50)

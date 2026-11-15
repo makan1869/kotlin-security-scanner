@@ -14,38 +14,38 @@ import com.jasmin.security.detekt.a07.DropwizardDatabasePasswordRule
 import com.jasmin.security.detekt.a07.DropwizardHardcodedTokenRule
 import com.jasmin.security.detekt.a08.DropwizardJacksonPolymorphismRule
 import com.jasmin.security.detekt.a09.DropwizardSensitiveDataLoggingRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 class DropwizardRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-dropwizard"
+    override val ruleSetId = RuleSetId("security-dropwizard")
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
             // A01 Broken Access Control
-            DropwizardMissingAuthRule(config),
+            ::DropwizardMissingAuthRule,
             // A02 Cryptographic Failures
-            InsecureTlsProtocolRule(config),
-            DropwizardUnencryptedJwtSecretRule(config),
+            ::InsecureTlsProtocolRule,
+            ::DropwizardUnencryptedJwtSecretRule,
             // A03 Injection
-            DropwizardSelfValidatingELRule(config),
-            DropwizardJdbiSqlInjectionRule(config),
-            DropwizardMissingBeanValidationRule(config),
-            DropwizardXssResponseRule(config),
+            ::DropwizardSelfValidatingELRule,
+            ::DropwizardJdbiSqlInjectionRule,
+            ::DropwizardMissingBeanValidationRule,
+            ::DropwizardXssResponseRule,
             // A05 Security Misconfiguration
-            InsecureCookieRule(config),
-            DropwizardAdminConnectorExposedRule(config),
-            DropwizardInsecureMultipartRule(config),
+            ::InsecureCookieRule,
+            ::DropwizardAdminConnectorExposedRule,
+            ::DropwizardInsecureMultipartRule,
             // A07 Identification and Authentication Failures
-            DropwizardHardcodedTokenRule(config),
-            DropwizardDatabasePasswordRule(config),
+            ::DropwizardHardcodedTokenRule,
+            ::DropwizardDatabasePasswordRule,
             // A08 Software and Data Integrity Failures
-            DropwizardJacksonPolymorphismRule(config),
+            ::DropwizardJacksonPolymorphismRule,
             // A09 Security Logging and Monitoring Failures
-            DropwizardSensitiveDataLoggingRule(config),
+            ::DropwizardSensitiveDataLoggingRule,
         )
     )
 }

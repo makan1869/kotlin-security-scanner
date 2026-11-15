@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  *   HttpsURLConnection.setDefaultHostnameVerifier { _, _ -> true }
  *   conn.setHostnameVerifier { _, _ -> true }
  */
-class TrustAllHostnamesRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "TrustAllHostnames",
-        severity = Severity.Security,
-        description = "HostnameVerifier always returns true — SSL hostname verification is disabled",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class TrustAllHostnamesRule(config: Config) : SecurityRule(
+    config,
+    id = "TrustAllHostnames",
+    description = "HostnameVerifier always returns true — SSL hostname verification is disabled",
+) {
     private val setterMethods = setOf("setDefaultHostnameVerifier", "setHostnameVerifier")
 
     @Suppress("ReturnCount")

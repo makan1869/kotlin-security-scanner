@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // server logs, browser history, and HTTP Referer headers.
 // Compliant:   pass credentials in the request body or Authorization header
 // Non-compliant: fun login(@QueryParam("password") password: String)
-class QuarkusSensitiveQueryParamRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusSensitiveQueryParam",
-        severity = Severity.Security,
-        description = "Sensitive data passed as @QueryParam — credentials in URLs end up in logs/history",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusSensitiveQueryParamRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusSensitiveQueryParam",
+    description = "Sensitive data passed as @QueryParam — credentials in URLs end up in logs/history",
+) {
     private val sensitiveNames = setOf("password", "passwd", "pwd", "secret", "token", "apikey", "api_key", "auth")
 
     // Split on non-alphanumeric boundaries AND camelCase boundaries, then lowercase, so a

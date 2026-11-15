@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 // to map the application and discover exploitable paths.
 // Compliant:   exception<Exception> { _ -> call.respond(HttpStatusCode.InternalServerError, "Internal error") }
 // Non-compliant: exception<Exception> { cause -> call.respond(cause.message) }
-class KtorStatusPageLeakDetailsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorStatusPageLeakDetails",
-        severity = Severity.Security,
-        description = "exception<Exception> handler exposes cause details in HTTP response — return a generic error message",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorStatusPageLeakDetailsRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorStatusPageLeakDetails",
+    description = "exception<Exception> handler exposes cause details in HTTP response — return a generic error message",
+) {
     // Match leak indicators on identifier boundaries so e.g. `commit.message`
     // does not match `it.message` and `audit`/`edit` do not match `it`.
     private val leakIndicators = listOf(

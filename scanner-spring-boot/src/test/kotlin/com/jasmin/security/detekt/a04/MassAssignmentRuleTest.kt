@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a04
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -26,7 +26,7 @@ class MassAssignmentRuleTest {
                 fun create(@RequestBody user: User): User = user
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class MassAssignmentRuleTest {
                 fun update(@RequestBody product: Product): Product = product
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -63,7 +63,7 @@ class MassAssignmentRuleTest {
                 fun create(@RequestBody user: User?): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -80,7 +80,7 @@ class MassAssignmentRuleTest {
                 fun create(@RequestBody request: CreateUserRequest): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -93,7 +93,7 @@ class MassAssignmentRuleTest {
                 fun create(@RequestBody order: Order): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -105,7 +105,7 @@ class MassAssignmentRuleTest {
                 fun save(user: User): User = user
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -118,6 +118,6 @@ class MassAssignmentRuleTest {
                 fun login(next: String): String = "redirect:" + next
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

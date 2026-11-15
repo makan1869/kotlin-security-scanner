@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // The DSL-based approach is safe; raw SQL strings with user input are not.
 // Compliant:   Users.select { Users.name eq name }
 // Non-compliant: exec("SELECT * FROM users WHERE name = '$name'")
-class KtorExposedOrmInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorExposedOrmInjection",
-        severity = Severity.Security,
-        description = "Exposed exec() with interpolated SQL string — use the Exposed DSL or prepared statements",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorExposedOrmInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorExposedOrmInjection",
+    description = "Exposed exec() with interpolated SQL string — use the Exposed DSL or prepared statements",
+) {
     private val dangerousCalls = setOf("exec", "addString")
 
     @Suppress("ReturnCount")

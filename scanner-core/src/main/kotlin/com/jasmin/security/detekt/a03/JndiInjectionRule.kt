@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   ctx.lookup(name)                          // variable — may be a remote URL
  *   ctx.lookup("ldap://${'$'}host/exploit")  // interpolated — attacker-controlled host
  */
-class JndiInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JndiInjection",
-        severity = Severity.Security,
-        description = "JNDI lookup with non-literal name — dynamic names can be remote URLs (RCE risk)",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JndiInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "JndiInjection",
+    description = "JNDI lookup with non-literal name — dynamic names can be remote URLs (RCE risk)",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
