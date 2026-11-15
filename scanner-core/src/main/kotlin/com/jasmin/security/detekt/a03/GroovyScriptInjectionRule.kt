@@ -4,6 +4,13 @@ import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
 import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -32,12 +39,43 @@ class GroovyScriptInjectionRule(config: Config) : SecurityRule(
         val callee = expression.calleeExpression?.text ?: return
         if (callee !in DetectionPatterns.SCRIPT_EVAL_METHODS) return
         val firstArg = expression.valueArguments.firstOrNull()?.getArgumentExpression() ?: return
-        val isSafe = firstArg is KtStringTemplateExpression && !firstArg.hasInterpolation()
-        if (!isSafe) {
-            reportAt(
-                expression,
-                "$callee() with dynamic script source — never pass user input to a script engine",
-            )
+        if (firstArg is KtStringTemplateExpression && !firstArg.hasInterpolation()) return
+        if (!callsScriptEngine(expression)) return
+        reportAt(
+            expression,
+            "$callee() with dynamic script source — never pass user input to a script engine",
+        )
+    }
+
+    /**
+     * True when the call goes to a script engine: the file imports one, the receiver names an engine
+     * type, or the receiver is a variable declared in this file with an engine type or initializer.
+     */
+    private fun callsScriptEngine(call: KtCallExpression): Boolean {
+        val file = call.containingKtFile
+        val importsEngine =
+            file.importDirectives.any { directive ->
+                val path = directive.importPath?.pathStr.orEmpty()
+                DetectionPatterns.SCRIPT_ENGINE_IMPORT_PREFIXES.any { path.startsWith(it) }
+            }
+        if (importsEngine) return true
+        val receiver = (call.parent as? KtDotQualifiedExpression)?.takeIf { it.selectorExpression == call }?.receiverExpression
+        return when (receiver) {
+            null -> false
+            is KtNameReferenceExpression -> namesEngine(receiver.text) || declaresEngine(file, receiver.getReferencedName())
+            else -> namesEngine(receiver.text)
         }
     }
+
+    private fun declaresEngine(
+        file: KtFile,
+        name: String,
+    ): Boolean =
+        file.collectDescendantsOfType<KtCallableDeclaration> { it.name == name && (it is KtProperty || it is KtParameter) }
+            .any { declaration ->
+                namesEngine(declaration.typeReference?.text.orEmpty()) ||
+                    namesEngine((declaration as? KtProperty)?.initializer?.text.orEmpty())
+            }
+
+    private fun namesEngine(text: String): Boolean = DetectionPatterns.SCRIPT_ENGINE_TYPES.any { text.contains(it) }
 }

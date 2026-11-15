@@ -5,7 +5,7 @@ Kotlin applications at compile time — with module-level picks for
 Spring Boot, Quarkus, Dropwizard, Ktor, Micronaut, Vert.x, or any Kotlin project.
 
 **216 rules across 7 modules, 1237 tests. Built for detekt 2, as
-`io.github.makan1869:scanner-*:0.4.0`.** Rules are active by default: each module ships
+`io.github.makan1869:scanner-*:0.4.1`.** Rules are active by default: each module ships
 `src/main/resources/config/config.yml`, which detekt merges into the default config. Disable any
 rule with `active: false`.
 
@@ -199,37 +199,37 @@ framework classes off the classpath parseable.
 
 **Spring Boot:**
 ```kotlin
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.1")
 ```
 
 **Quarkus:**
 ```kotlin
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-quarkus:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-quarkus:0.4.1")
 ```
 
 **Ktor:**
 ```kotlin
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-ktor:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-ktor:0.4.1")
 ```
 
 **Dropwizard:**
 ```kotlin
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.1")
 ```
 
 **Micronaut:**
 ```kotlin
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-micronaut:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-micronaut:0.4.1")
 ```
 
 **Everything (convenience bundle):**
 ```kotlin
-detektPlugins("io.github.makan1869:scanner-all:0.4.0")
+detektPlugins("io.github.makan1869:scanner-all:0.4.1")
 ```
 
 ---
@@ -245,19 +245,19 @@ modules** by adding more `detektPlugins` entries — no conflicts, no duplicates
 
 ```kotlin
 // Dropwizard service that also uses Ktor for outbound HTTP clients
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.0")
-detektPlugins("io.github.makan1869:scanner-ktor:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.1")
+detektPlugins("io.github.makan1869:scanner-ktor:0.4.1")
 
 // Quarkus monorepo with a Spring Boot admin module
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-quarkus:0.4.0")
-detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-quarkus:0.4.1")
+detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.1")
 
 // Migrating from Spring Boot to Micronaut — scan both during transition
-detektPlugins("io.github.makan1869:scanner-core:0.4.0")
-detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
-detektPlugins("io.github.makan1869:scanner-micronaut:0.4.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.1")
+detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.1")
+detektPlugins("io.github.makan1869:scanner-micronaut:0.4.1")
 ```
 
 **Rules by scope:**

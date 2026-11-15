@@ -28,18 +28,18 @@ plugins {
 
 dependencies {
     // Core rules — works with any Kotlin project
-    detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+    detektPlugins("io.github.makan1869:scanner-core:0.4.1")
 
     // Pick the module(s) for your framework — combine as many as you like
-    detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
-    // detektPlugins("io.github.makan1869:scanner-quarkus:0.4.0")
-    // detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.0")
-    // detektPlugins("io.github.makan1869:scanner-ktor:0.4.0")
-    // detektPlugins("io.github.makan1869:scanner-micronaut:0.4.0")
-    // detektPlugins("io.github.makan1869:scanner-vertx:0.4.0")
+    detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.1")
+    // detektPlugins("io.github.makan1869:scanner-quarkus:0.4.1")
+    // detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.1")
+    // detektPlugins("io.github.makan1869:scanner-ktor:0.4.1")
+    // detektPlugins("io.github.makan1869:scanner-micronaut:0.4.1")
+    // detektPlugins("io.github.makan1869:scanner-vertx:0.4.1")
 
     // ...or pull everything in one go:
-    // detektPlugins("io.github.makan1869:scanner-all:0.4.0")
+    // detektPlugins("io.github.makan1869:scanner-all:0.4.1")
 }
 
 detekt {
