@@ -4,14 +4,14 @@ import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
 import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * OWASP A03 — Injection (Groovy / ScriptEngine)
@@ -53,29 +53,24 @@ class GroovyScriptInjectionRule(config: Config) : SecurityRule(
      */
     private fun callsScriptEngine(call: KtCallExpression): Boolean {
         val file = call.containingKtFile
-        val importsEngine =
-            file.importDirectives.any { directive ->
-                val path = directive.importPath?.pathStr.orEmpty()
-                DetectionPatterns.SCRIPT_ENGINE_IMPORT_PREFIXES.any { path.startsWith(it) }
-            }
-        if (importsEngine) return true
-        val receiver = (call.parent as? KtDotQualifiedExpression)?.takeIf { it.selectorExpression == call }?.receiverExpression
-        return when (receiver) {
-            null -> false
-            is KtNameReferenceExpression -> namesEngine(receiver.text) || declaresEngine(file, receiver.getReferencedName())
-            else -> namesEngine(receiver.text)
-        }
+        val qualified = call.parent as? KtDotQualifiedExpression
+        val receiver = qualified?.takeIf { it.selectorExpression == call }?.receiverExpression
+        return importsEngine(file) ||
+            (receiver is KtNameReferenceExpression && declaresEngine(file, receiver.getReferencedName())) ||
+            (receiver != null && namesEngine(receiver.text))
     }
 
-    private fun declaresEngine(
-        file: KtFile,
-        name: String,
-    ): Boolean =
-        file.collectDescendantsOfType<KtCallableDeclaration> { it.name == name && (it is KtProperty || it is KtParameter) }
-            .any { declaration ->
-                namesEngine(declaration.typeReference?.text.orEmpty()) ||
-                    namesEngine((declaration as? KtProperty)?.initializer?.text.orEmpty())
-            }
+    private fun importsEngine(file: KtFile): Boolean = file.importDirectives.any { directive ->
+        val path = directive.importPath?.pathStr.orEmpty()
+        DetectionPatterns.SCRIPT_ENGINE_IMPORT_PREFIXES.any { path.startsWith(it) }
+    }
+
+    private fun declaresEngine(file: KtFile, name: String): Boolean = file
+        .collectDescendantsOfType<KtCallableDeclaration> { it.name == name && (it is KtProperty || it is KtParameter) }
+        .any { declaration ->
+            namesEngine(declaration.typeReference?.text.orEmpty()) ||
+                namesEngine((declaration as? KtProperty)?.initializer?.text.orEmpty())
+        }
 
     private fun namesEngine(text: String): Boolean = DetectionPatterns.SCRIPT_ENGINE_TYPES.any { text.contains(it) }
 }

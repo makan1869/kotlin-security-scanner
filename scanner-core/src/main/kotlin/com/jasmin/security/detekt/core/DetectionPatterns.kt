@@ -134,10 +134,15 @@ object DetectionPatterns {
     // A name holds a credential when one of these is its head noun ("dbPassword", "authToken"),
     // not a qualifier ("TOKEN_LIMIT", "passwordHash") or a longer word ("author").
     val CREDENTIAL_NAME_WORDS = setOf(
-        "password", "passwd", "pwd", "passphrase", "secret", "token", "credential", "credentials", "apikey", "auth",
+        "password", "passwd", "pwd", "passphrase", "secret",
+        "token", "credential", "credentials", "apikey", "auth",
     )
     val CREDENTIAL_NAME_PHRASES = setOf(
-        listOf("api", "key"), listOf("private", "key"), listOf("access", "key"), listOf("secret", "key"), listOf("signing", "key"),
+        listOf("api", "key"),
+        listOf("private", "key"),
+        listOf("access", "key"),
+        listOf("secret", "key"),
+        listOf("signing", "key"),
     )
 
     // Words after the head noun that still name the credential itself ("apiKeyValue", "authHeader").

@@ -3,8 +3,8 @@ package com.jasmin.security.detekt.a03
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.provider.ValueSource
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class SqlInjectionRuleTest {
 
@@ -115,7 +115,7 @@ class SqlInjectionRuleTest {
         ],
     )
     fun `ignores prose and identifiers that only contain SQL words`(text: String) {
-        val code = "fun message(old: String, new: String, team: String, count: Int, updatedAt: String, deletedAt: String, fields: String, options: String) = \"$text\""
+        val code = "fun message() = \"$text\""
         assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
