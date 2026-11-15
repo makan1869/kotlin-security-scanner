@@ -3,6 +3,8 @@ package com.jasmin.security.detekt.a03
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class SqlInjectionRuleTest {
 
@@ -78,6 +80,48 @@ class SqlInjectionRuleTest {
     @Test
     fun `does not interfere with hardcoded credential code`() {
         val code = """val dbPassword = "myS3cretPass!"""
+        assertThat(rule.lint(code, compile = false)).isEmpty()
+    }
+
+    // ── Statement shapes, not loose keywords ─────────────────────────────────
+
+    @Test
+    fun `flags an interpolated fragment after a statement that starts with SELECT`() {
+        val code = """fun count(from: String) = "SELECT count(*) ${'$'}from""""
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
+    }
+
+    @Test
+    fun `flags an interpolated value compared in a WHERE clause`() {
+        val code = """fun filter(id: String) = "WHERE id = ${'$'}id""""
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
+    }
+
+    @Test
+    fun `flags lower-case SQL`() {
+        val code = """fun find(name: String) = "select * from users where name = '${'$'}name'""""
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "the head moved from \${'$'}old to \${'$'}new",
+            "a reviewer joined \${'$'}team and approved",
+            "deleted \${'$'}count rows where they were stale",
+            "updatedAt=\${'$'}updatedAt deletedAt=\${'$'}deletedAt",
+            "query{pullRequests(orderBy:{field:UPDATED_AT}) \${'$'}fields}",
+            "please select one of \${'$'}options",
+        ],
+    )
+    fun `ignores prose and identifiers that only contain SQL words`(text: String) {
+        val code = "fun message() = \"$text\""
+        assertThat(rule.lint(code, compile = false)).isEmpty()
+    }
+
+    @Test
+    fun `ignores a message concatenated after prose that only contains SQL words`() {
+        val code = """fun message(team: String) = "approved from the list of " + team"""
         assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

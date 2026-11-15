@@ -3,6 +3,8 @@ package com.jasmin.security.detekt.a07
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class HardcodedCredentialsRuleTest {
 
@@ -70,6 +72,32 @@ class HardcodedCredentialsRuleTest {
                 return "SELECT * FROM users WHERE username = '${'$'}username'"
             }
         """.trimIndent()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
+    }
+
+    // ── Names: the credential word must be the head noun ─────────────────────
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "dbPassword", "DB_PASSWORD", "pwd", "passphrase", "clientSecret", "authToken", "API_KEY", "APIKey",
+            "privateKey", "accessKey", "signingKey", "credentials", "apiKeyValue", "authHeader", "secretKeyBase64",
+        ],
+    )
+    fun `flags a credential name`(name: String) {
+        val code = "val $name = \"s3cr3t-value-123\""
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "author", "RULE_HUMAN_AUTHOR", "AUTHOR_LOGIN", "TOKEN_LIMIT_FINISH_REASON", "maxTokens", "tokenCount",
+            "passwordHash", "secretName", "keyId", "oauthProvider", "tokenizer",
+        ],
+    )
+    fun `ignores a name where the credential word is only a qualifier or part of a longer word`(name: String) {
+        val code = "val $name = \"s3cr3t-value-123\""
         assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

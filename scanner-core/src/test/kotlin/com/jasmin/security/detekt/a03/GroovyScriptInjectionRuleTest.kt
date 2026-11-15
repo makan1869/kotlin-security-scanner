@@ -77,4 +77,51 @@ class GroovyScriptInjectionRuleTest {
         """.trimIndent()
         assertThat(rule.lint(code, compile = false)).isEmpty()
     }
+
+    // ── Only calls to a script engine ────────────────────────────────────────
+
+    @Test
+    fun `flags evaluate on a receiver of any name when the file imports a script engine`() {
+        val code = """
+            import groovy.lang.GroovyShell
+
+            fun run(shell: Any, script: String) = shell.evaluate(script)
+        """.trimIndent()
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
+    }
+
+    @Test
+    fun `flags eval on a parameter declared as a script engine`() {
+        val code = """
+            fun run(engine: ScriptEngine, code: String) = engine.eval(code)
+        """.trimIndent()
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
+    }
+
+    @Test
+    fun `ignores evaluate on an object that is not a script engine`() {
+        val code = """
+            fun ready(checks: List<String>) = CiReadinessEvaluator.evaluate(checks, required)
+        """.trimIndent()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
+    }
+
+    @Test
+    fun `ignores evaluate on a variable that is not a script engine`() {
+        val code = """
+            class Gate(private val evaluator: ApprovalEvaluator) {
+                fun decide(facts: Facts) = evaluator.evaluate(facts)
+            }
+        """.trimIndent()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
+    }
+
+    @Test
+    fun `ignores a local function called evaluate`() {
+        val code = """
+            fun evaluate(input: String) = input.length
+            fun check(value: String) = evaluate(value)
+        """.trimIndent()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
+    }
 }

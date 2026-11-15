@@ -4,6 +4,15 @@ All notable changes to kotlin-security-scanner are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] — Fewer false positives
+
+### Changed
+- `SqlInjection` matches SQL statement shapes on whole words, not loose keywords. Log messages and
+  identifiers such as `updatedAt` no longer match.
+- `GroovyScriptInjection` reports only calls to a script engine.
+- `HardcodedCredentials` reads the credential word as the head noun of the name. Names such as
+  `author` and `TOKEN_LIMIT` no longer match. The shipped config excludes test sources.
+
 ## [0.4.0] — detekt 2
 
 Ports every module to the detekt 2 API (`dev.detekt`, 2.0.0-alpha.6). detekt 1.x is no longer
@@ -86,5 +95,6 @@ First public release on Maven Central:
   and dead-detection defects (fully-qualified-name receivers, substring over-matching, wrong
   argument indices, Spring `${prop:default}` vs bash `:-` syntax). No crash bugs found.
 
+[0.4.1]: https://github.com/makan1869/kotlin-security-scanner/releases/tag/v0.4.1
 [0.4.0]: https://github.com/makan1869/kotlin-security-scanner/releases/tag/v0.4.0
 [0.2.0]: https://github.com/JasminGuberinic/kotlin-security-scanner/releases/tag/v0.2.0

@@ -58,6 +58,10 @@ object DetectionPatterns {
 
     val SCRIPT_EVAL_METHODS = setOf("evaluate", "eval")
 
+    val SCRIPT_ENGINE_TYPES = setOf("GroovyShell", "GroovyScriptEngine", "ScriptEngine", "ScriptEngineManager")
+
+    val SCRIPT_ENGINE_IMPORT_PREFIXES = setOf("groovy.lang.", "groovy.util.", "javax.script.", "org.codehaus.groovy.")
+
     val EL_EVAL_METHODS = setOf("eval", "createValueExpression")
 
     val CSRF_TOKEN_KEYWORDS = setOf("csrf", "xsrf")
@@ -90,7 +94,16 @@ object DetectionPatterns {
 
     // ── A03 (continued) ───────────────────────────────────────────────────────
 
-    val SQL_KEYWORDS = listOf("SELECT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE", "JOIN")
+    // Statement shapes, matched on whole words so prose ("from", "joined") and identifiers
+    // (updatedAt, deletedAt) do not read as SQL. Each interpolated value is a `?` when matched.
+    val SQL_STATEMENT_PATTERNS = listOf(
+        Regex("""^\s*(SELECT|WITH)\s""", RegexOption.IGNORE_CASE),
+        Regex("""\bSELECT\b[\s\S]*?\bFROM\b""", RegexOption.IGNORE_CASE),
+        Regex("""\bINSERT\s+INTO\b""", RegexOption.IGNORE_CASE),
+        Regex("""\bDELETE\s+FROM\b""", RegexOption.IGNORE_CASE),
+        Regex("""\bUPDATE\s+[\w."`]+\s+SET\b""", RegexOption.IGNORE_CASE),
+        Regex("""\bWHERE\s+[\w."`]+\s*(=|<|>|\bLIKE\b|\bIN\b)""", RegexOption.IGNORE_CASE),
+    )
 
     val FILE_CONSTRUCTORS = setOf(
         "File",
@@ -117,6 +130,23 @@ object DetectionPatterns {
         "token", "auth", "credential", "private_key", "privatekey",
         "access_key", "accesskey", "client_secret", "clientsecret"
     )
+
+    // A name holds a credential when one of these is its head noun ("dbPassword", "authToken"),
+    // not a qualifier ("TOKEN_LIMIT", "passwordHash") or a longer word ("author").
+    val CREDENTIAL_NAME_WORDS = setOf(
+        "password", "passwd", "pwd", "passphrase", "secret",
+        "token", "credential", "credentials", "apikey", "auth",
+    )
+    val CREDENTIAL_NAME_PHRASES = setOf(
+        listOf("api", "key"),
+        listOf("private", "key"),
+        listOf("access", "key"),
+        listOf("secret", "key"),
+        listOf("signing", "key"),
+    )
+
+    // Words after the head noun that still name the credential itself ("apiKeyValue", "authHeader").
+    val CREDENTIAL_NAME_SUFFIXES = setOf("value", "string", "str", "text", "hex", "base64", "b64", "raw", "header")
 
     val SAFE_CREDENTIAL_PLACEHOLDERS = listOf(
         Regex("""^\$\{.*}$"""),

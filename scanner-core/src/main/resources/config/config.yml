@@ -59,6 +59,8 @@ security-core:
     active: true
   HardcodedCredentials:
     active: true
+    # Test fixtures hold fake secrets on purpose.
+    excludes: ['**/test/**', '**/testFixtures/**', '**/androidTest/**', '**/*Test.kt', '**/*Spec.kt']
   InsecureRandom:
     active: true
   HardcodedAwsCredentials:
