@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -28,15 +25,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @PreAuthorize("hasRole('ADMIN')")
  *   suspend fun deleteUser(id: Long) { ... }  // annotation silently ignored
  */
-class CoroutineSecurityContextLossRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "CoroutineSecurityContextLoss",
-        severity = Severity.Security,
-        description = "@PreAuthorize/@PostAuthorize on suspend fun — security context is silently dropped",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class CoroutineSecurityContextLossRule(config: Config) : SecurityRule(
+    config,
+    id = "CoroutineSecurityContextLoss",
+    description = "@PreAuthorize/@PostAuthorize on suspend fun — security context is silently dropped",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (!function.hasModifier(KtTokens.SUSPEND_KEYWORD)) return

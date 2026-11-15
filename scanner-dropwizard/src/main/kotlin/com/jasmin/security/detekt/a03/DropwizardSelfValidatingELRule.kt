@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   context.buildConstraintViolationWithTemplate(userValue).addConstraintViolation()
  */
-class DropwizardSelfValidatingELRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DropwizardSelfValidatingEL",
-        severity = Severity.Security,
-        description = "buildConstraintViolationWithTemplate() with dynamic message — EL injection enables RCE",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class DropwizardSelfValidatingELRule(config: Config) : SecurityRule(
+    config,
+    id = "DropwizardSelfValidatingEL",
+    description = "buildConstraintViolationWithTemplate() with dynamic message — EL injection enables RCE",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @Cacheable("tokens")
  *   fun getAccessToken(userId: Long): String
  */
-class SpringCacheableSensitiveRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringCacheableSensitive",
-        severity = Severity.Security,
-        description = "@Cacheable on security-sensitive method — credentials/tokens may persist in cache",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringCacheableSensitiveRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringCacheableSensitive",
+    description = "@Cacheable on security-sensitive method — credentials/tokens may persist in cache",
+) {
     @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)

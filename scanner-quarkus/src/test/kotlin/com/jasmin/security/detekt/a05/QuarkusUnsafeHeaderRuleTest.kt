@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class QuarkusUnsafeHeaderRuleTest {
             fun build(userAgent: String): Response =
                 Response.ok().header("X-Custom", userAgent).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class QuarkusUnsafeHeaderRuleTest {
             fun build(version: String): Response =
                 Response.ok().header("X-App-Version", "v${'$'}version").build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class QuarkusUnsafeHeaderRuleTest {
             fun proxy(contentType: String): Response =
                 Response.status(200).header("Content-Type", contentType).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class QuarkusUnsafeHeaderRuleTest {
             fun mirror(req: Request): Response =
                 Response.ok().header("X-Forwarded", req.getHeaderString("Origin")).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -55,7 +55,7 @@ class QuarkusUnsafeHeaderRuleTest {
             fun secure(): Response =
                 Response.ok().header("X-Frame-Options", "DENY").build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -65,7 +65,7 @@ class QuarkusUnsafeHeaderRuleTest {
                 builder.header("X-Custom", value)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -75,6 +75,6 @@ class QuarkusUnsafeHeaderRuleTest {
         val code = """
             fun sessionCookie(token: String) = NewCookie("session", token)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

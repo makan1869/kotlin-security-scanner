@@ -2,21 +2,14 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
-class HardcodedDatasourcePasswordRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedDatasourcePassword",
-        severity = Severity.Security,
-        description = "Database password hardcoded in application.properties — use environment variable",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HardcodedDatasourcePasswordRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "HardcodedDatasourcePassword",
+    description = "Database password hardcoded in application.properties — use environment variable",
+) {
     private val passwordKeys = listOf(
         "spring.datasource.password",
         "spring.datasource.hikari.password",

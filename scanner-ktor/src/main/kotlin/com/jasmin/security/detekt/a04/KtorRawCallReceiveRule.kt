@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a04
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -15,15 +12,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 // specific, validated data class.
 // Compliant:   call.receive<CreateUserRequest>()
 // Non-compliant: call.receive<Any>()
-class KtorRawCallReceiveRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorRawCallReceive",
-        severity = Severity.Security,
-        description = "call.receive<Any>() accepts untyped input — deserialize into a specific validated data class",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorRawCallReceiveRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorRawCallReceive",
+    description = "call.receive<Any>() accepts untyped input — deserialize into a specific validated data class",
+) {
     private val unsafeTypes = setOf("Any", "HashMap", "Map", "LinkedHashMap", "MutableMap", "JsonElement", "JsonObject")
 
     @Suppress("ReturnCount")

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -13,15 +10,11 @@ import java.util.Properties
  * mp.jwt.verify.algorithm=none disables JWT signature verification — any caller can forge tokens.
  * A hardcoded mp.jwt.verify.secret.value leaks the signing key with every artifact.
  */
-class QuarkusSmallryeJwtInsecureRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusSmallryeJwtInsecure",
-        severity = Severity.Security,
-        description = "MicroProfile JWT misconfigured — algorithm=none or hardcoded secret",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusSmallryeJwtInsecureRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusSmallryeJwtInsecure",
+    description = "MicroProfile JWT misconfigured — algorithm=none or hardcoded secret",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val issues = mutableListOf<Pair<String, String>>()
         val algorithmKey = "mp.jwt.verify.algorithm"

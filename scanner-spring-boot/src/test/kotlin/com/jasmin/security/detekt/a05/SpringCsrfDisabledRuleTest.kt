@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SpringCsrfDisabledRuleTest {
@@ -17,7 +17,7 @@ class SpringCsrfDisabledRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isNotEmpty()
+        assertThat(rule.lint(code, compile = false)).isNotEmpty()
     }
 
     @Test
@@ -27,7 +27,7 @@ class SpringCsrfDisabledRuleTest {
                 http.csrf().disable()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isNotEmpty()
+        assertThat(rule.lint(code, compile = false)).isNotEmpty()
     }
 
     @Test
@@ -37,7 +37,7 @@ class SpringCsrfDisabledRuleTest {
                 http.csrf(CsrfConfigurer::disable)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isNotEmpty()
+        assertThat(rule.lint(code, compile = false)).isNotEmpty()
     }
 
     @Test
@@ -49,7 +49,7 @@ class SpringCsrfDisabledRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -59,13 +59,13 @@ class SpringCsrfDisabledRuleTest {
                 http.headers().disable()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag hardcoded credential patterns
     @Test
     fun `does not interfere with hardcoded credential code`() {
         val code = """val secretKey = "my-jwt-secret-value""""
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$(".")</ID>
+    <ID>ArgumentListWrapping:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$(expression, "setAlgorithm(\"none\") accepts unsigned JWTs — use RS256/ES256 (or HS256 with a strong secret)")</ID>
+    <ID>ArgumentListWrapping:VertxSessionCookieInsecureRule.kt:VertxSessionCookieInsecureRule$(expression, "setCookieSecureFlag(false) sends the session cookie over plain HTTP — call setCookieSecureFlag(true)")</ID>
+    <ID>ArgumentListWrapping:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$(expression, "StaticHandler.create(\"/\") serves the filesystem root — use a dedicated webroot directory")</ID>
+    <ID>ArgumentListWrapping:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$(expression, "setAllowRootFileSystemAccess(true) exposes the whole filesystem — serve a dedicated webroot")</ID>
+    <ID>BinaryExpressionWrapping:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$(expression.parent as? KtDotQualifiedExpression)?.receiverExpression?.text?.substringAfterLast(".") == "CorsHandler"</ID>
+    <ID>BinaryExpressionWrapping:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>BinaryExpressionWrapping:VertxEventBusBridgeOpenRule.kt:VertxEventBusBridgeOpenRule$expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>BinaryExpressionWrapping:VertxHardcodedJwtSecretRule.kt:VertxHardcodedJwtSecretRule$expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>BinaryExpressionWrapping:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>BinaryExpressionWrapping:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtConstantExpression ?: return</ID>
+    <ID>BinaryExpressionWrapping:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>BlankLineBetweenWhenConditions:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$when (callee) { "setAllowRootFileSystemAccess" -&gt; { val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtConstantExpression ?: return if (arg.text == "true") { reportAt(expression, "setAllowRootFileSystemAccess(true) exposes the whole filesystem — serve a dedicated webroot") } } "create" -&gt; { val receiver = (expression.parent as? KtDotQualifiedExpression)?.receiverExpression?.text ?: return if (receiver.substringAfterLast(".") != "StaticHandler") return val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return if (!arg.hasInterpolation() &amp;&amp; arg.rawValue() == "/") { reportAt(expression, "StaticHandler.create(\"/\") serves the filesystem root — use a dedicated webroot directory") } } }</ID>
+    <ID>MaxLineLength:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$"Vert.x CORS $callee(\"$value\") allows any origin — list trusted origins with addOrigin(\"https://app.example.com\")"</ID>
+    <ID>MaxLineLength:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$(expression.parent as? KtDotQualifiedExpression)?.receiverExpression?.text?.substringAfterLast(".") == "CorsHandler"</ID>
+    <ID>MaxLineLength:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>MaxLineLength:VertxEventBusBridgeOpenRule.kt:VertxEventBusBridgeOpenRule$"$callee(\"$value\") permits every event-bus address — restrict the bridge to the exact addresses the client needs"</ID>
+    <ID>MaxLineLength:VertxEventBusBridgeOpenRule.kt:VertxEventBusBridgeOpenRule$val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>MaxLineLength:VertxHardcodedJwtSecretRule.kt:VertxHardcodedJwtSecretRule$val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>MaxLineLength:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$reportAt(expression, "setAlgorithm(\"none\") accepts unsigned JWTs — use RS256/ES256 (or HS256 with a strong secret)")</ID>
+    <ID>MaxLineLength:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>MaxLineLength:VertxSessionCookieInsecureRule.kt:VertxSessionCookieInsecureRule$reportAt(expression, "setCookieSecureFlag(false) sends the session cookie over plain HTTP — call setCookieSecureFlag(true)")</ID>
+    <ID>MaxLineLength:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$reportAt(expression, "StaticHandler.create(\"/\") serves the filesystem root — use a dedicated webroot directory")</ID>
+    <ID>MaxLineLength:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$reportAt(expression, "setAllowRootFileSystemAccess(true) exposes the whole filesystem — serve a dedicated webroot")</ID>
+    <ID>MaxLineLength:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtConstantExpression ?: return</ID>
+    <ID>MaxLineLength:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$val arg = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtStringTemplateExpression ?: return</ID>
+    <ID>MaxLineLength:VertxTrustAllCertsRule.kt:VertxTrustAllCertsRule$"$callee(${arg.text}) disables TLS verification on a Vert.x client — use a trust store and keep host verification on"</ID>
+    <ID>MaximumLineLength:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$"</ID>
+    <ID>MaximumLineLength:VertxCorsWildcardRule.kt:VertxCorsWildcardRule$return</ID>
+    <ID>MaximumLineLength:VertxEventBusBridgeOpenRule.kt:VertxEventBusBridgeOpenRule$return</ID>
+    <ID>MaximumLineLength:VertxHardcodedJwtSecretRule.kt:VertxHardcodedJwtSecretRule$return</ID>
+    <ID>MaximumLineLength:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$)</ID>
+    <ID>MaximumLineLength:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$return</ID>
+    <ID>MaximumLineLength:VertxSessionCookieInsecureRule.kt:VertxSessionCookieInsecureRule$)</ID>
+    <ID>MaximumLineLength:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$)</ID>
+    <ID>MaximumLineLength:VertxStaticHandlerRootFsRule.kt:VertxStaticHandlerRootFsRule$return</ID>
+    <ID>ReturnCount:VertxJwtNoneAlgorithmRule.kt:VertxJwtNoneAlgorithmRule$override fun visitCallExpression</ID>
+    <ID>ReturnCount:VertxSessionCookieInsecureRule.kt:VertxSessionCookieInsecureRule$override fun visitCallExpression</ID>
+    <ID>ReturnCount:VertxStaticHandlerDirectoryListingRule.kt:VertxStaticHandlerDirectoryListingRule$override fun visitCallExpression</ID>
+    <ID>TrailingCommaOnCallSite:VertxRuleSetProvider.kt:VertxRuleSetProvider$( ruleSetId, listOf( // A01 Broken Access Control ::VertxEventBusBridgeOpenRule, // A02 Cryptographic Failures ::VertxTrustAllCertsRule, ::VertxJwtNoneAlgorithmRule, // A03 Injection ::VertxStaticHandlerRootFsRule, // A05 Security Misconfiguration ::VertxCorsWildcardRule, ::VertxBodyHandlerNoLimitRule, ::VertxInsecureCookieRule, ::VertxCookieNoHttpOnlyRule, ::VertxSessionCookieInsecureRule, ::VertxStaticHandlerDirectoryListingRule, // A07 Identification and Authentication Failures ::VertxHardcodedJwtSecretRule, ) )</ID>
+  </CurrentIssues>
+</SmellBaseline>

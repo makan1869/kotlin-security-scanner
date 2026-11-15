@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -27,15 +24,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   templateEngine.process(templateName, ctx)       // non-literal template name
  *   templateEngine.process("Hello, ${name}", ctx)   // interpolated first arg
  */
-class ThymeleafSSTIRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ThymeleafSSTI",
-        severity = Severity.Security,
-        description = "TemplateEngine.process() with non-literal template — Thymeleaf SSTI risk",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class ThymeleafSSTIRule(config: Config) : SecurityRule(
+    config,
+    id = "ThymeleafSSTI",
+    description = "TemplateEngine.process() with non-literal template — Thymeleaf SSTI risk",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

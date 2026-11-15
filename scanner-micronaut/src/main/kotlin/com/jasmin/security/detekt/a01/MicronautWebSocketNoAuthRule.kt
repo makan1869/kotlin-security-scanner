@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 
 // OWASP A01 — Broken Access Control
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtClass
 // Without @Secured the handshake completes unauthenticated for any caller.
 // Compliant:   @ServerWebSocket("/chat") @Secured(SecurityRule.IS_AUTHENTICATED) class ChatHandler
 // Non-compliant: @ServerWebSocket("/chat") class ChatHandler  // no @Secured
-class MicronautWebSocketNoAuthRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautWebSocketNoAuth",
-        severity = Severity.Security,
-        description = "@ServerWebSocket endpoint has no @Secured — WebSocket connections bypass HTTP security filters",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautWebSocketNoAuthRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautWebSocketNoAuth",
+    description = "@ServerWebSocket endpoint has no @Secured — WebSocket connections bypass HTTP security filters",
+) {
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         val annotations = klass.annotationNames()

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBlockStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameStringTemplateEntry
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   log.info("Requested path: ${'$'}{request.path}")
  */
-class LogForgingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "LogForging",
-        severity = Severity.Security,
-        description = "Request input logged unsanitized — strip CR/LF to prevent forged log entries",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class LogForgingRule(config: Config) : SecurityRule(
+    config,
+    id = "LogForging",
+    description = "Request input logged unsanitized — strip CR/LF to prevent forged log entries",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

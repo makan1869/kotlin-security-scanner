@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // accessible. Sensitive details should be protected behind authentication.
 // Compliant:   @Endpoint("metrics") @Secured(SecurityRule.IS_AUTHENTICATED) class MetricsEndpoint
 // Non-compliant: @Endpoint("metrics") class MetricsEndpoint { @Read fun details(): Map<...> }
-class MicronautManagementEndpointInsecureRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautManagementEndpointInsecure",
-        severity = Severity.Security,
-        description = "@Endpoint management method without @Secured is publicly accessible",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautManagementEndpointInsecureRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautManagementEndpointInsecure",
+    description = "@Endpoint management method without @Secured is publicly accessible",
+) {
     private val endpointOperations = setOf("Read", "Write", "Delete")
 
     override fun visitClass(klass: KtClass) {

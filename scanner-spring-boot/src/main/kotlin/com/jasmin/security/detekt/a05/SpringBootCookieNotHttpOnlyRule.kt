@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // A cookie without HttpOnly can be read by JavaScript — XSS escalates to session hijack.
 // Compliant:   ResponseCookie.from(name, value).httpOnly(true).build()
 // Non-compliant: cookie.isHttpOnly = false
-class SpringBootCookieNotHttpOnlyRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringBootCookieNotHttpOnly",
-        severity = Severity.Security,
-        description = "Cookie with HttpOnly disabled — JavaScript can read the cookie (XSS → session hijack)",
-        debt = Debt.TEN_MINS,
-    )
-
+class SpringBootCookieNotHttpOnlyRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringBootCookieNotHttpOnly",
+    description = "Cookie with HttpOnly disabled — JavaScript can read the cookie (XSS → session hijack)",
+) {
     @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

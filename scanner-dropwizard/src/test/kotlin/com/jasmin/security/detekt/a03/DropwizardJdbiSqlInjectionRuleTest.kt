@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class DropwizardJdbiSqlInjectionRuleTest {
             @SqlQuery("SELECT * FROM users WHERE name = '${'$'}name'")
             fun findByName(name: String): List<User>
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class DropwizardJdbiSqlInjectionRuleTest {
             @SqlUpdate("UPDATE users SET active = true WHERE id = ${'$'}id")
             fun activate(id: Long)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -33,7 +33,7 @@ class DropwizardJdbiSqlInjectionRuleTest {
             @SqlQuery("SELECT * FROM users WHERE name = :name")
             fun findByName(@Bind("name") name: String): List<User>
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -41,6 +41,6 @@ class DropwizardJdbiSqlInjectionRuleTest {
         val code = """
             fun findByName(name: String): List<User> = emptyList()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

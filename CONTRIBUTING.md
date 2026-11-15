@@ -5,11 +5,9 @@ fixes, and false-positive reports are all welcome.
 
 ## Build & test
 
-Requires **JDK 21** (Kotlin 2.0.10 / Detekt 1.23.7 are incompatible with newer JDKs in
-the Gradle DSL).
+Requires **JDK 21 or newer**. The build targets Kotlin 2.4.10 and detekt 2.0.0-alpha.6.
 
 ```bash
-export JAVA_HOME=/path/to/jdk-21
 ./gradlew test            # all rule unit tests
 ./gradlew detekt          # self-scan
 ./gradlew :scanner-e2e:detekt   # end-to-end: every rule must fire on the fixtures

@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   User.find("name = '" + name + "'")        // concatenated — SQL injection
  *   User.list("role = '${'$'}{userRole}'")    // interpolated — SQL injection
  */
-class PanacheRawQueryRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "PanacheRawQuery",
-        severity = Severity.Security,
-        description = "Panache query with interpolated string — use positional parameters (?1, ?2) instead",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class PanacheRawQueryRule(config: Config) : SecurityRule(
+    config,
+    id = "PanacheRawQuery",
+    description = "Panache query with interpolated string — use positional parameters (?1, ?2) instead",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

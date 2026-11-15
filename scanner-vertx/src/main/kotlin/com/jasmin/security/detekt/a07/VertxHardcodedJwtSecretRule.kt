@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   PubSecKeyOptions().setAlgorithm("HS256").setBuffer("my-hardcoded-jwt-secret")
  */
-class VertxHardcodedJwtSecretRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "VertxHardcodedJwtSecret",
-        severity = Severity.Security,
-        description = "PubSecKeyOptions.setBuffer(literal) — hardcoded JWT signing secret",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class VertxHardcodedJwtSecretRule(config: Config) : SecurityRule(
+    config,
+    id = "VertxHardcodedJwtSecret",
+    description = "PubSecKeyOptions.setBuffer(literal) — hardcoded JWT signing secret",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

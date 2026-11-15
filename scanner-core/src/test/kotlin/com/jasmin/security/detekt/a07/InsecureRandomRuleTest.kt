@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class InsecureRandomRuleTest {
@@ -14,7 +14,7 @@ class InsecureRandomRuleTest {
             import java.util.Random
             fun token(): Int = Random().nextInt(100000)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -23,7 +23,7 @@ class InsecureRandomRuleTest {
             import java.util.concurrent.ThreadLocalRandom
             fun token(): Int = ThreadLocalRandom().nextInt(100000)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class InsecureRandomRuleTest {
             import java.util.concurrent.ThreadLocalRandom
             fun token(): Int = ThreadLocalRandom.current().nextInt(100000)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -40,7 +40,7 @@ class InsecureRandomRuleTest {
         val code = """
             fun now() = Instant.current()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -49,7 +49,7 @@ class InsecureRandomRuleTest {
             import java.security.SecureRandom
             fun token(): Int = SecureRandom().nextInt(100000)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -57,7 +57,7 @@ class InsecureRandomRuleTest {
         val code = """
             fun token(): Int = (1..100000).random()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag sql injection patterns
@@ -66,6 +66,6 @@ class InsecureRandomRuleTest {
         val code = """
             fun find(id: String) = "SELECT * FROM items WHERE id = ${'$'}id"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

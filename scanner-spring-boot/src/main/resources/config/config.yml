@@ -1,0 +1,123 @@
+security-spring-boot:
+  active: true
+  # Off by default: a per-file rule cannot see URL-based authorization in a SecurityFilterChain,
+  # so it would flag every endpoint of an app secured that way. Enable it for method security.
+  MissingAuthorization:
+    active: false
+  ReactiveSecurityContextHolder:
+    active: true
+  ReactivePermitAllExchange:
+    active: true
+  OpenRedirect:
+    active: true
+  DisabledHttpSecurity:
+    active: true
+  CsrfTokenLeak:
+    active: true
+  CoroutineSecurityContextLoss:
+    active: true
+  AsyncSecurityContextLoss:
+    active: true
+  FeignClientInsecureUrl:
+    active: true
+  UnvalidatedForward:
+    active: true
+  PermitAllAdminPath:
+    active: true
+  InsecurePasswordEncoder:
+    active: true
+  WebClientInsecureSsl:
+    active: true
+  WeakBcryptRounds:
+    active: true
+    minStrength: 10
+  JwtExpirationMissing:
+    active: true
+  JwtSecretInProperties:
+    active: true
+  OAuth2ClientSecretInProperties:
+    active: true
+  SpringCacheableSensitive:
+    active: true
+  MissingHttpsRedirect:
+    active: true
+  InsecureRedisConnection:
+    active: true
+  InsecureSmtpConfig:
+    active: true
+  SpelInjection:
+    active: true
+  ResponseSplitting:
+    active: true
+  ELInjection:
+    active: true
+  SpringDataMongoInjection:
+    active: true
+  ThymeleafSSTI:
+    active: true
+  EntityManagerJpqlInjection:
+    active: true
+  SpringDataSortInjection:
+    active: true
+  MassAssignment:
+    active: true
+  SpringCsrfDisabled:
+    active: true
+  PermissiveCors:
+    active: true
+  InsecureActuatorExposure:
+    active: true
+  SecurityHeadersMissing:
+    active: true
+  ExceptionDetailsExposed:
+    active: true
+  HttpMethodOverride:
+    active: true
+  KafkaTrustedPackagesWildcard:
+    active: true
+  KafkaInsecureProtocol:
+    active: true
+  SpringSecurityDebugEnabled:
+    active: true
+  H2ConsoleEnabled:
+    active: true
+  SpringActuatorShutdownEnabled:
+    active: true
+  CloudConfigInsecureUri:
+    active: true
+  CrossOriginCredentialsWildcard:
+    active: true
+  SpringBootCookieNotHttpOnly:
+    active: true
+  SpringBootInsecureFileUpload:
+    active: true
+  SpringFrameOptionsDisabled:
+    active: true
+  WebFluxBlockingCall:
+    active: true
+  SpringContentTypeOptionsDisabled:
+    active: true
+  SpringSessionFixationNone:
+    active: true
+  SpringCsrfIgnoringMatchers:
+    active: true
+  InsecureRememberMe:
+    active: true
+  HardcodedDatasourcePassword:
+    active: true
+  SpringBootNoOpPasswordEncoder:
+    active: true
+  SpringBootHardcodedValueDefault:
+    active: true
+  SpringBootRequestBodyAnyType:
+    active: true
+  ShowSqlEnabled:
+    active: true
+  SecurityLoggingVerbose:
+    active: true
+  SpringBootExceptionBodyLeak:
+    active: true
+  WebClientSSRF:
+    active: true
+  RestTemplateSsrf:
+    active: true

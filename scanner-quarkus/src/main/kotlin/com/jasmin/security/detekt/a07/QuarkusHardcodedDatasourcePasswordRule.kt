@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -13,15 +10,11 @@ import java.util.Properties
  * A hardcoded quarkus.datasource.password leaks the database credential
  * with every build artifact and source-code checkout.
  */
-class QuarkusHardcodedDatasourcePasswordRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusHardcodedDatasourcePassword",
-        severity = Severity.Security,
-        description = "quarkus.datasource.password hardcoded — use environment variable reference",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusHardcodedDatasourcePasswordRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "QuarkusHardcodedDatasourcePassword",
+    description = "quarkus.datasource.password hardcoded — use environment variable reference",
+) {
     override fun scanProperties(props: Properties): List<Pair<String, String>> {
         val key = "quarkus.datasource.password"
         val value = props.getProperty(key) ?: return emptyList()

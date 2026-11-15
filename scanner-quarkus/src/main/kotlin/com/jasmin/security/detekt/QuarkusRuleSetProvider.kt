@@ -39,66 +39,64 @@ import com.jasmin.security.detekt.a08.QuarkusJsonbUnsafeDeserializationRule
 import com.jasmin.security.detekt.a08.QuarkusReflectionUnsafeRule
 import com.jasmin.security.detekt.a09.QuarkusExceptionMessageLeakRule
 import com.jasmin.security.detekt.a09.QuarkusPasswordInLogRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 class QuarkusRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-quarkus"
+    override val ruleSetId = RuleSetId("security-quarkus")
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
             // A01 Broken Access Control
-            QuarkusMissingAuthRule(config),
-            QuarkusSystemExitRule(config),
-            QuarkusPermitAllSensitiveRule(config),
-            QuarkusJsonBeforeAuthRule(config),
-            QuarkusRestClientInsecureUrlRule(config),
-            QuarkusGraphQLNoAuthRule(config),
-            QuarkusReactiveRouteNoAuthRule(config),
-            QuarkusFormCsrfMissingRule(config),
-            QuarkusUnsafeSecurityContextRule(config),
-            QuarkusCacheResultSensitiveRule(config),
+            ::QuarkusMissingAuthRule,
+            ::QuarkusSystemExitRule,
+            ::QuarkusPermitAllSensitiveRule,
+            ::QuarkusJsonBeforeAuthRule,
+            ::QuarkusRestClientInsecureUrlRule,
+            ::QuarkusGraphQLNoAuthRule,
+            ::QuarkusReactiveRouteNoAuthRule,
+            ::QuarkusFormCsrfMissingRule,
+            ::QuarkusUnsafeSecurityContextRule,
+            ::QuarkusCacheResultSensitiveRule,
             // A02 Cryptographic Failures
-            QuarkusSmallryeJwtInsecureRule(config),
-            QuarkusRedisInsecureRule(config),
-            QuarkusMongoInsecureRule(config),
-            QuarkusOidcAudienceMissingRule(config),
-            QuarkusGrpcInsecureRule(config),
+            ::QuarkusSmallryeJwtInsecureRule,
+            ::QuarkusRedisInsecureRule,
+            ::QuarkusMongoInsecureRule,
+            ::QuarkusOidcAudienceMissingRule,
+            ::QuarkusGrpcInsecureRule,
             // A03 Injection
-            PanacheRawQueryRule(config),
-            QuarkusMissingBeanValidationRule(config),
-            QuarkusNativeQueryInjectionRule(config),
-            QuarkusPathParamInjectionRule(config),
-            QuarkusSensitiveQueryParamRule(config),
+            ::PanacheRawQueryRule,
+            ::QuarkusMissingBeanValidationRule,
+            ::QuarkusNativeQueryInjectionRule,
+            ::QuarkusPathParamInjectionRule,
+            ::QuarkusSensitiveQueryParamRule,
             // A04 Insecure Design
-            QuarkusMassAssignmentRule(config),
+            ::QuarkusMassAssignmentRule,
             // A05 Security Misconfiguration
-            QuarkusUnsafeHeaderRule(config),
-            QuarkusBuildTimeSecretLeakRule(config),
-            QuarkusCorsPermissiveConfigRule(config),
-            QuarkusDevServicesInProdRule(config),
-            QuarkusMultipartInsecureRule(config),
-            QuarkusSmallRyeHealthInsecureRule(config),
-            QuarkusSwaggerUiInProdRule(config),
-            QuarkusInsecureCookieRule(config),
-            QuarkusInsecureFileUploadRule(config),
+            ::QuarkusUnsafeHeaderRule,
+            ::QuarkusBuildTimeSecretLeakRule,
+            ::QuarkusCorsPermissiveConfigRule,
+            ::QuarkusDevServicesInProdRule,
+            ::QuarkusMultipartInsecureRule,
+            ::QuarkusSmallRyeHealthInsecureRule,
+            ::QuarkusSwaggerUiInProdRule,
+            ::QuarkusInsecureCookieRule,
+            ::QuarkusInsecureFileUploadRule,
             // A07 Identification and Authentication Failures
-            QuarkusHardcodedConfigSecretRule(config),
-            QuarkusOidcInsecureConfigRule(config),
-            QuarkusHardcodedDatasourcePasswordRule(config),
-            QuarkusConfigPasswordLeakRule(config),
-            QuarkusHardcodedConfigPropertyDefaultRule(
-                config,
-            ),
+            ::QuarkusHardcodedConfigSecretRule,
+            ::QuarkusOidcInsecureConfigRule,
+            ::QuarkusHardcodedDatasourcePasswordRule,
+            ::QuarkusConfigPasswordLeakRule,
+            ::QuarkusHardcodedConfigPropertyDefaultRule,
             // A08 Software and Data Integrity
-            QuarkusReflectionUnsafeRule(config),
-            QuarkusJsonbUnsafeDeserializationRule(config),
+            ::QuarkusReflectionUnsafeRule,
+            ::QuarkusJsonbUnsafeDeserializationRule,
             // A09 Security Logging and Monitoring Failures
-            QuarkusExceptionMessageLeakRule(config),
-            QuarkusPasswordInLogRule(config),
+            ::QuarkusExceptionMessageLeakRule,
+            ::QuarkusPasswordInLogRule,
         )
     )
 }

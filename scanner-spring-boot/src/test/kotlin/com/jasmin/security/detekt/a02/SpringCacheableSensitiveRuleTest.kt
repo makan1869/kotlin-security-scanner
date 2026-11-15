@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class SpringCacheableSensitiveRuleTest {
             @Cacheable("passwords")
             fun getUserPassword(userId: Long): String = passwordStore.get(userId)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class SpringCacheableSensitiveRuleTest {
             @Cacheable("tokens")
             fun getAccessToken(userId: Long): String = tokenService.generate(userId)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -33,7 +33,7 @@ class SpringCacheableSensitiveRuleTest {
             @Cacheable("secrets")
             fun getApiSecret(clientId: String): String = secretStore.lookup(clientId)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class SpringCacheableSensitiveRuleTest {
             @Cacheable("users")
             fun getUser(id: Long): UserDto = userRepository.findById(id)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class SpringCacheableSensitiveRuleTest {
         val code = """
             fun getAccessToken(userId: Long): String = tokenService.generate(userId)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -58,6 +58,6 @@ class SpringCacheableSensitiveRuleTest {
         val code = """
             val encoder = BCryptPasswordEncoder(4)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

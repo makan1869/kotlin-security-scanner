@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * Non-compliant:
  *   RedisStandaloneConfiguration("redis.internal", 6379)
  */
-class InsecureRedisConnectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecureRedisConnection",
-        severity = Severity.Security,
-        description = "Redis connection without TLS — configure SSL via useSsl() or RedisSSLContext",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class InsecureRedisConnectionRule(config: Config) : SecurityRule(
+    config,
+    id = "InsecureRedisConnection",
+    description = "Redis connection without TLS — configure SSL via useSsl() or RedisSSLContext",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (expression.calleeExpression?.text !in DetectionPatterns.REDIS_CONNECTION_CONSTRUCTORS) return

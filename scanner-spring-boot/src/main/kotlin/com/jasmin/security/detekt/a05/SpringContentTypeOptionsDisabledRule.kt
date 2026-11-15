@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -18,15 +15,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * Non-compliant:
  *   http.headers { contentTypeOptions { disable() } }
  */
-class SpringContentTypeOptionsDisabledRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringContentTypeOptionsDisabled",
-        severity = Severity.Security,
-        description = "X-Content-Type-Options disabled — browsers may MIME-sniff responses",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringContentTypeOptionsDisabledRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "SpringContentTypeOptionsDisabled",
+    description = "X-Content-Type-Options disabled — browsers may MIME-sniff responses",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

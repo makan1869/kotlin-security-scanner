@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // If the env variable is absent the hardcoded default is silently used.
 // Compliant:   @ConfigProperty(name = "jwt.secret")  // fail fast when absent
 // Non-compliant: @ConfigProperty(name = "jwt.secret", defaultValue = "fallback-secret")
-class QuarkusHardcodedConfigPropertyDefaultRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusHardcodedConfigPropertyDefault",
-        severity = Severity.Security,
-        description = "@ConfigProperty with hardcoded default for sensitive key — secret exposed in source code",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusHardcodedConfigPropertyDefaultRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusHardcodedConfigPropertyDefault",
+    description = "@ConfigProperty with hardcoded default for sensitive key — secret exposed in source code",
+) {
     private val sensitiveKeywords = setOf("secret", "password", "passwd", "apikey", "api_key", "token", "key")
 
     @Suppress("ReturnCount")

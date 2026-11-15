@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 // OWASP A07 — Identification and Authentication Failures
@@ -13,15 +10,11 @@ import java.util.Properties
 // with every build artifact and container image.
 // Compliant:   database.password=${DB_PASSWORD}
 // Non-compliant: database.password=myS3cretP@ss
-class DropwizardDatabasePasswordRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DropwizardDatabasePassword",
-        severity = Severity.Security,
-        description = "Dropwizard database.password hardcoded — use environment variable reference",
-        debt = Debt.TEN_MINS,
-    )
-
+class DropwizardDatabasePasswordRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "DropwizardDatabasePassword",
+    description = "Dropwizard database.password hardcoded — use environment variable reference",
+) {
     private val passwordKeys = listOf("database.password")
 
     @Suppress("ReturnCount")

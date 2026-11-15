@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -18,15 +15,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   val key = "sk_live_<24+ alphanumeric characters>"
  */
-class StripeSecretKeyRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "StripeSecretKey",
-        severity = Severity.Security,
-        description = "Hardcoded Stripe live secret key — roll it and load from a secret manager",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class StripeSecretKeyRule(config: Config) : SecurityRule(
+    config,
+    id = "StripeSecretKey",
+    description = "Hardcoded Stripe live secret key — roll it and load from a secret manager",
+) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
         if (expression.hasInterpolation()) return

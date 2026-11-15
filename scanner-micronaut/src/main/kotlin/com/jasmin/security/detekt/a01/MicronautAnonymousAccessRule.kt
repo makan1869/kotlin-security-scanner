@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -18,15 +15,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Non-compliant:
  *   @Post @Secured(SecurityRule.IS_ANONYMOUS) fun delete(id: Long)
  */
-class MicronautAnonymousAccessRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautAnonymousAccess",
-        severity = Severity.Security,
-        description = "Anonymous @Secured on a state-changing endpoint — unauthenticated callers can write",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautAnonymousAccessRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautAnonymousAccess",
+    description = "Anonymous @Secured on a state-changing endpoint — unauthenticated callers can write",
+) {
     private val writeMethods = setOf("Post", "Put", "Delete", "Patch")
 
     @Suppress("ReturnCount")

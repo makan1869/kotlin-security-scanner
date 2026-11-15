@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/admin/users").permitAll()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/actuator/health").permitAll()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/management/info").permitAll()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -46,7 +46,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/public/welcome").permitAll()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/admin/**").permitAll()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -69,7 +69,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/public/**").permitAll()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -79,7 +79,7 @@ class PermitAllAdminPathRuleTest {
                 it.requestMatchers("/admin/users").hasRole("ADMIN")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -87,6 +87,6 @@ class PermitAllAdminPathRuleTest {
         val code = """
             http.csrf { it.disable() }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

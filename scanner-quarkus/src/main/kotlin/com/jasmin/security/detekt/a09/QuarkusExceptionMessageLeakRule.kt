@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 // OWASP A09 — Security Logging and Monitoring Failures
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // SQL queries, and file paths — aids reconnaissance attacks.
 // Compliant:   Response.serverError().entity("Internal error").build()
 // Non-compliant: Response.serverError().entity(e.message).build()
-class QuarkusExceptionMessageLeakRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusExceptionMessageLeak",
-        severity = Severity.Security,
-        description = "Exception message returned in JAX-RS Response — exposes internal details to callers",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusExceptionMessageLeakRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusExceptionMessageLeak",
+    description = "Exception message returned in JAX-RS Response — exposes internal details to callers",
+) {
     // A left boundary (?<![A-Za-z0-9_$]) ensures the receiver is a standalone identifier,
     // so "service.message" / "cache.toString()" do NOT match inside a longer identifier —
     // only bare "e", "ex", "exception", or "it" receivers are flagged.

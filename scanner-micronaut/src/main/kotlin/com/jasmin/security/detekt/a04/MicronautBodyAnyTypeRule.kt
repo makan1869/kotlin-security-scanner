@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a04
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtParameter
 
 // OWASP A04 — Insecure Design
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtParameter
 // mass assignment and polymorphic deserialization gadget attacks.
 // Compliant:   @Body body: CreateUserRequest  (concrete DTO with validation)
 // Non-compliant: @Body body: Any
-class MicronautBodyAnyTypeRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautBodyAnyType",
-        severity = Severity.Security,
-        description = "@Body typed as Any bypasses schema validation — use a concrete DTO",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautBodyAnyTypeRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautBodyAnyType",
+    description = "@Body typed as Any bypasses schema validation — use a concrete DTO",
+) {
     private val unsafeTypes = setOf("Any", "Object", "Map", "MutableMap", "HashMap")
 
     @Suppress("ReturnCount")

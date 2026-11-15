@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a06
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = Regex("(a+)+")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = Regex("([a-zA-Z]+)*")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val emailValidator = Regex("(a|aa)+end")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -40,7 +40,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = "(\\w+)+".toRegex()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = Regex("(\\w+\\.)+\\w+")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -58,7 +58,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = Regex("[a-z]+")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = Regex("[a-z0-9]+")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val r = Regex("^[0-9]{1,10}${'$'}")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             fun compile(pattern: String) = Regex(pattern)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -92,6 +92,6 @@ class RegexDenialOfServiceRuleTest {
         val code = """
             val password = "hardcoded-secret"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

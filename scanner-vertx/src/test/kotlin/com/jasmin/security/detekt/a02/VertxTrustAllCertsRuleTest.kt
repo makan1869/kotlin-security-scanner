@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +14,7 @@ class VertxTrustAllCertsRuleTest {
         val code = """
             fun client() = HttpClientOptions().setSsl(true).setTrustAll(true)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -22,7 +22,7 @@ class VertxTrustAllCertsRuleTest {
         val code = """
             fun client() = WebClientOptions().setVerifyHost(false)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,6 +30,6 @@ class VertxTrustAllCertsRuleTest {
         val code = """
             fun client() = WebClientOptions().setTrustAll(false).setVerifyHost(true)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

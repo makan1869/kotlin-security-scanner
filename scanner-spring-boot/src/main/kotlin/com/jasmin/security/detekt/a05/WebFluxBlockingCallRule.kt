@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *       return Mono.just(user)
  *   }
  */
-class WebFluxBlockingCallRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "WebFluxBlockingCall",
-        severity = Severity.Security,
-        description = "Blocking call (block()/blockFirst()/blockLast()) inside a reactive method — starves the event loop",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class WebFluxBlockingCallRule(config: Config) : SecurityRule(
+    config,
+    id = "WebFluxBlockingCall",
+    description = "Blocking call (block()/blockFirst()/blockLast()) inside a reactive method — starves the event loop",
+) {
     private val blockingCalls = setOf("block", "blockFirst", "blockLast", "blockOptional")
 
     @Suppress("ReturnCount")

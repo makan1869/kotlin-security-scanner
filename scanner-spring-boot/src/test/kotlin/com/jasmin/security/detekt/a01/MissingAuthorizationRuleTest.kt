@@ -1,8 +1,8 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class MissingAuthorizationRuleTest {
@@ -16,7 +16,7 @@ class MissingAuthorizationRuleTest {
             @GetMapping("/users")
             fun getUsers(): List<String> = emptyList()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -25,7 +25,7 @@ class MissingAuthorizationRuleTest {
             @PostMapping("/users")
             fun createUser(): String = "ok"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class MissingAuthorizationRuleTest {
             @RequestMapping("/admin")
             fun admin(): String = "ok"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class MissingAuthorizationRuleTest {
             @PreAuthorize("hasRole('ADMIN')")
             fun getUsers(): List<String> = emptyList()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -54,7 +54,7 @@ class MissingAuthorizationRuleTest {
             @Secured("ROLE_ADMIN")
             fun getUsers(): List<String> = emptyList()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -67,7 +67,7 @@ class MissingAuthorizationRuleTest {
                 fun x(): String = "ok"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -75,7 +75,7 @@ class MissingAuthorizationRuleTest {
         val code = """
             fun helperFunction(): String = "ok"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag sql injection patterns
@@ -84,6 +84,6 @@ class MissingAuthorizationRuleTest {
         val code = """
             fun find(id: String) = "SELECT * FROM items WHERE id = ${'$'}id"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

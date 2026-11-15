@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +14,7 @@ class VertxEventBusBridgeOpenRuleTest {
         val code = """
             fun bridge() = SockJSBridgeOptions().addInboundPermitted(PermittedOptions().setAddressRegex(".*"))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -22,7 +22,7 @@ class VertxEventBusBridgeOpenRuleTest {
         val code = """
             fun bridge() = PermittedOptions().setAddress("*")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class VertxEventBusBridgeOpenRuleTest {
         val code = """
             fun bridge() = PermittedOptions().setAddressRegex("news\\..+")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -38,6 +38,6 @@ class VertxEventBusBridgeOpenRuleTest {
         val code = """
             fun bridge() = PermittedOptions().setAddress("news.updates")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

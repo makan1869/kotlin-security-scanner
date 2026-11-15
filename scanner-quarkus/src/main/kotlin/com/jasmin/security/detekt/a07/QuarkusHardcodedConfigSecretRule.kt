@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -30,15 +27,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   @ConfigProperty(name = "db.password", defaultValue = "admin123")
  *   @ConfigProperty(name = "api.secret",  defaultValue = "s3cr3t")
  */
-class QuarkusHardcodedConfigSecretRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusHardcodedConfigSecret",
-        severity = Severity.Security,
-        description = "@ConfigProperty with a credential key must not have a hardcoded defaultValue",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusHardcodedConfigSecretRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusHardcodedConfigSecret",
+    description = "@ConfigProperty with a credential key must not have a hardcoded defaultValue",
+) {
     @Suppress("ReturnCount")
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)

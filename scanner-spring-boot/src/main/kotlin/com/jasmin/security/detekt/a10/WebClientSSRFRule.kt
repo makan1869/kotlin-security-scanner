@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a10
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   WebClient.create(request.getParameter("url"))
  */
-class WebClientSSRFRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "WebClientSSRF",
-        severity = Severity.Security,
-        description = "WebClient.create() with dynamic URL — validate against an allowlist to prevent SSRF",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class WebClientSSRFRule(config: Config) : SecurityRule(
+    config,
+    id = "WebClientSSRF",
+    description = "WebClient.create() with dynamic URL — validate against an allowlist to prevent SSRF",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

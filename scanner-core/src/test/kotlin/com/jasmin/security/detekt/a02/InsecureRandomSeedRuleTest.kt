@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class InsecureRandomSeedRuleTest {
             import java.security.SecureRandom
             val rng = SecureRandom(byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class InsecureRandomSeedRuleTest {
                 return rng
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -41,7 +41,7 @@ class InsecureRandomSeedRuleTest {
                 return rng
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -50,7 +50,7 @@ class InsecureRandomSeedRuleTest {
             import java.security.SecureRandom
             val rng = SecureRandom()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -59,7 +59,7 @@ class InsecureRandomSeedRuleTest {
             import java.security.SecureRandom
             fun build(seedBytes: ByteArray) = SecureRandom(seedBytes)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -72,6 +72,6 @@ class InsecureRandomSeedRuleTest {
                 return rng
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

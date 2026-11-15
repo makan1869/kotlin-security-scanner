@@ -59,9 +59,9 @@ import com.jasmin.security.detekt.a09.ShowSqlEnabledRule
 import com.jasmin.security.detekt.a09.SpringBootExceptionBodyLeakRule
 import com.jasmin.security.detekt.a10.RestTemplateSsrfRule
 import com.jasmin.security.detekt.a10.WebClientSSRFRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 /**
  * Spring Boot specific security rules.
@@ -70,79 +70,79 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  */
 class SpringBootRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-spring-boot"
+    override val ruleSetId = RuleSetId("security-spring-boot")
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
             // A01 Broken Access Control
-            MissingAuthorizationRule(config),
-            ReactiveSecurityContextHolderRule(config),
-            ReactivePermitAllExchangeRule(config),
-            OpenRedirectRule(config),
-            DisabledHttpSecurityRule(config),
-            CsrfTokenLeakRule(config),
-            CoroutineSecurityContextLossRule(config),
-            AsyncSecurityContextLossRule(config),
-            FeignClientInsecureUrlRule(config),
-            UnvalidatedForwardRule(config),
-            PermitAllAdminPathRule(config),
+            ::MissingAuthorizationRule,
+            ::ReactiveSecurityContextHolderRule,
+            ::ReactivePermitAllExchangeRule,
+            ::OpenRedirectRule,
+            ::DisabledHttpSecurityRule,
+            ::CsrfTokenLeakRule,
+            ::CoroutineSecurityContextLossRule,
+            ::AsyncSecurityContextLossRule,
+            ::FeignClientInsecureUrlRule,
+            ::UnvalidatedForwardRule,
+            ::PermitAllAdminPathRule,
             // A02 Cryptographic Failures
-            InsecurePasswordEncoderRule(config),
-            WebClientInsecureSslRule(config),
-            WeakBcryptRoundsRule(config),
-            JwtExpirationMissingRule(config),
-            JwtSecretInPropertiesRule(config),
-            OAuth2ClientSecretInPropertiesRule(config),
-            SpringCacheableSensitiveRule(config),
-            MissingHttpsRedirectRule(config),
-            InsecureRedisConnectionRule(config),
-            InsecureSmtpConfigRule(config),
+            ::InsecurePasswordEncoderRule,
+            ::WebClientInsecureSslRule,
+            ::WeakBcryptRoundsRule,
+            ::JwtExpirationMissingRule,
+            ::JwtSecretInPropertiesRule,
+            ::OAuth2ClientSecretInPropertiesRule,
+            ::SpringCacheableSensitiveRule,
+            ::MissingHttpsRedirectRule,
+            ::InsecureRedisConnectionRule,
+            ::InsecureSmtpConfigRule,
             // A03 Injection
-            SpelInjectionRule(config),
-            ResponseSplittingRule(config),
-            ELInjectionRule(config),
-            SpringDataMongoInjectionRule(config),
-            ThymeleafSSTIRule(config),
-            EntityManagerJpqlInjectionRule(config),
-            SpringDataSortInjectionRule(config),
+            ::SpelInjectionRule,
+            ::ResponseSplittingRule,
+            ::ELInjectionRule,
+            ::SpringDataMongoInjectionRule,
+            ::ThymeleafSSTIRule,
+            ::EntityManagerJpqlInjectionRule,
+            ::SpringDataSortInjectionRule,
             // A04 Insecure Design
-            MassAssignmentRule(config),
+            ::MassAssignmentRule,
             // A05 Security Misconfiguration
-            SpringCsrfDisabledRule(config),
-            PermissiveCorsRule(config),
-            InsecureActuatorExposureRule(config),
-            SecurityHeadersMissingRule(config),
-            ExceptionDetailsExposedRule(config),
-            HttpMethodOverrideRule(config),
-            KafkaTrustedPackagesWildcardRule(config),
-            KafkaInsecureProtocolRule(config),
-            SpringSecurityDebugEnabledRule(config),
-            H2ConsoleEnabledRule(config),
-            SpringActuatorShutdownEnabledRule(config),
-            CloudConfigInsecureUriRule(config),
-            CrossOriginCredentialsWildcardRule(config),
-            SpringBootCookieNotHttpOnlyRule(config),
-            SpringBootInsecureFileUploadRule(config),
-            SpringFrameOptionsDisabledRule(config),
-            WebFluxBlockingCallRule(config),
-            SpringContentTypeOptionsDisabledRule(config),
-            SpringSessionFixationNoneRule(config),
-            SpringCsrfIgnoringMatchersRule(config),
+            ::SpringCsrfDisabledRule,
+            ::PermissiveCorsRule,
+            ::InsecureActuatorExposureRule,
+            ::SecurityHeadersMissingRule,
+            ::ExceptionDetailsExposedRule,
+            ::HttpMethodOverrideRule,
+            ::KafkaTrustedPackagesWildcardRule,
+            ::KafkaInsecureProtocolRule,
+            ::SpringSecurityDebugEnabledRule,
+            ::H2ConsoleEnabledRule,
+            ::SpringActuatorShutdownEnabledRule,
+            ::CloudConfigInsecureUriRule,
+            ::CrossOriginCredentialsWildcardRule,
+            ::SpringBootCookieNotHttpOnlyRule,
+            ::SpringBootInsecureFileUploadRule,
+            ::SpringFrameOptionsDisabledRule,
+            ::WebFluxBlockingCallRule,
+            ::SpringContentTypeOptionsDisabledRule,
+            ::SpringSessionFixationNoneRule,
+            ::SpringCsrfIgnoringMatchersRule,
             // A07 Identification and Authentication Failures
-            InsecureRememberMeRule(config),
-            HardcodedDatasourcePasswordRule(config),
-            SpringBootNoOpPasswordEncoderRule(config),
-            SpringBootHardcodedValueDefaultRule(config),
+            ::InsecureRememberMeRule,
+            ::HardcodedDatasourcePasswordRule,
+            ::SpringBootNoOpPasswordEncoderRule,
+            ::SpringBootHardcodedValueDefaultRule,
             // A08 Software and Data Integrity Failures
-            SpringBootRequestBodyAnyTypeRule(config),
+            ::SpringBootRequestBodyAnyTypeRule,
             // A09 Security Logging and Monitoring Failures
-            ShowSqlEnabledRule(config),
-            SecurityLoggingVerboseRule(config),
-            SpringBootExceptionBodyLeakRule(config),
+            ::ShowSqlEnabledRule,
+            ::SecurityLoggingVerboseRule,
+            ::SpringBootExceptionBodyLeakRule,
             // A10 Server-Side Request Forgery
-            WebClientSSRFRule(config),
-            RestTemplateSsrfRule(config),
+            ::WebClientSSRFRule,
+            ::RestTemplateSsrfRule,
         )
     )
 }

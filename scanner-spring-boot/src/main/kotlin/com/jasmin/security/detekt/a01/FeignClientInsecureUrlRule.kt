@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 
 /**
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtClass
  * Non-compliant:
  *   @FeignClient(name = "users", url = "http://users-service")
  */
-class FeignClientInsecureUrlRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "FeignClientInsecureUrl",
-        severity = Severity.Security,
-        description = "@FeignClient url uses HTTP — credentials and data transmitted in cleartext",
-        debt = Debt.TEN_MINS,
-    )
-
+class FeignClientInsecureUrlRule(config: Config) : SecurityRule(
+    config,
+    id = "FeignClientInsecureUrl",
+    description = "@FeignClient url uses HTTP — credentials and data transmitted in cleartext",
+) {
     @Suppress("ReturnCount")
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)

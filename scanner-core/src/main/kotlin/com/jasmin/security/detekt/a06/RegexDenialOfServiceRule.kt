@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a06
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   Regex("(a+)+")
  *   "(\\w+\\.)+\\w+".toRegex()
  */
-class RegexDenialOfServiceRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "RegexDenialOfService",
-        severity = Severity.Security,
-        description = "Regex pattern with catastrophic backtracking — rewrite to avoid nested quantifiers",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class RegexDenialOfServiceRule(config: Config) : SecurityRule(
+    config,
+    id = "RegexDenialOfService",
+    description = "Regex pattern with catastrophic backtracking — rewrite to avoid nested quantifiers",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

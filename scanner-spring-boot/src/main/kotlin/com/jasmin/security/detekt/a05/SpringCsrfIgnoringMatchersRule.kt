@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -17,15 +14,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   http.csrf { it.ignoringRequestMatchers(apiPathPattern) }
  */
-class SpringCsrfIgnoringMatchersRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringCsrfIgnoringMatchers",
-        severity = Severity.Security,
-        description = "CSRF protection excluded for matched paths — those endpoints become forgeable",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringCsrfIgnoringMatchersRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "SpringCsrfIgnoringMatchers",
+    description = "CSRF protection excluded for matched paths — those endpoints become forgeable",
+) {
     private val ignoringMethods = setOf("ignoringRequestMatchers", "ignoringAntMatchers")
 
     override fun visitCallExpression(expression: KtCallExpression) {

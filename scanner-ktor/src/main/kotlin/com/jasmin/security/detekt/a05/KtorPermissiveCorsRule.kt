@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   install(CORS) { anyHost() }
  */
-class KtorPermissiveCorsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorPermissiveCors",
-        severity = Severity.Security,
-        description = "Ktor CORS allows any host (anyHost()) — specify allowed origins explicitly",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorPermissiveCorsRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorPermissiveCors",
+    description = "Ktor CORS allows any host (anyHost()) — specify allowed origins explicitly",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

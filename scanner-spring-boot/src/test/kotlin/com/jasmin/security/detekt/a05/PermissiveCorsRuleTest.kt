@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a05
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class PermissiveCorsRuleTest {
@@ -15,7 +15,7 @@ class PermissiveCorsRuleTest {
                 config.allowedOrigins("*")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -25,7 +25,7 @@ class PermissiveCorsRuleTest {
                 config.allowedOriginPatterns("*")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class PermissiveCorsRuleTest {
                 config.addAllowedOrigin("*")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -45,7 +45,7 @@ class PermissiveCorsRuleTest {
                 config.allowedOrigins("https://app.example.com")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -55,7 +55,7 @@ class PermissiveCorsRuleTest {
                 config.allowedOrigins("https://app.example.com", "https://admin.example.com")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag CSRF patterns
@@ -66,6 +66,6 @@ class PermissiveCorsRuleTest {
                 http.csrf().disable()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

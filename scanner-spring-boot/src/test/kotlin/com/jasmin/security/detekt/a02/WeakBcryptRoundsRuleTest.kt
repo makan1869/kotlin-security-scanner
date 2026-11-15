@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(4)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(8)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(1)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -40,7 +40,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(BCryptVersion.${'$'}2A, 4)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(strength = 4)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -58,7 +58,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(10)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class WeakBcryptRoundsRuleTest {
         val code = """
             fun encoder() = BCryptPasswordEncoder(12)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -85,6 +85,6 @@ class WeakBcryptRoundsRuleTest {
             import org.springframework.security.crypto.password.NoOpPasswordEncoder
             fun encoder() = NoOpPasswordEncoder.getInstance()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

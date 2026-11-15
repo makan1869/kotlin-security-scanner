@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.crypto.password.NoOpPasswordEncoder
             fun encoder() = NoOpPasswordEncoder.getInstance()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class InsecurePasswordEncoderRuleTest {
             fun encoder() =
                 org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.authentication.encoding.Md5PasswordEncoder
             fun encoder() = Md5PasswordEncoder()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.authentication.encoding.ShaPasswordEncoder
             fun encoder() = ShaPasswordEncoder()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -53,7 +53,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.crypto.password.LdapShaPasswordEncoder
             fun encoder() = LdapShaPasswordEncoder()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -64,7 +64,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
             fun encoder() = BCryptPasswordEncoder()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -73,7 +73,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
             fun encoder() = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class InsecurePasswordEncoderRuleTest {
             import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
             fun encoder() = SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -94,6 +94,6 @@ class InsecurePasswordEncoderRuleTest {
             fun eval(userExpr: String): Any? =
                 SpelExpressionParser().parseExpression(userExpr).getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

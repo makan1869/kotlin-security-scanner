@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 // OWASP A09 — Security Logging and Monitoring Failures
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // implementation details (class names, SQL, file paths) that aid attackers.
 // Compliant:   return ResponseEntity.status(500).body(mapOf("error" to "Internal error"))
 // Non-compliant: return ResponseEntity.badRequest().body(ex.message)
-class SpringBootExceptionBodyLeakRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringBootExceptionBodyLeak",
-        severity = Severity.Security,
-        description = "Exception details returned in HTTP response — may expose internals to clients",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringBootExceptionBodyLeakRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringBootExceptionBodyLeak",
+    description = "Exception details returned in HTTP response — may expose internals to clients",
+) {
     private val exceptionLeakPatterns = listOf(
         Regex("""ex\.(message|localizedMessage|stackTraceToString|toString)\b"""),
         Regex("""e\.(message|localizedMessage|stackTraceToString|toString)\b"""),

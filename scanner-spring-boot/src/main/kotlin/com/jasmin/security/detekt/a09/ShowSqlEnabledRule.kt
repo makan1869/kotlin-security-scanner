@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -23,15 +20,11 @@ import java.util.Properties
  *   spring.jpa.show-sql=true
  *   logging.level.org.hibernate.SQL=DEBUG
  */
-class ShowSqlEnabledRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ShowSqlEnabled",
-        severity = Severity.Security,
-        description = "SQL logging enabled — leaks schema and query patterns to application logs",
-        debt = Debt.FIVE_MINS,
-    )
-
+class ShowSqlEnabledRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "ShowSqlEnabled",
+    description = "SQL logging enabled — leaks schema and query patterns to application logs",
+) {
     private val safeProfiles = setOf("dev", "test", "local", "it")
 
     override fun scanProperties(props: Properties): List<Pair<String, String>> {

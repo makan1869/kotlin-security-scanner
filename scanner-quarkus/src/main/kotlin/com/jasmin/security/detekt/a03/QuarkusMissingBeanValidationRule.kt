@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * JAX-RS @POST/@PUT methods that accept an entity body without @Valid skip Bean Validation,
  * allowing malformed or malicious payloads to reach business logic unchecked.
  */
-class QuarkusMissingBeanValidationRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusMissingBeanValidation",
-        severity = Severity.Security,
-        description = "JAX-RS entity parameter missing @Valid — input not validated",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusMissingBeanValidationRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusMissingBeanValidation",
+    description = "JAX-RS entity parameter missing @Valid — input not validated",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val annotations = function.annotationNames()

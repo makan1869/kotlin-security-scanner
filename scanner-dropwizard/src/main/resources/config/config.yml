@@ -1,0 +1,31 @@
+security-dropwizard:
+  active: true
+  DropwizardMissingAuth:
+    active: true
+  InsecureTlsProtocol:
+    active: true
+  DropwizardUnencryptedJwtSecret:
+    active: true
+  DropwizardSelfValidatingEL:
+    active: true
+  DropwizardJdbiSqlInjection:
+    active: true
+  DropwizardMissingBeanValidation:
+    active: true
+  DropwizardXssResponse:
+    active: true
+  InsecureCookie:
+    active: true
+  DropwizardAdminConnectorExposed:
+    active: true
+  DropwizardInsecureMultipart:
+    active: true
+    maxBodySizeMb: 50
+  DropwizardHardcodedToken:
+    active: true
+  DropwizardDatabasePassword:
+    active: true
+  DropwizardJacksonPolymorphism:
+    active: true
+  DropwizardSensitiveDataLogging:
+    active: true

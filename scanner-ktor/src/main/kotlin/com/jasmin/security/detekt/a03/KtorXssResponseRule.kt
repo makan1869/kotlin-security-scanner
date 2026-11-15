@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * call.respondText with ContentType.Text.Html and a dynamically built string
  * can reflect unescaped user input as HTML, enabling cross-site scripting attacks.
  */
-class KtorXssResponseRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorXssResponse",
-        severity = Severity.Security,
-        description = "call.respondText with HTML content type and dynamic content — potential XSS",
-        debt = Debt.TEN_MINS,
-    )
-
+class KtorXssResponseRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorXssResponse",
+    description = "call.respondText with HTML content type and dynamic content — potential XSS",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

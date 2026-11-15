@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -18,15 +15,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   call.respondFile(baseDir, call.parameters["file"]!!)
  */
-class KtorRespondFileTraversalRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorRespondFileTraversal",
-        severity = Severity.Security,
-        description = "respondFile path taken from request parameters — verify it stays inside the base directory",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorRespondFileTraversalRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorRespondFileTraversal",
+    description = "respondFile path taken from request parameters — verify it stays inside the base directory",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression?.text ?: return

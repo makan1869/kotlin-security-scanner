@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 
@@ -20,15 +17,11 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
  *   HttpClientOptions().setSsl(true).setTrustAll(true)
  *   WebClientOptions().setVerifyHost(false)
  */
-class VertxTrustAllCertsRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "VertxTrustAllCerts",
-        severity = Severity.Security,
-        description = "Vert.x client disables TLS verification (setTrustAll(true)/setVerifyHost(false))",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class VertxTrustAllCertsRule(config: Config) : SecurityRule(
+    config,
+    id = "VertxTrustAllCerts",
+    description = "Vert.x client disables TLS verification (setTrustAll(true)/setVerifyHost(false))",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

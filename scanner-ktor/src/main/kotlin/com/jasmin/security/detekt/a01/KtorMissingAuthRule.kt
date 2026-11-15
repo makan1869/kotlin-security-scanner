@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -21,15 +18,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   routing { get("/users") { ... } }
  */
-class KtorMissingAuthRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorMissingAuth",
-        severity = Severity.Security,
-        description = "Ktor routing{} without authenticate{} — all routes are publicly accessible",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorMissingAuthRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorMissingAuth",
+    description = "Ktor routing{} without authenticate{} — all routes are publicly accessible",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

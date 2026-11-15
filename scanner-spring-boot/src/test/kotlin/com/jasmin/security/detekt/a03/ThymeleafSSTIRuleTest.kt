@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class ThymeleafSSTIRuleTest {
             fun render(templateName: String, ctx: Context): String =
                 templateEngine.process(templateName, ctx)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class ThymeleafSSTIRuleTest {
             fun render(name: String, ctx: Context): String =
                 templateEngine.process("view-${'$'}name", ctx)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class ThymeleafSSTIRuleTest {
                 return myTemplateEngine.process(view, ctx)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -48,7 +48,7 @@ class ThymeleafSSTIRuleTest {
         val code = """
             fun render(ctx: Context): String = templateEngine.process("user-profile", ctx)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class ThymeleafSSTIRuleTest {
         val code = """
             fun render(ctx: Context): String = templateEngine.process("user" + "-profile", ctx)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -64,7 +64,7 @@ class ThymeleafSSTIRuleTest {
         val code = """
             fun handle(data: String): String = queryProcessor.process(data, ctx)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -72,7 +72,7 @@ class ThymeleafSSTIRuleTest {
         val code = """
             fun render(name: String) = process(name)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -82,6 +82,6 @@ class ThymeleafSSTIRuleTest {
         val code = """
             fun eval(expr: String): Any = parser.parseExpression(expr).getValue()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

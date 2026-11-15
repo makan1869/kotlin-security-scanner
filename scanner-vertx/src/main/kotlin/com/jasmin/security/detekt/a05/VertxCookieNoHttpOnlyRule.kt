@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * Non-compliant:
  *   Cookie.cookie("session", id).setHttpOnly(false)
  */
-class VertxCookieNoHttpOnlyRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "VertxCookieNoHttpOnly",
-        severity = Severity.Security,
-        description = "Vert.x cookie setHttpOnly(false) — readable by JavaScript (XSS cookie theft)",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class VertxCookieNoHttpOnlyRule(config: Config) : SecurityRule(
+    config,
+    id = "VertxCookieNoHttpOnly",
+    description = "Vert.x cookie setHttpOnly(false) — readable by JavaScript (XSS cookie theft)",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -4,9 +4,10 @@ Detekt plugin that detects OWASP Top 10 security vulnerabilities in
 Kotlin applications at compile time — with module-level picks for
 Spring Boot, Quarkus, Dropwizard, Ktor, Micronaut, Vert.x, or any Kotlin project.
 
-**216 rules across 7 modules, 1306 tests. Published to Maven Central as
-`io.github.jasminguberinic:scanner-*:0.3.0`.** Rules are active by default
-(`SecurityRule.active` defaults to true); disable any with `active: false`.
+**216 rules across 7 modules, 1237 tests. Built for detekt 2, as
+`io.github.makan1869:scanner-*:0.4.0`.** Rules are active by default: each module ships
+`src/main/resources/config/config.yml`, which detekt merges into the default config. Disable any
+rule with `active: false`.
 
 Designed to grow: every rule follows the same architecture so contributors
 (human or AI) can add new coverage without touching existing rules.
@@ -158,7 +159,6 @@ Use the `/add-security-rule` skill. It:
 ## Running
 
 ```bash
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
 
 ./gradlew test          # all rule unit tests (core + spring-boot + dropwizard)
 ./gradlew detekt        # security scan of this repo
@@ -187,8 +187,9 @@ Each rule has a test class in the matching `a0X/` package with three layers:
 @Test fun `does not interfere with <other rule> code`()
 ```
 
-Uses `io.gitlab.arturbosch.detekt:detekt-test` with `rule.lint(code)` and
-`assertThat(findings)` from `assertj-core`.
+Uses `dev.detekt:detekt-test` with `rule.lint(code, compile = false)` and
+`assertThat(findings)` from `assertj-core`. `compile = false` keeps snippets that reference
+framework classes off the classpath parseable.
 
 ---
 
@@ -198,37 +199,37 @@ Uses `io.gitlab.arturbosch.detekt:detekt-test` with `rule.lint(code)` and
 
 **Spring Boot:**
 ```kotlin
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-spring-boot:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
 ```
 
 **Quarkus:**
 ```kotlin
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-quarkus:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-quarkus:0.4.0")
 ```
 
 **Ktor:**
 ```kotlin
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-ktor:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-ktor:0.4.0")
 ```
 
 **Dropwizard:**
 ```kotlin
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-dropwizard:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.0")
 ```
 
 **Micronaut:**
 ```kotlin
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-micronaut:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-micronaut:0.4.0")
 ```
 
 **Everything (convenience bundle):**
 ```kotlin
-detektPlugins("io.github.jasminguberinic:scanner-all:0.2.0")
+detektPlugins("io.github.makan1869:scanner-all:0.4.0")
 ```
 
 ---
@@ -244,19 +245,19 @@ modules** by adding more `detektPlugins` entries — no conflicts, no duplicates
 
 ```kotlin
 // Dropwizard service that also uses Ktor for outbound HTTP clients
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-dropwizard:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-ktor:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-dropwizard:0.4.0")
+detektPlugins("io.github.makan1869:scanner-ktor:0.4.0")
 
 // Quarkus monorepo with a Spring Boot admin module
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-quarkus:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-spring-boot:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-quarkus:0.4.0")
+detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
 
 // Migrating from Spring Boot to Micronaut — scan both during transition
-detektPlugins("io.github.jasminguberinic:scanner-core:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-spring-boot:0.2.0")
-detektPlugins("io.github.jasminguberinic:scanner-micronaut:0.2.0")
+detektPlugins("io.github.makan1869:scanner-core:0.4.0")
+detektPlugins("io.github.makan1869:scanner-spring-boot:0.4.0")
+detektPlugins("io.github.makan1869:scanner-micronaut:0.4.0")
 ```
 
 **Rules by scope:**
@@ -319,8 +320,8 @@ git clone git@github.com-personal:JasminGuberinic/kotlin-security-scanner.git
 
 | Component | Version |
 |---|---|
-| Kotlin | 2.0.10 |
-| Detekt | 1.23.7 |
-| Java | 21 |
-| Gradle | 8.x |
+| Kotlin | 2.4.10 |
+| Detekt | 2.0.0-alpha.6 |
+| Java | 21+ |
+| Gradle | 9.x |
 | AssertJ | 3.26.3 |

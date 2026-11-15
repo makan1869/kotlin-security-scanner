@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findByRole(role: String) = User.find("role = '${'$'}role'")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun listByStatus(status: String) = Order.list("status = '${'$'}status'")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun countActive(type: String) = Product.count("type = '${'$'}type' AND active = true")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -40,7 +40,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun deleteOld(status: String) = Session.delete("status = '${'$'}status'")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findByRole(role: String) = User.find("role = '" + role + "'")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -58,7 +58,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findActive() = User.find("active = " + "true")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -66,7 +66,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findByRole(role: String) = User.find("role = ?1", role)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findActive() = User.find("active = true")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findByName(name: String) = User.find("name", name)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -90,7 +90,7 @@ class PanacheRawQueryRuleTest {
         val code = """
             fun findById(id: Long) = User.findById(id)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -105,6 +105,6 @@ class PanacheRawQueryRuleTest {
                 fun delete(): Response = Response.noContent().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

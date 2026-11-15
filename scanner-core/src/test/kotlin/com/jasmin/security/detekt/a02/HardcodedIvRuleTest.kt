@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class HardcodedIvRuleTest {
             import javax.crypto.spec.IvParameterSpec
             fun buildSpec() = IvParameterSpec(byteArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class HardcodedIvRuleTest {
             import javax.crypto.spec.IvParameterSpec
             val FIXED_IV = IvParameterSpec(byteArrayOf(0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08))
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -42,7 +42,7 @@ class HardcodedIvRuleTest {
                 return IvParameterSpec(iv)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -51,7 +51,7 @@ class HardcodedIvRuleTest {
             import javax.crypto.spec.IvParameterSpec
             fun empty() = IvParameterSpec(byteArrayOf())
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -60,7 +60,7 @@ class HardcodedIvRuleTest {
             import javax.crypto.spec.SecretKeySpec
             fun buildKey(bytes: ByteArray) = SecretKeySpec(byteArrayOf(1, 2, 3), "AES")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -75,6 +75,6 @@ class HardcodedIvRuleTest {
                 override fun getAcceptedIssuers() = emptyArray<java.security.cert.X509Certificate>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

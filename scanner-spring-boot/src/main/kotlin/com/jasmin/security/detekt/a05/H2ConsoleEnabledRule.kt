@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -22,15 +19,11 @@ import java.util.Properties
  *   spring.h2.console.enabled=true
  *   %prod.spring.h2.console.enabled=true
  */
-class H2ConsoleEnabledRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "H2ConsoleEnabled",
-        severity = Severity.Security,
-        description = "H2 web console enabled — exposes full SQL access in production",
-        debt = Debt.TEN_MINS,
-    )
-
+class H2ConsoleEnabledRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "H2ConsoleEnabled",
+    description = "H2 web console enabled — exposes full SQL access in production",
+) {
     private val safeProfiles = setOf("dev", "test", "local", "it")
 
     override fun scanProperties(props: Properties): List<Pair<String, String>> {

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class SpringBootNoOpPasswordEncoderRuleTest {
             @Bean
             fun passwordEncoder(): PasswordEncoder = NoOpPasswordEncoder.getInstance()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class SpringBootNoOpPasswordEncoderRuleTest {
             @Bean
             fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -33,7 +33,7 @@ class SpringBootNoOpPasswordEncoderRuleTest {
             @Bean
             fun passwordEncoder(): PasswordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -42,6 +42,6 @@ class SpringBootNoOpPasswordEncoderRuleTest {
             @Bean
             fun encoder() = MessageDigestPasswordEncoder("MD5")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

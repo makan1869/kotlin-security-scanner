@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A05 — Security Misconfiguration
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // enabling resource exhaustion. Ktor's default maxFileSize is Long.MAX_VALUE.
 // Compliant:   call.receiveMultipart(maxFileSize = 10 * 1024 * 1024L)   // 10 MB
 // Non-compliant: call.receiveMultipart()
-class KtorMultipartInsecureUploadRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorMultipartInsecureUpload",
-        severity = Severity.Security,
-        description = "receiveMultipart() without maxFileSize — accepts arbitrarily large uploads (resource exhaustion)",
-        debt = Debt.TEN_MINS,
-    )
-
+class KtorMultipartInsecureUploadRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorMultipartInsecureUpload",
+    description = "receiveMultipart() without maxFileSize — accepts arbitrarily large uploads (resource exhaustion)",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

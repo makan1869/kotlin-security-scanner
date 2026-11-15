@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var apiSecret: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var signingKey: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -56,7 +56,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var stripeKey: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative tests — must NOT be flagged ──────────────────────────────────
@@ -70,7 +70,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -94,7 +94,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var appName: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -106,7 +106,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -116,7 +116,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation tests — no interference with other rules ────────────────────
@@ -130,7 +130,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 fun listUsers(): Response = Response.ok().build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -140,7 +140,7 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 val dbPassword = "admin123"
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -153,6 +153,6 @@ class QuarkusHardcodedConfigSecretRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

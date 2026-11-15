@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -31,16 +28,12 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  *   kpg.initialize(512)    // too short — broken
  *   kpg.initialize(1024)   // too short — deprecated
  */
-class WeakRsaKeyRule(config: Config) : SecurityRule(config) {
-
+class WeakRsaKeyRule(config: Config) : SecurityRule(
+    config,
+    id = "WeakRsaKey",
+    description = "KeyPairGenerator initialized with insufficient key size — use ≥ 2048 bits for RSA",
+) {
     private val minKeySize: Int = config.valueOrDefault("minKeySize", DetectionPatterns.RSA_MIN_KEY_SIZE)
-
-    override val issue = Issue(
-        id = "WeakRsaKey",
-        severity = Severity.Security,
-        description = "KeyPairGenerator initialized with insufficient key size — use ≥ 2048 bits for RSA",
-        debt = Debt.TWENTY_MINS,
-    )
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {

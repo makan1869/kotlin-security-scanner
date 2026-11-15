@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * Non-compliant:
  *   Jwts.builder().subject("user").compact()
  */
-class JwtExpirationMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JwtExpirationMissing",
-        severity = Severity.Security,
-        description = "JWT compact() without expiration — tokens never expire",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JwtExpirationMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "JwtExpirationMissing",
+    description = "JWT compact() without expiration — tokens never expire",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

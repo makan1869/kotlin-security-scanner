@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a09
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // copy in log files, often readable by anyone with server/log-aggregator access.
 // Compliant:   Log.info("Login attempt for user $userId")
 // Non-compliant: Log.debug("Authenticating with password=$password")
-class QuarkusPasswordInLogRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusPasswordInLog",
-        severity = Severity.Security,
-        description = "Sensitive keyword in log message — credentials may be written to log files",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusPasswordInLogRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusPasswordInLog",
+    description = "Sensitive keyword in log message — credentials may be written to log files",
+) {
     private val logMethods = setOf("debug", "info", "warn", "error", "trace", "fatal")
     private val sensitiveKeywords = setOf("password", "passwd", "secret", "token", "apikey", "api_key", "credential")
 

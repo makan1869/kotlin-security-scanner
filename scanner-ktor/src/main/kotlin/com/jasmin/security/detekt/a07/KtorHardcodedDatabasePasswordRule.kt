@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // Database.connect(url, password="literal") embeds database credentials in source code.
 // Compliant:   Database.connect(url, password = System.getenv("DB_PASS") ?: error("not set"))
 // Non-compliant: Database.connect("jdbc:...", "org.postgresql.Driver", "user", "hardcoded-pass")
-class KtorHardcodedDatabasePasswordRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorHardcodedDatabasePassword",
-        severity = Severity.Security,
-        description = "Database.connect() with hardcoded password — use environment variable",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorHardcodedDatabasePasswordRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorHardcodedDatabasePassword",
+    description = "Database.connect() with hardcoded password — use environment variable",
+) {
     @Suppress("ReturnCount", "MagicNumber")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

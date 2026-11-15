@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // is an injection point. Always validate and use parameterized queries.
 // Compliant:   val id = call.parameters["id"]?.toLongOrNull() ?: return; Users.select { Users.id eq id }
 // Non-compliant: exec("SELECT * FROM users WHERE id = ${call.parameters["id"]}")
-class KtorSensitiveRouteParamRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorSensitiveRouteParam",
-        severity = Severity.Security,
-        description = "call.parameters value used in SQL/exec string template — use parameterized queries",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorSensitiveRouteParamRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorSensitiveRouteParam",
+    description = "call.parameters value used in SQL/exec string template — use parameterized queries",
+) {
     private val dangerousCalls = setOf("exec", "query", "createNativeQuery", "createQuery")
 
     @Suppress("ReturnCount")

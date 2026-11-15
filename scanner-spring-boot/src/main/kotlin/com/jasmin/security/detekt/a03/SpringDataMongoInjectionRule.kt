@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   Criteria.where(userSuppliedField).is(value)
  */
-class SpringDataMongoInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringDataMongoInjection",
-        severity = Severity.Security,
-        description = "Criteria.where() with dynamic field name — use a literal field name to prevent NoSQL injection",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SpringDataMongoInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringDataMongoInjection",
+    description = "Criteria.where() with dynamic field name — use a literal field name to prevent NoSQL injection",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

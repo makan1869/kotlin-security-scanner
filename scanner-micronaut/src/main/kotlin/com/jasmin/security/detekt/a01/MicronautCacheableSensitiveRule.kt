@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // leaks user-specific data across authentication boundaries.
 // Compliant:   @Cacheable("public-data") fun publicInfo() // no auth, safe to cache
 // Non-compliant: @Cacheable("user-data") @Secured(...) fun userProfile() // user-specific
-class MicronautCacheableSensitiveRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautCacheableSensitive",
-        severity = Severity.Security,
-        description = "@Cacheable on a secured method may serve cached responses across users — ensure cache key includes the principal",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautCacheableSensitiveRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautCacheableSensitive",
+    description = "@Cacheable on a secured method may serve cached responses across users — ensure cache key includes the principal",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val funcAnnotations = function.annotationNames()

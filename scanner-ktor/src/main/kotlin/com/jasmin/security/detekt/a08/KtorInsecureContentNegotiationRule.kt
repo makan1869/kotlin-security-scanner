@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 // OWASP A08 — Software and Data Integrity Failures
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // CVE-2015-4852 (WebLogic), CVE-2016-4437 (Apache Shiro) — both via Java deserialization.
 // Compliant:   use JSON or other text-based content types
 // Non-compliant: ContentType.parse("application/x-java-serialized-object")
-class KtorInsecureContentNegotiationRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorInsecureContentNegotiation",
-        severity = Severity.Security,
-        description = "application/x-java-serialized-object enables RCE via Java deserialization gadget chains",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorInsecureContentNegotiationRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorInsecureContentNegotiation",
+    description = "application/x-java-serialized-object enables RCE via Java deserialization gadget chains",
+) {
     private val dangerousContentTypes = listOf(
         "x-java-serialized-object",
         "application/java-serialized-object",

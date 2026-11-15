@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class XpathInjectionRuleTest {
             fun findUser(name: String): Any? =
                 xpath.evaluate("//user[@name='${'$'}name']", doc, XPathConstants.NODE)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class XpathInjectionRuleTest {
             fun getNodes(id: String) =
                 doc.selectNodes("//item[@id='${'$'}id']")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -35,7 +35,7 @@ class XpathInjectionRuleTest {
             fun getNode(role: String) =
                 root.selectSingleNode("//user[@role='${'$'}role']")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -44,7 +44,7 @@ class XpathInjectionRuleTest {
             fun findUser(name: String): Any? =
                 xpath.evaluate("//user[@name='" + name + "']", doc, XPathConstants.NODE)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -55,7 +55,7 @@ class XpathInjectionRuleTest {
             fun getAdmins(): Any? =
                 xpath.evaluate("//user[@role='" + "admin" + "']", doc, XPathConstants.NODESET)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -64,7 +64,7 @@ class XpathInjectionRuleTest {
             fun getAllAdmins(): Any? =
                 xpath.evaluate("//user[@role='admin']", doc, XPathConstants.NODESET)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -73,7 +73,7 @@ class XpathInjectionRuleTest {
             fun findByExpr(expr: String): Any? =
                 xpath.evaluate(expr, doc, XPathConstants.NODE)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -81,7 +81,7 @@ class XpathInjectionRuleTest {
         val code = """
             fun getItems() = doc.selectNodes("//items/item")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -93,6 +93,6 @@ class XpathInjectionRuleTest {
                 ctx.search("ou=users,dc=example,dc=com", "(uid=${'$'}username)", controls)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

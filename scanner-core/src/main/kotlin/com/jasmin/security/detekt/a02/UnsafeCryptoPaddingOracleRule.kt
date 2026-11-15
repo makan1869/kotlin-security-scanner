@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   Cipher.getInstance("AES/CBC/PKCS5Padding")
  */
-class UnsafeCryptoPaddingOracleRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "UnsafeCryptoPaddingOracle",
-        severity = Severity.Security,
-        description = "AES/CBC/PKCS5Padding is vulnerable to padding oracle attacks — use AES/GCM/NoPadding",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class UnsafeCryptoPaddingOracleRule(config: Config) : SecurityRule(
+    config,
+    id = "UnsafeCryptoPaddingOracle",
+    description = "AES/CBC/PKCS5Padding is vulnerable to padding oracle attacks — use AES/GCM/NoPadding",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

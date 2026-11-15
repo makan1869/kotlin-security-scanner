@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class HardcodedAesKeyRuleTest {
             fun key() = SecretKeySpec(byteArrayOf(0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
                 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10), "AES")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -25,7 +25,7 @@ class HardcodedAesKeyRuleTest {
             import javax.crypto.spec.SecretKeySpec
             fun key() = SecretKeySpec("my-secret-key-16!!".toByteArray(), "AES")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class HardcodedAesKeyRuleTest {
             import javax.crypto.spec.SecretKeySpec
             fun key() = SecretKeySpec("my-hardcoded-key!!".encodeToByteArray(), "AES")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -43,7 +43,7 @@ class HardcodedAesKeyRuleTest {
             import javax.crypto.spec.SecretKeySpec
             fun key(keyBytes: ByteArray) = SecretKeySpec(keyBytes, "AES")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class HardcodedAesKeyRuleTest {
                 return SecretKeySpec(bytes, "AES")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -65,6 +65,6 @@ class HardcodedAesKeyRuleTest {
             import javax.crypto.spec.SecretKeySpec
             fun key(b: Byte) = SecretKeySpec(byteArrayOf(b, 0x02), "AES")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

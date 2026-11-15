@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  *   Jwts.builder().signWith(SignatureAlgorithm.NONE, "").compact()
  *   JWT.require(Algorithm.none()).build()
  */
-class JwtNoneAlgorithmRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JwtNoneAlgorithm",
-        severity = Severity.Security,
-        description = "JWT signed with 'none' algorithm — token signature is not verified, can be forged",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JwtNoneAlgorithmRule(config: Config) : SecurityRule(
+    config,
+    id = "JwtNoneAlgorithm",
+    description = "JWT signed with 'none' algorithm — token signature is not verified, can be forged",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

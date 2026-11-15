@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:KtorForwardedHeaderTrustRule.kt:KtorForwardedHeaderTrustRule$"trustProxyHeaders" in lambdaText || "useFirstProxy" in lambdaText || "useLastProxy" in lambdaText || "skipLastProxies" in lambdaText</ID>
+    <ID>FunctionSignature:KtorCsrfMissingRule.kt:KtorCsrfMissingRule$private fun hasAuthAncestor: Boolean</ID>
+    <ID>FunctionSignature:KtorCsrfMissingRule.kt:KtorCsrfMissingRule$private fun hasRouteAncestor: Boolean</ID>
+    <ID>MaxLineLength:KtorForwardedHeaderTrustRule.kt:KtorForwardedHeaderTrustRule$"install($firstArg) without proxy restrictions — an attacker can spoof X-Forwarded-For to bypass IP-based controls"</ID>
+    <ID>MaxLineLength:KtorMultipartInsecureUploadRule.kt:KtorMultipartInsecureUploadRule$"receiveMultipart() without maxFileSize limit — add maxFileSize = 10 * 1024 * 1024L to cap uploads at 10 MB"</ID>
+    <ID>MaxLineLength:KtorRawCallReceiveRule.kt:KtorRawCallReceiveRule$"call.receive&lt;$typeArg&gt;() is unsafe — define a data class and use call.receive&lt;YourRequest&gt;() with validation"</ID>
+    <ID>MaxLineLength:KtorRespondFileTraversalRule.kt:KtorRespondFileTraversalRule$"respondFile path comes from request parameters — resolve().normalize() and require it stays under baseDir"</ID>
+    <ID>MaxLineLength:KtorStatusPageLeakDetailsRule.kt:KtorStatusPageLeakDetailsRule$description = "exception&lt;Exception&gt; handler exposes cause details in HTTP response — return a generic error message"</ID>
+    <ID>MaxLineLength:KtorUnvalidatedQueryParamRule.kt:KtorUnvalidatedQueryParamRule$description = "call.parameters[\"...\"]!! force-unwrap — missing parameter causes unhandled 500; use ?: return call.respond(BadRequest)"</ID>
+    <ID>MaxLineLength:KtorWebSocketNoAuthRule.kt:KtorWebSocketNoAuthRule$description = "webSocket() handler without authenticate{} — wrap with authenticate(\"provider\") to require credentials"</ID>
+    <ID>MaximumLineLength:KtorStatusPageLeakDetailsRule.kt:KtorStatusPageLeakDetailsRule$,</ID>
+    <ID>MaximumLineLength:KtorUnvalidatedQueryParamRule.kt:KtorUnvalidatedQueryParamRule$,</ID>
+    <ID>MaximumLineLength:KtorWebSocketNoAuthRule.kt:KtorWebSocketNoAuthRule$,</ID>
+    <ID>ReturnCount:KtorDevelopmentModeRule.kt:KtorDevelopmentModeRule$override fun visitBinaryExpression</ID>
+    <ID>ReturnCount:KtorWebSocketNoAuthRule.kt:KtorWebSocketNoAuthRule$private fun isInsideAuthenticate: Boolean</ID>
+  </CurrentIssues>
+</SmellBaseline>

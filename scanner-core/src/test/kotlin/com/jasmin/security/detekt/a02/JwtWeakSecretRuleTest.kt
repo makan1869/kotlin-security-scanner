@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class JwtWeakSecretRuleTest {
         val code = """
             fun algorithm() = Algorithm.HMAC256("my-super-secret-key")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class JwtWeakSecretRuleTest {
         val code = """
             fun algorithm() = Algorithm.HMAC512("another-hardcoded-secret")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -33,7 +33,7 @@ class JwtWeakSecretRuleTest {
             fun token(): String =
                 Jwts.builder().signWith(SignatureAlgorithm.HS256, "hardcoded-secret").compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -41,7 +41,7 @@ class JwtWeakSecretRuleTest {
         val code = """
             fun token(): String = Jwts.builder().signWith("plain-text-secret").compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -51,7 +51,7 @@ class JwtWeakSecretRuleTest {
         val code = """
             fun algorithm() = Algorithm.HMAC256(System.getenv("JWT_SECRET"))
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -60,7 +60,7 @@ class JwtWeakSecretRuleTest {
             fun token(secret: SecretKey): String =
                 Jwts.builder().signWith(secret).compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -68,7 +68,7 @@ class JwtWeakSecretRuleTest {
         val code = """
             fun algorithm(prefix: String) = Algorithm.HMAC256("${'$'}prefix-key")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Nimbus JOSE JWT (MACSigner / MACVerifier) ─────────────────────────────
@@ -81,7 +81,7 @@ class JwtWeakSecretRuleTest {
                 fun sign() = MACSigner("super-secret-key-min-256-bits!!")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -92,7 +92,7 @@ class JwtWeakSecretRuleTest {
                 fun verify() = MACVerifier("super-secret-key-min-256-bits!!")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -103,7 +103,7 @@ class JwtWeakSecretRuleTest {
                 fun build(secret: ByteArray) = MACSigner(secret)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── JJWT v1 (Keys.hmacShaKeyFor) ─────────────────────────────────────────
@@ -116,7 +116,7 @@ class JwtWeakSecretRuleTest {
                 val key = Keys.hmacShaKeyFor("my-secret-key-that-is-long-enough".toByteArray())
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -127,7 +127,7 @@ class JwtWeakSecretRuleTest {
                 val key = Keys.hmacShaKeyFor("my-secret-key-that-is-long-enough")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -138,7 +138,7 @@ class JwtWeakSecretRuleTest {
                 fun build(secret: ByteArray) = Keys.hmacShaKeyFor(secret)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -148,6 +148,6 @@ class JwtWeakSecretRuleTest {
         val code = """
             fun verifier() = JWT.require(Algorithm.none()).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

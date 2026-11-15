@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
@@ -13,15 +10,11 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 // permitAll() on admin/actuator paths removes authentication entirely.
 // Compliant: .requestMatchers("/admin/users").hasRole("ADMIN")
 // Non-compliant: .requestMatchers("/admin/users").permitAll()
-class PermitAllAdminPathRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "PermitAllAdminPath",
-        severity = Severity.Security,
-        description = "permitAll() on admin/actuator path — unauthenticated access to privileged endpoints",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class PermitAllAdminPathRule(config: Config) : SecurityRule(
+    config,
+    id = "PermitAllAdminPath",
+    description = "permitAll() on admin/actuator path — unauthenticated access to privileged endpoints",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

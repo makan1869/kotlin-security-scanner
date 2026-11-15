@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -20,15 +17,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @CacheResult(cacheName = "profile") @RolesAllowed("user")
  *   fun profile(id: Long): Profile
  */
-class QuarkusCacheResultSensitiveRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusCacheResultSensitive",
-        severity = Severity.Security,
-        description = "@CacheResult on a secured method caches per-user data across users",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusCacheResultSensitiveRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusCacheResultSensitive",
+    description = "@CacheResult on a secured method caches per-user data across users",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val annotations = function.annotationNames()

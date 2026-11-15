@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtExpression
 // transmitted over HTTP and accessed by JavaScript (XSS → session hijack).
 // Compliant:   NewCookie.Builder("SESSION").secure(true).httpOnly(true).build()
 // Non-compliant: NewCookie("SESSION", token)  // all defaults = insecure
-class QuarkusInsecureCookieRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusInsecureCookie",
-        severity = Severity.Security,
-        description = "JAX-RS NewCookie without secure/httpOnly — vulnerable to interception and XSS",
-        debt = Debt.TEN_MINS,
-    )
-
+class QuarkusInsecureCookieRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusInsecureCookie",
+    description = "JAX-RS NewCookie without secure/httpOnly — vulnerable to interception and XSS",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

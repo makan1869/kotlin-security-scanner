@@ -3,33 +3,17 @@ package com.jasmin.security.detekt.a01
 import com.jasmin.security.detekt.core.DetectionPatterns.SPRING_ENDPOINT_ANNOTATIONS
 import com.jasmin.security.detekt.core.DetectionPatterns.SPRING_SECURITY_ANNOTATIONS
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 // FindSecBugs: SPRING_ENDPOINT — OWASP A01
-class MissingAuthorizationRule(config: Config = Config.empty) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MissingAuthorization",
-        severity = Severity.Security,
-        description = "Spring endpoint has no authorization annotation — add @PreAuthorize or @Secured (OWASP A01)",
-        debt = Debt.TWENTY_MINS
-    )
-
-    // Off by default (opt-in). A per-file rule cannot see whether an endpoint is
-    // already protected by a URL-based SecurityFilterChain
-    // (http.authorizeHttpRequests { ... }), which is how many Spring apps enforce
-    // authorization. Leaving it on would flag EVERY endpoint of a properly secured
-    // app that uses URL-based security. Teams that standardize on method security
-    // (@PreAuthorize/@Secured) can enable it with `active: true` in detekt.yml.
-    override val active: Boolean
-        get() = valueOrDefault(Config.ACTIVE_KEY, false)
-
+class MissingAuthorizationRule(config: Config = Config.empty) : SecurityRule(
+    config,
+    id = "MissingAuthorization",
+    description = "Spring endpoint has no authorization annotation — add @PreAuthorize or @Secured (OWASP A01)",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val annotations = function.annotationNames()

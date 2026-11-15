@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // If the environment variable is absent, the hardcoded default is silently used.
 // Compliant:   @Value("\${jwt.secret}") — fail-fast when env var is absent
 // Non-compliant: @Value("\${jwt.secret:some-default}")
-class SpringBootHardcodedValueDefaultRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SpringBootHardcodedValueDefault",
-        severity = Severity.Security,
-        description = "@Value with default secret — hardcoded fallback is used when env var is missing",
-        debt = Debt.TEN_MINS,
-    )
-
+class SpringBootHardcodedValueDefaultRule(config: Config) : SecurityRule(
+    config,
+    id = "SpringBootHardcodedValueDefault",
+    description = "@Value with default secret — hardcoded fallback is used when env var is missing",
+) {
     private val sensitiveKeywords = setOf("secret", "password", "passwd", "apikey", "api_key", "token", "key")
 
     @Suppress("ReturnCount")

@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class MicronautRetryOnAuthRuleTest {
                 fun authenticate(username: String, password: String): Boolean = false
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class MicronautRetryOnAuthRuleTest {
                 fun login(credentials: Any): String = ""
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class MicronautRetryOnAuthRuleTest {
                 fun verifyPassword(hash: String, input: String): Boolean = false
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -54,7 +54,7 @@ class MicronautRetryOnAuthRuleTest {
                 fun processPayment(amount: Double): Boolean = false
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -64,6 +64,6 @@ class MicronautRetryOnAuthRuleTest {
                 fun authenticate(username: String, password: String): Boolean = false
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

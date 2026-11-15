@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a04
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class KtorRawCallReceiveRuleTest {
                 println(body)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class KtorRawCallReceiveRuleTest {
                 val body = call.receive<HashMap<String, Any>>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class KtorRawCallReceiveRuleTest {
                 val body = call.receive<Map<String, Any>>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class KtorRawCallReceiveRuleTest {
                 val user = userService.create(request)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -59,7 +59,7 @@ class KtorRawCallReceiveRuleTest {
                 call.respondText("Echo: ${'$'}body")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -69,7 +69,7 @@ class KtorRawCallReceiveRuleTest {
                 val body = call.receive<Any>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -79,7 +79,7 @@ class KtorRawCallReceiveRuleTest {
                 val msg = eventBus.receive<Map<String, Any>>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -89,7 +89,7 @@ class KtorRawCallReceiveRuleTest {
                 val item = channel.receive<Any>()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -103,6 +103,6 @@ class KtorRawCallReceiveRuleTest {
                 }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

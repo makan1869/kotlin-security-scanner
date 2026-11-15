@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @CrossOrigin(origins = ["*"], allowCredentials = "true")
  *   @CrossOrigin(allowCredentials = "true")   // defaults to reflecting Origin header
  */
-class CrossOriginCredentialsWildcardRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "CrossOriginCredentialsWildcard",
-        severity = Severity.Security,
-        description = "@CrossOrigin with allowCredentials — verify origins are restricted to trusted domains",
-        debt = Debt.TEN_MINS,
-    )
-
+class CrossOriginCredentialsWildcardRule(config: Config) : SecurityRule(
+    config,
+    id = "CrossOriginCredentialsWildcard",
+    description = "@CrossOrigin with allowCredentials — verify origins are restricted to trusted domains",
+) {
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         klass.annotationEntries.forEach { checkAnnotation(it) }

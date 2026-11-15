@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * Non-compliant:
  *   @Bean fun hiddenHttpMethodFilter() = HiddenHttpMethodFilter()
  */
-class HttpMethodOverrideRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HttpMethodOverride",
-        severity = Severity.Security,
-        description = "HiddenHttpMethodFilter re-enabled — can bypass method-specific CSRF checks",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HttpMethodOverrideRule(config: Config) : SecurityRule(
+    config,
+    id = "HttpMethodOverride",
+    description = "HiddenHttpMethodFilter re-enabled — can bypass method-specific CSRF checks",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression?.text ?: return

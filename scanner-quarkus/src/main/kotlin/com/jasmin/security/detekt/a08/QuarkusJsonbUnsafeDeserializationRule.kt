@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A08 — Software and Data Integrity Failures
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // allows polymorphic deserialization attacks similar to Jackson CVE-2017-7525.
 // Compliant:   Jsonb.fromJson(input, MyDto::class.java)
 // Non-compliant: Jsonb.fromJson(body, Object::class.java)
-class QuarkusJsonbUnsafeDeserializationRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusJsonbUnsafeDeserialization",
-        severity = Severity.Security,
-        description = "Jsonb.fromJson() with Object/Any type — enables polymorphic deserialization attacks",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusJsonbUnsafeDeserializationRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusJsonbUnsafeDeserialization",
+    description = "Jsonb.fromJson() with Object/Any type — enables polymorphic deserialization attacks",
+) {
     private val unsafeTypes = setOf("Object::class.java", "Any::class.java", "Serializable::class.java")
 
     @Suppress("ReturnCount")

@@ -1,14 +1,14 @@
 package com.jasmin.security.detekt.core
 
-import io.github.detekt.psi.FilePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Location
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
+import java.nio.file.Path
 import java.util.Collections
 import java.util.Properties
 
@@ -27,7 +27,11 @@ import java.util.Properties
  * Unit-test approach: call [scanProperties] directly with a hand-crafted Properties
  * object — no filesystem access needed.
  */
-abstract class PropertiesSecurityRule(config: Config) : SecurityRule(config) {
+abstract class PropertiesSecurityRule(
+    config: Config,
+    id: String,
+    description: String,
+) : SecurityRule(config, id, description) {
 
     // Backstop dedup if the same instance happens to visit the owner file twice.
     private val scannedRoots: MutableSet<String> = Collections.synchronizedSet(mutableSetOf())
@@ -48,13 +52,10 @@ abstract class PropertiesSecurityRule(config: Config) : SecurityRule(config) {
         if (!scannedRoots.add(root)) return
         val rawLines = propertiesFile.readLines()
         val props = Properties().also { p -> propertiesFile.bufferedReader().use { p.load(it) } }
-        val cwe = CweMapping.forRule(issue.id)
-        val fix = RemediationHints.forRule(issue.id)
-        val filePath = FilePath.fromAbsolute(propertiesFile.toPath())
+        val propertiesPath = propertiesFile.toPath()
         scanProperties(props).forEach { (key, message) ->
-            val withCwe = "application.properties[$key]: $message" + if (cwe != null) " [$cwe]" else ""
-            val fullMessage = if (fix != null) "$withCwe — Fix: $fix" else withCwe
-            report(CodeSmell(issue, propertiesEntity(key, rawLines, filePath), fullMessage))
+            val entity = propertiesEntity(file, key, rawLines, propertiesPath)
+            report(Finding(entity, decorate("application.properties[$key]: $message")))
         }
     }
 
@@ -64,15 +65,19 @@ abstract class PropertiesSecurityRule(config: Config) : SecurityRule(config) {
      */
     abstract fun scanProperties(props: Properties): List<Pair<String, String>>
 
-    /** Build an Entity that points at [key]'s line in the properties file. */
-    private fun propertiesEntity(key: String, rawLines: List<String>, filePath: FilePath): Entity {
+    /**
+     * Build an Entity that points at [key]'s line in the properties file. detekt 2 requires every
+     * entity to carry a Kotlin element, so the owning Kotlin file stands in for it.
+     */
+    private fun propertiesEntity(file: KtFile, key: String, rawLines: List<String>, path: Path): Entity {
         val (lineNumber, startOffset) = locateKey(key, rawLines)
         val location = Location(
             SourceLocation(lineNumber, 1),
+            SourceLocation(lineNumber, 1 + key.length),
             TextLocation(startOffset, startOffset + key.length),
-            filePath,
+            path,
         )
-        return Entity("application.properties", key, location)
+        return Entity("application.properties:$key", location, file)
     }
 
     /**

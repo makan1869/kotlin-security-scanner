@@ -1,9 +1,10 @@
 package com.jasmin.security.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Rule
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -18,26 +19,34 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * describing WHAT is checked rather than HOW the AST is traversed.
  * Keep this lean: only add a helper when two or more rules share the need.
  */
-abstract class SecurityRule(config: Config) : Rule(config) {
+abstract class SecurityRule(
+    config: Config,
+    private val id: String,
+    description: String,
+) : Rule(config, description) {
 
-    // ── Activation ──────────────────────────────────────────────────────────────
+    // ── Identity ────────────────────────────────────────────────────────────────
     //
-    // Security rules are ON by default. Detekt's stock default for an unconfigured rule
-    // is `active = false`, which would make this plugin silently do nothing for a user
-    // who simply adds it with buildUponDefaultConfig=true and no per-rule config — a
-    // dangerous failure mode for a security tool. We flip the default to true so every
-    // rule fires out of the box; an explicit `active: false` in detekt.yml still disables.
-    override val active: Boolean
-        get() = valueOrDefault(Config.ACTIVE_KEY, true)
+    // detekt 2 names a rule after its class by default ("SqlInjectionRule"). The rule ids in
+    // config and reports predate that ("SqlInjection"), so keep them stable.
+    //
+    // Activation is not decided here: detekt 2 only runs rules listed in config, and every
+    // module ships src/main/resources/config/config.yml with its rules active by default.
+    override val ruleName: RuleName
+        get() = RuleName(id)
 
     // ── Reporting ─────────────────────────────────────────────────────────────
 
     protected fun reportAt(node: KtElement, message: String) {
-        val cwe = CweMapping.forRule(issue.id)
-        val fix = RemediationHints.forRule(issue.id)
+        report(Finding(Entity.from(node), decorate(message)))
+    }
+
+    /** Appends the CWE id and remediation hint registered for this rule, when there are any. */
+    protected fun decorate(message: String): String {
+        val cwe = CweMapping.forRule(id)
+        val fix = RemediationHints.forRule(id)
         val withCwe = if (cwe != null) "$message [$cwe]" else message
-        val fullMessage = if (fix != null) "$withCwe — Fix: $fix" else withCwe
-        report(CodeSmell(issue, Entity.from(node), fullMessage))
+        return if (fix != null) "$withCwe — Fix: $fix" else withCwe
     }
 
     // ── AST traversal ─────────────────────────────────────────────────────────

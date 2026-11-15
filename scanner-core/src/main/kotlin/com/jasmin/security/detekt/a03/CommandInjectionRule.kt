@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   Runtime.getRuntime().exec("ls $userInput")
  *   ProcessBuilder(listOf("sh", "-c", userInput))
  */
-class CommandInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "CommandInjection",
-        severity = Severity.Security,
-        description = "OS command executed with non-literal argument — user input may reach the shell",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class CommandInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "CommandInjection",
+    description = "OS command executed with non-literal argument — user input may reach the shell",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (isExecWithVariable(expression) || isProcessBuilderWithVariable(expression)) {

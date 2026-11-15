@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @Async
  *   fun process() { val auth = SecurityContextHolder.getContext().authentication }
  */
-class AsyncSecurityContextLossRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "AsyncSecurityContextLoss",
-        severity = Severity.Security,
-        description = "@Async method reads SecurityContextHolder — context is lost across thread boundaries",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class AsyncSecurityContextLossRule(config: Config) : SecurityRule(
+    config,
+    id = "AsyncSecurityContextLoss",
+    description = "@Async method reads SecurityContextHolder — context is lost across thread boundaries",
+) {
     @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)

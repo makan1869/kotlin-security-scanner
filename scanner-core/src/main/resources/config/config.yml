@@ -1,0 +1,95 @@
+security-core:
+  active: true
+  JaxrsOpenRedirect:
+    active: true
+  PredictableTempFile:
+    active: true
+  HardcodedAesKey:
+    active: true
+  HardcodedPrivateKey:
+    active: true
+  InsecureRandomSeed:
+    active: true
+  InsecureSslContext:
+    active: true
+  TrustAllHostnames:
+    active: true
+  WeakCipherMode:
+    active: true
+  WeakHashAlgorithm:
+    active: true
+  TrustAllCerts:
+    active: true
+  HardcodedIv:
+    active: true
+  WeakRsaKey:
+    active: true
+    minKeySize: 2048
+  JwtNoneAlgorithm:
+    active: true
+  JwtWeakSecret:
+    active: true
+  UnsafeCryptoPaddingOracle:
+    active: true
+  InsecurePasswordStorage:
+    active: true
+  SqlInjection:
+    active: true
+  LdapInjection:
+    active: true
+  JndiInjection:
+    active: true
+  XpathInjection:
+    active: true
+  ReflectionInjection:
+    active: true
+  PathTraversal:
+    active: true
+  CommandInjection:
+    active: true
+  XxeInjection:
+    active: true
+  GroovyScriptInjection:
+    active: true
+  ZipSlip:
+    active: true
+  RegexDenialOfService:
+    active: true
+  RegexInjection:
+    active: true
+  HardcodedCredentials:
+    active: true
+  InsecureRandom:
+    active: true
+  HardcodedAwsCredentials:
+    active: true
+  GoogleApiKey:
+    active: true
+  SlackToken:
+    active: true
+  GitHubToken:
+    active: true
+  StripeSecretKey:
+    active: true
+  HardcodedJwtToken:
+    active: true
+  HardcodedJdbcCredentials:
+    active: true
+  InsecureDeserialization:
+    active: true
+  JacksonUnsafeDeserialization:
+    active: true
+  XmlMapperUnsafe:
+    active: true
+  KotlinxSerializationSensitiveField:
+    active: true
+  CorsWildcardOrigins:
+    active: true
+  InsecureFilePermissions:
+    active: true
+  SensitiveDataLogging:
+    active: true
+  LogForging:
+    active: true
+  Ssrf:
+    active: true

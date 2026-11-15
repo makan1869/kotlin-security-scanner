@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 // OWASP A05 — Security Misconfiguration
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 // header or Origin is vulnerable to cross-site request forgery.
 // Compliant:   rateLimited { post("/login") { ... } }
 // Non-compliant: post("/login") { ... }  // in routing block without rate limiting
-class KtorRateLimitingMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorRateLimitingMissing",
-        severity = Severity.Security,
-        description = "Ktor login/auth route without rate limiting — brute-force attack possible",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class KtorRateLimitingMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorRateLimitingMissing",
+    description = "Ktor login/auth route without rate limiting — brute-force attack possible",
+) {
     private val authKeywords = setOf("login", "auth", "token", "signin", "authenticate")
 
     @Suppress("ReturnCount")

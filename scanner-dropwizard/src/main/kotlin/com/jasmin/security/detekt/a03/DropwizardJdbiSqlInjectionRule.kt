@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -14,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 // enabling SQL injection. Use :paramName or <bindParam> placeholders instead.
 // Compliant:   @SqlQuery("SELECT * FROM users WHERE id = :id")
 // Non-compliant: @SqlQuery("SELECT * FROM users WHERE name = '$name'")
-class DropwizardJdbiSqlInjectionRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "DropwizardJdbiSqlInjection",
-        severity = Severity.Security,
-        description = "JDBI @SqlQuery/@SqlUpdate with interpolated string — use named bind parameters",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class DropwizardJdbiSqlInjectionRule(config: Config) : SecurityRule(
+    config,
+    id = "DropwizardJdbiSqlInjection",
+    description = "JDBI @SqlQuery/@SqlUpdate with interpolated string — use named bind parameters",
+) {
     private val jdbiAnnotations = setOf("SqlQuery", "SqlUpdate", "SqlCall", "SqlBatch")
 
     @Suppress("ReturnCount")

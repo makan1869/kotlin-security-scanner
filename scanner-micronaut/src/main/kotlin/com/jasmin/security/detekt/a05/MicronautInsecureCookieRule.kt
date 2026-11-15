@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -27,15 +24,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *   Cookie.of("SESSION", id).secure(false)              // fluent
  *   val c = Cookie.of("SESSION", id); c.secure(false)   // via local variable
  */
-class MicronautInsecureCookieRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "MicronautInsecureCookie",
-        severity = Severity.Security,
-        description = "Cookie marked secure(false) — it will be sent over plain HTTP",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class MicronautInsecureCookieRule(config: Config) : SecurityRule(
+    config,
+    id = "MicronautInsecureCookie",
+    description = "Cookie marked secure(false) — it will be sent over plain HTTP",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

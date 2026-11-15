@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a08
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  *   mapper.enableDefaultTyping()
  *   @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
  */
-class JacksonUnsafeDeserializationRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JacksonUnsafeDeserialization",
-        severity = Severity.Security,
-        description = "Jackson default typing or Id.CLASS enables arbitrary type deserialization — RCE risk",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JacksonUnsafeDeserializationRule(config: Config) : SecurityRule(
+    config,
+    id = "JacksonUnsafeDeserialization",
+    description = "Jackson default typing or Id.CLASS enables arbitrary type deserialization — RCE risk",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression?.text ?: return

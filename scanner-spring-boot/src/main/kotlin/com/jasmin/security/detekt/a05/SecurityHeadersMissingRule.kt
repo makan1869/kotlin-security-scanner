@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a05
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -23,16 +20,12 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *       return http.build()
  *   }
  */
-class SecurityHeadersMissingRule(config: Config) : SecurityRule(config) {
-
+class SecurityHeadersMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "SecurityHeadersMissing",
+    description = "SecurityFilterChain without HTTP security headers (X-Frame-Options, CSP…)",
+) {
     private val HEADERS_CONFIG = Regex("""\.headers\s*[({]""")
-
-    override val issue = Issue(
-        id = "SecurityHeadersMissing",
-        severity = Severity.Security,
-        description = "SecurityFilterChain without HTTP security headers (X-Frame-Options, CSP…)",
-        debt = Debt.TWENTY_MINS,
-    )
 
     @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {

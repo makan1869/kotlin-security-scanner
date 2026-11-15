@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -23,15 +20,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   File("/tmp/session-data.txt")
  */
-class PredictableTempFileRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "PredictableTempFile",
-        severity = Severity.Security,
-        description = "File at a fixed temp path — use Files.createTempFile for an unpredictable, owner-only file",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class PredictableTempFileRule(config: Config) : SecurityRule(
+    config,
+    id = "PredictableTempFile",
+    description = "File at a fixed temp path — use Files.createTempFile for an unpredictable, owner-only file",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

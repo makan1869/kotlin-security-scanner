@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class WeakCipherModeRuleTest {
@@ -14,7 +14,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -23,7 +23,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("DES/CBC/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("DES")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -41,7 +41,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("RC4")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -50,7 +50,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("RC2/CBC/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -59,7 +59,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("Blowfish")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -68,7 +68,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -77,7 +77,7 @@ class WeakCipherModeRuleTest {
             import javax.crypto.Cipher
             val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -85,7 +85,7 @@ class WeakCipherModeRuleTest {
         val code = """
             val description = "ECB mode is not allowed"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag path traversal patterns
@@ -94,6 +94,6 @@ class WeakCipherModeRuleTest {
         val code = """
             fun readFile(path: String) = java.io.File(path)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

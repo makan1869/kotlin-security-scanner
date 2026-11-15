@@ -17,7 +17,7 @@ All research is pre-embedded — no doc fetching needed during implementation.
 3. Run `/add-security-rule` — the skill reads the row and generates everything
 4. Check the box, pick the next
 
-Build command: `export JAVA_HOME=/opt/homebrew/opt/openjdk@21 && ./gradlew test detekt`
+Build command: `./gradlew test detekt`
 
 ---
 
@@ -164,7 +164,7 @@ Total after Phase 2: 58 rules across 4 modules. ✅ COMPLETE
 ### Properties-file scanning — FileProcessListener approach
 ```kotlin
 // Implement FileProcessListener (NOT a Rule subclass)
-// Register in: META-INF/services/io.gitlab.arturbosch.detekt.api.FileProcessListener
+// Register in: META-INF/services/dev.detekt.api.FileProcessListener
 class InsecureActuatorExposureListener : FileProcessListener {
     override fun onProcess(file: KtFile, bindingContext: BindingContext) { }
     override fun onProcessComplete(

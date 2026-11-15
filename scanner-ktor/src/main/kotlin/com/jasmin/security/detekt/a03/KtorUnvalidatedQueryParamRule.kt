@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
@@ -16,15 +13,11 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 // Always validate with safe-call + elvis: val id = call.parameters["id"] ?: return call.respond(BadRequest)
 // Compliant:   val id = call.parameters["id"] ?: return call.respond(HttpStatusCode.BadRequest)
 // Non-compliant: val id = call.parameters["id"]!!
-class KtorUnvalidatedQueryParamRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "KtorUnvalidatedQueryParam",
-        severity = Severity.Security,
-        description = "call.parameters[\"...\"]!! force-unwrap — missing parameter causes unhandled 500; use ?: return call.respond(BadRequest)",
-        debt = Debt.TEN_MINS,
-    )
-
+class KtorUnvalidatedQueryParamRule(config: Config) : SecurityRule(
+    config,
+    id = "KtorUnvalidatedQueryParam",
+    description = "call.parameters[\"...\"]!! force-unwrap — missing parameter causes unhandled 500; use ?: return call.respond(BadRequest)",
+) {
     @Suppress("ReturnCount")
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)

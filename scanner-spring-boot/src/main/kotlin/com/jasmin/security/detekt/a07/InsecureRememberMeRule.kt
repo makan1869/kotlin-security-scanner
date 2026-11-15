@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -22,15 +19,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   http.rememberMe().key("myStaticRememberMeKey")
  */
-class InsecureRememberMeRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecureRememberMe",
-        severity = Severity.Security,
-        description = "rememberMe().key() uses a hardcoded literal — cookie signing secret must come from environment",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class InsecureRememberMeRule(config: Config) : SecurityRule(
+    config,
+    id = "InsecureRememberMe",
+    description = "rememberMe().key() uses a hardcoded literal — cookie signing secret must come from environment",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

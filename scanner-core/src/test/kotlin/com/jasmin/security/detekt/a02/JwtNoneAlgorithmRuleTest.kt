@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class JwtNoneAlgorithmRuleTest {
             fun buildToken(): String =
                 Jwts.builder().signWith(SignatureAlgorithm.NONE, "").compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class JwtNoneAlgorithmRuleTest {
             fun buildToken(claims: Map<String, Any>): String =
                 Jwts.builder().setClaims(claims).signWith(alg.NONE).compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class JwtNoneAlgorithmRuleTest {
         val code = """
             fun verifier() = JWT.require(Algorithm.none()).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -45,7 +45,7 @@ class JwtNoneAlgorithmRuleTest {
             fun buildToken(secret: SecretKey): String =
                 Jwts.builder().signWith(SignatureAlgorithm.HS256, secret).compact()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -53,7 +53,7 @@ class JwtNoneAlgorithmRuleTest {
         val code = """
             fun verifier(secret: String) = JWT.require(Algorithm.HMAC256(secret)).build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -61,7 +61,7 @@ class JwtNoneAlgorithmRuleTest {
         val code = """
             fun noop() = Optional.none()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -71,6 +71,6 @@ class JwtNoneAlgorithmRuleTest {
         val code = """
             fun hash(data: ByteArray) = MessageDigest.getInstance("MD5").digest(data)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

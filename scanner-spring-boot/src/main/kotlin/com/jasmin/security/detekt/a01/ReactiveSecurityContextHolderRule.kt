@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *       return Mono.just(auth.name)
  *   }
  */
-class ReactiveSecurityContextHolderRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ReactiveSecurityContextHolder",
-        severity = Severity.Security,
-        description = "ThreadLocal SecurityContextHolder used in reactive code — returns empty; use ReactiveSecurityContextHolder",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class ReactiveSecurityContextHolderRule(config: Config) : SecurityRule(
+    config,
+    id = "ReactiveSecurityContextHolder",
+    description = "ThreadLocal SecurityContextHolder used in reactive code — returns empty; use ReactiveSecurityContextHolder",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

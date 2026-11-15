@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 )
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -29,7 +29,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 Database.connect("jdbc:postgresql://host/db?ssl=false", "org.postgresql.Driver")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 Database.connect("jdbc:postgresql://host/db?sslmode=disable", "org.postgresql.Driver")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -49,7 +49,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 org.jetbrains.exposed.sql.Database.connect("jdbc:mysql://h/db?useSSL=false")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -62,7 +62,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 )
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -72,7 +72,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 Database.connect("jdbc:h2:mem:test", "org.h2.Driver")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -82,7 +82,7 @@ class KtorExposedConnectionNotSecureRuleTest {
                 CacheClient.connect("redis://localhost:6379")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -97,6 +97,6 @@ class KtorExposedConnectionNotSecureRuleTest {
                 )
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

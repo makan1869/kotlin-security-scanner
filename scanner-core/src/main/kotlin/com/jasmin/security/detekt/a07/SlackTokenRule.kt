@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -18,15 +15,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   val token = "xoxb-<workspace-id>-<token-body>"
  */
-class SlackTokenRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "SlackToken",
-        severity = Severity.Security,
-        description = "Hardcoded Slack token — revoke it and load from environment or a secret manager",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class SlackTokenRule(config: Config) : SecurityRule(
+    config,
+    id = "SlackToken",
+    description = "Hardcoded Slack token — revoke it and load from environment or a secret manager",
+) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
         if (expression.hasInterpolation()) return

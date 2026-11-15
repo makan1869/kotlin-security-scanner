@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SqlInjectionRuleTest {
@@ -13,7 +13,7 @@ class SqlInjectionRuleTest {
         val code = """
             fun find(name: String) = "SELECT * FROM users WHERE name = '${'$'}name'"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class SqlInjectionRuleTest {
         val code = """
             fun delete(id: Int) = "DELETE FROM orders WHERE id = ${'$'}id"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -29,7 +29,7 @@ class SqlInjectionRuleTest {
         val code = """
             fun update(val1: String, id: Int) = "UPDATE items SET name = '${'$'}val1' WHERE id = ${'$'}id"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class SqlInjectionRuleTest {
         val code = """
             fun insert(name: String) = "INSERT INTO users (name) VALUES ('${'$'}name')"
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -47,7 +47,7 @@ class SqlInjectionRuleTest {
                 return "SELECT * FROM users WHERE id = " + userId
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -55,7 +55,7 @@ class SqlInjectionRuleTest {
         val code = """
             val query = "SELECT * FROM users WHERE name = :name"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class SqlInjectionRuleTest {
         val code = """
             val query = "SELECT * FROM users WHERE id = ?"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -71,13 +71,13 @@ class SqlInjectionRuleTest {
         val code = """
             val query = "SELECT * FROM users WHERE active = true"
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag hardcoded credential patterns
     @Test
     fun `does not interfere with hardcoded credential code`() {
         val code = """val dbPassword = "myS3cretPass!"""
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

@@ -1,6 +1,3 @@
-build:
-  maxIssues: 100
-
 config:
   validation: false
   warningsAsErrors: false
@@ -630,3 +627,10 @@ security-vertx:
   # A07 Identification and Authentication Failures
   VertxHardcodedJwtSecret:
     active: true
+
+# ─── KTLINT ───────────────────────────────────────────────────────────────────
+ktlint:
+  # Every rule passes its id and description to the SecurityRule constructor on separate lines,
+  # which ktlint_official would otherwise rewrap.
+  ClassSignature:
+    active: false

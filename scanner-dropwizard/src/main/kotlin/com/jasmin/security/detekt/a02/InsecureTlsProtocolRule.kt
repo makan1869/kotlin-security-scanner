@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   setSupportedProtocols("TLSv1.0")
  *   setSslProtocol("SSLv3")
  */
-class InsecureTlsProtocolRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "InsecureTlsProtocol",
-        severity = Severity.Security,
-        description = "Deprecated SSL/TLS protocol version is explicitly enabled",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class InsecureTlsProtocolRule(config: Config) : SecurityRule(
+    config,
+    id = "InsecureTlsProtocol",
+    description = "Deprecated SSL/TLS protocol version is explicitly enabled",
+) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

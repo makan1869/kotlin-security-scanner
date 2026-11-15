@@ -46,9 +46,9 @@ import com.jasmin.security.detekt.a09.SensitiveDataLoggingRule
 import com.jasmin.security.detekt.a05.CorsWildcardOriginsRule
 import com.jasmin.security.detekt.a05.InsecureFilePermissionsRule
 import com.jasmin.security.detekt.a10.SsrfRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 /**
  * Framework-agnostic security rules.
@@ -60,68 +60,68 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  */
 class CoreRuleSetProvider : RuleSetProvider {
 
-    override val ruleSetId = "security-core"
+    override val ruleSetId = RuleSetId("security-core")
 
     // config is the rule-set config (security-core section). Each Rule subclass
     // receives it as ruleSetConfig and self-scopes via getRuleConfig() = ruleSetConfig.subConfig(ruleId).
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
             // A01 Broken Access Control
-            JaxrsOpenRedirectRule(config),
-            PredictableTempFileRule(config),
+            ::JaxrsOpenRedirectRule,
+            ::PredictableTempFileRule,
             // A02 Cryptographic Failures
-            HardcodedAesKeyRule(config),
-            HardcodedPrivateKeyRule(config),
-            InsecureRandomSeedRule(config),
-            InsecureSslContextRule(config),
-            TrustAllHostnamesRule(config),
-            WeakCipherModeRule(config),
-            WeakHashAlgorithmRule(config),
-            TrustAllCertsRule(config),
-            HardcodedIvRule(config),
-            WeakRsaKeyRule(config),
-            JwtNoneAlgorithmRule(config),
-            JwtWeakSecretRule(config),
-            UnsafeCryptoPaddingOracleRule(config),
-            InsecurePasswordStorageRule(config),
+            ::HardcodedAesKeyRule,
+            ::HardcodedPrivateKeyRule,
+            ::InsecureRandomSeedRule,
+            ::InsecureSslContextRule,
+            ::TrustAllHostnamesRule,
+            ::WeakCipherModeRule,
+            ::WeakHashAlgorithmRule,
+            ::TrustAllCertsRule,
+            ::HardcodedIvRule,
+            ::WeakRsaKeyRule,
+            ::JwtNoneAlgorithmRule,
+            ::JwtWeakSecretRule,
+            ::UnsafeCryptoPaddingOracleRule,
+            ::InsecurePasswordStorageRule,
             // A03 Injection
-            SqlInjectionRule(config),
-            LdapInjectionRule(config),
-            JndiInjectionRule(config),
-            XpathInjectionRule(config),
-            ReflectionInjectionRule(config),
-            PathTraversalRule(config),
-            CommandInjectionRule(config),
-            XxeInjectionRule(config),
-            GroovyScriptInjectionRule(config),
-            ZipSlipRule(config),
+            ::SqlInjectionRule,
+            ::LdapInjectionRule,
+            ::JndiInjectionRule,
+            ::XpathInjectionRule,
+            ::ReflectionInjectionRule,
+            ::PathTraversalRule,
+            ::CommandInjectionRule,
+            ::XxeInjectionRule,
+            ::GroovyScriptInjectionRule,
+            ::ZipSlipRule,
             // A06 Vulnerable Components / ReDoS
-            RegexDenialOfServiceRule(config),
-            RegexInjectionRule(config),
+            ::RegexDenialOfServiceRule,
+            ::RegexInjectionRule,
             // A07 Authentication Failures
-            HardcodedCredentialsRule(config),
-            InsecureRandomRule(config),
-            HardcodedAwsCredentialsRule(config),
-            GoogleApiKeyRule(config),
-            SlackTokenRule(config),
-            GitHubTokenRule(config),
-            StripeSecretKeyRule(config),
-            HardcodedJwtTokenRule(config),
-            HardcodedJdbcCredentialsRule(config),
+            ::HardcodedCredentialsRule,
+            ::InsecureRandomRule,
+            ::HardcodedAwsCredentialsRule,
+            ::GoogleApiKeyRule,
+            ::SlackTokenRule,
+            ::GitHubTokenRule,
+            ::StripeSecretKeyRule,
+            ::HardcodedJwtTokenRule,
+            ::HardcodedJdbcCredentialsRule,
             // A08 Software and Data Integrity
-            InsecureDeserializationRule(config),
-            JacksonUnsafeDeserializationRule(config),
-            XmlMapperUnsafeRule(config),
-            KotlinxSerializationSensitiveFieldRule(config),
+            ::InsecureDeserializationRule,
+            ::JacksonUnsafeDeserializationRule,
+            ::XmlMapperUnsafeRule,
+            ::KotlinxSerializationSensitiveFieldRule,
             // A05 Security Misconfiguration
-            CorsWildcardOriginsRule(config),
-            InsecureFilePermissionsRule(config),
+            ::CorsWildcardOriginsRule,
+            ::InsecureFilePermissionsRule,
             // A09 Logging Failures
-            SensitiveDataLoggingRule(config),
-            LogForgingRule(config),
+            ::SensitiveDataLoggingRule,
+            ::LogForgingRule,
             // A10 Server-Side Request Forgery
-            SsrfRule(config),
+            ::SsrfRule,
         )
     )
 }

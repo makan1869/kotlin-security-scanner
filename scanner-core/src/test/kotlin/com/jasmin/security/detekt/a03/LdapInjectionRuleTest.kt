@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class LdapInjectionRuleTest {
                 ctx.search("ou=users,dc=example,dc=com", "(uid=${'$'}username)", controls)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class LdapInjectionRuleTest {
                 ctx.bind("uid=${'$'}user,ou=users,dc=example,dc=com", null, null)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class LdapInjectionRuleTest {
                 return ctx.lookup("cn=${'$'}cn,ou=groups")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class LdapInjectionRuleTest {
                 ctx.search("ou=users", "(uid=" + username + ")", controls)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -60,7 +60,7 @@ class LdapInjectionRuleTest {
                 ctx.search("ou=users", "(role=" + "admin" + ")", controls)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -70,7 +70,7 @@ class LdapInjectionRuleTest {
                 ctx.search("ou=users", "(role=admin)", controls)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -81,7 +81,7 @@ class LdapInjectionRuleTest {
                 ctx.search("ou=users", filter, arrayOf(username), controls)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -91,7 +91,7 @@ class LdapInjectionRuleTest {
                 return index.search(query)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -103,6 +103,6 @@ class LdapInjectionRuleTest {
                 Runtime.getRuntime().exec("ls ${'$'}arg")
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

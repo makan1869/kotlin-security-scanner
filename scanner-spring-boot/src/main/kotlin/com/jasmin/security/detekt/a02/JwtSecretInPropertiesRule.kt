@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a02
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.PropertiesSecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import java.util.Properties
 
 /**
@@ -21,15 +18,11 @@ import java.util.Properties
  * Non-compliant:
  *   spring.security.oauth2.resourceserver.jwt.secret=mySuperSecretKey123
  */
-class JwtSecretInPropertiesRule(config: Config) : PropertiesSecurityRule(config) {
-
-    override val issue = Issue(
-        id = "JwtSecretInProperties",
-        severity = Severity.Security,
-        description = "JWT signing secret stored in properties file — use environment variable or Vault",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class JwtSecretInPropertiesRule(config: Config) : PropertiesSecurityRule(
+    config,
+    id = "JwtSecretInProperties",
+    description = "JWT signing secret stored in properties file — use environment variable or Vault",
+) {
     private val sensitiveKeys = listOf(
         "spring.security.oauth2.resourceserver.jwt.secret",
         "spring.security.oauth2.resourceserver.opaquetoken.client-secret",

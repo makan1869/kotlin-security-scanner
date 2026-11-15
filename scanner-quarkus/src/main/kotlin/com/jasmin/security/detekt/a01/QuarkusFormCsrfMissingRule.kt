@@ -1,10 +1,7 @@
 package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 // OWASP A01 — Broken Access Control
@@ -12,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 // checking a CSRF token is vulnerable to cross-site request forgery.
 // Compliant:   check @HeaderParam("X-CSRF-Token") or use @CSRF Quarkus extension
 // Non-compliant: @POST @Consumes(MediaType.APPLICATION_FORM_URLENCODED) without CSRF check
-class QuarkusFormCsrfMissingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusFormCsrfMissing",
-        severity = Severity.Security,
-        description = "JAX-RS form endpoint without CSRF protection — cross-site request forgery risk",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusFormCsrfMissingRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusFormCsrfMissing",
+    description = "JAX-RS form endpoint without CSRF protection — cross-site request forgery risk",
+) {
     @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)

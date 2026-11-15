@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a07
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -19,15 +16,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * Non-compliant:
  *   val token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dummysignature123"
  */
-class HardcodedJwtTokenRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "HardcodedJwtToken",
-        severity = Severity.Security,
-        description = "Hardcoded JWT bearer token — issue tokens at runtime, never commit them",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class HardcodedJwtTokenRule(config: Config) : SecurityRule(
+    config,
+    id = "HardcodedJwtToken",
+    description = "Hardcoded JWT bearer token — issue tokens at runtime, never commit them",
+) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
         if (expression.hasInterpolation()) return

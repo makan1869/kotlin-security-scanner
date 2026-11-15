@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
@@ -24,15 +21,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   return "redirect:${'$'}returnUrl"     // interpolated — attacker-controlled
  *   return "redirect:" + request.getParameter("next")
  */
-class OpenRedirectRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "OpenRedirect",
-        severity = Severity.Security,
-        description = "Spring redirect target built from non-literal input — validate against an allowlist",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class OpenRedirectRule(config: Config) : SecurityRule(
+    config,
+    id = "OpenRedirect",
+    description = "Spring redirect target built from non-literal input — validate against an allowlist",
+) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
         if (!expression.hasInterpolation()) return

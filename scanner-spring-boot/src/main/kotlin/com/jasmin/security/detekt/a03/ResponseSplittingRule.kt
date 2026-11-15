@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a03
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -26,15 +23,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  *   response.addHeader("X-Custom", userInput)         // dynamic — strip CR/LF first
  *   response.setHeader("Location", "https://${'$'}host")  // interpolated
  */
-class ResponseSplittingRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "ResponseSplitting",
-        severity = Severity.Security,
-        description = "HTTP header value from dynamic input — CR/LF in the value enables response splitting",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class ResponseSplittingRule(config: Config) : SecurityRule(
+    config,
+    id = "ResponseSplitting",
+    description = "HTTP header value from dynamic input — CR/LF in the value enables response splitting",
+) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

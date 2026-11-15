@@ -2,10 +2,7 @@ package com.jasmin.security.detekt.a01
 
 import com.jasmin.security.detekt.core.DetectionPatterns
 import com.jasmin.security.detekt.core.SecurityRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -25,15 +22,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *   @DELETE @PermitAll fun deleteUser()           // anonymous deletion
  *   @PUT @PermitAll fun updateConfig()            // anonymous update
  */
-class QuarkusPermitAllSensitiveRule(config: Config) : SecurityRule(config) {
-
-    override val issue = Issue(
-        id = "QuarkusPermitAllSensitive",
-        severity = Severity.Security,
-        description = "@PermitAll on a write operation allows unauthenticated callers to mutate data",
-        debt = Debt.TWENTY_MINS,
-    )
-
+class QuarkusPermitAllSensitiveRule(config: Config) : SecurityRule(
+    config,
+    id = "QuarkusPermitAllSensitive",
+    description = "@PermitAll on a write operation allows unauthenticated callers to mutate data",
+) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         val annotations = function.annotationNames()

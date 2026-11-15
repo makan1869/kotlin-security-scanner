@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a10
 
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SsrfRuleTest {
@@ -13,7 +13,7 @@ class SsrfRuleTest {
         val code = """
             fun fetch(userUrl: String) = java.net.URL(userUrl)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class SsrfRuleTest {
         val code = """
             fun fetch(host: String) = java.net.URL("https://${'$'}host/api")
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -29,7 +29,7 @@ class SsrfRuleTest {
         val code = """
             fun fetch(userUri: String) = java.net.URI(userUri)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class SsrfRuleTest {
         val code = """
             val url = java.net.URL("https://api.example.com/data")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -45,7 +45,7 @@ class SsrfRuleTest {
         val code = """
             val uri = java.net.URI("https://api.example.com/data")
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag path traversal patterns
@@ -54,13 +54,13 @@ class SsrfRuleTest {
         val code = """
             fun readFile(path: String) = java.io.File(path)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // Isolation: must not flag hardcoded credential patterns
     @Test
     fun `does not interfere with hardcoded credential code`() {
         val code = """val apiSecret = "hardcoded-value""""
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

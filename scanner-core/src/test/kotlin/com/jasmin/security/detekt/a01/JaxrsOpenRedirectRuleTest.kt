@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a01
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go(url: String) = Response.seeOther(URI(url)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go(url: String) = Response.temporaryRedirect(URI(url)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go(url: String) = Response.seeOther(URI.create(url)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -50,7 +50,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go(url: String) = HttpResponse.seeOther<Any>(URI(url))
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -61,7 +61,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go(host: String) = Response.seeOther(URI("https://${'$'}host/path")).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -72,7 +72,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go(url: String) = Response.seeOther(URL.create(url)).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -83,7 +83,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun dashboard() = Response.seeOther(URI.create("/dashboard")).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -94,7 +94,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun dashboard() = Response.seeOther(URI("/dashboard")).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -105,7 +105,7 @@ class JaxrsOpenRedirectRuleTest {
                 fun go() = Response.seeOther(URI("https://app.example.com/home")).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -116,6 +116,6 @@ class JaxrsOpenRedirectRuleTest {
                 fun ok() = Response.ok(URI("/data")).build()
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

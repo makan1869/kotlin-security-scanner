@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a03
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class DropwizardMissingBeanValidationRuleTest {
             @POST
             fun createUser(req: CreateUserRequest): Response = Response.ok().build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class DropwizardMissingBeanValidationRuleTest {
             @PUT
             fun updateUser(req: UpdateUserRequest): Response = Response.ok().build()
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -33,7 +33,7 @@ class DropwizardMissingBeanValidationRuleTest {
             @POST
             fun createUser(@Valid req: CreateUserRequest): Response = Response.ok().build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -42,7 +42,7 @@ class DropwizardMissingBeanValidationRuleTest {
             @GET
             fun listUsers(): Response = Response.ok().build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -52,6 +52,6 @@ class DropwizardMissingBeanValidationRuleTest {
             @Path("/{id}/activate")
             fun activateUser(@PathParam("id") id: Long): Response = Response.ok().build()
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

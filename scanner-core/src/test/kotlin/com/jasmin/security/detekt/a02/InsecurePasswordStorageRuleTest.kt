@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a02
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class InsecurePasswordStorageRuleTest {
                 return digest.digest(password.toByteArray())
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -31,7 +31,7 @@ class InsecurePasswordStorageRuleTest {
                     .joinToString("") { "%02x".format(it) }
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class InsecurePasswordStorageRuleTest {
                 return hash.contentEquals(stored.toByteArray())
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -50,7 +50,7 @@ class InsecurePasswordStorageRuleTest {
         val code = """
             fun hashPassword(password: String): String = DigestUtils.sha256Hex(password)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -58,7 +58,7 @@ class InsecurePasswordStorageRuleTest {
         val code = """
             fun encodeCredential(pwd: String): String = DigestUtils.md5Hex(pwd)
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     // ── Negative — must NOT flag ──────────────────────────────────────────────
@@ -70,7 +70,7 @@ class InsecurePasswordStorageRuleTest {
                 return MessageDigest.getInstance("SHA-256").digest(data)
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -78,7 +78,7 @@ class InsecurePasswordStorageRuleTest {
         val code = """
             fun hashPassword(password: String): String = BCryptPasswordEncoder().encode(password)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -86,7 +86,7 @@ class InsecurePasswordStorageRuleTest {
         val code = """
             fun buildEtag(content: String): String = DigestUtils.sha256Hex(content)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     // ── Isolation ─────────────────────────────────────────────────────────────
@@ -96,6 +96,6 @@ class InsecurePasswordStorageRuleTest {
         val code = """
             fun computeFileHash(data: ByteArray): ByteArray = MessageDigest.getInstance("SHA-256").digest(data)
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }

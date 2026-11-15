@@ -1,7 +1,7 @@
 package com.jasmin.security.detekt.a07
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 lateinit var apiKey: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -41,7 +41,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 @ConfigProperty(name = "app.secret", defaultValue = "changeme") val s: String
             )
         """.trimIndent()
-        assertThat(rule.lint(code)).hasSize(1)
+        assertThat(rule.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -52,7 +52,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 @ConfigProperty(name = "app.greeting", defaultValue = "Hello") val greeting: String
             )
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 @ConfigProperty(name = "app.secret") val s: String
             )
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -75,7 +75,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 lateinit var password: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -87,7 +87,7 @@ class QuarkusConfigPasswordLeakRuleTest {
                 lateinit var greeting: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -99,6 +99,6 @@ class QuarkusConfigPasswordLeakRuleTest {
                 lateinit var host: String
             }
         """.trimIndent()
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lint(code, compile = false)).isEmpty()
     }
 }
